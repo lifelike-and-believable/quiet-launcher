@@ -1,13 +1,13 @@
 ---
 id: concept
-status: draft
+status: approved
 ---
 
 # Quiet Launcher
 
 <!-- docs/product/concept.md. The root artifact: it links to nothing. A first draft from the
-conversation that started the project (2026-11-08); every claim the approver has not confirmed is
-marked. -->
+conversation that started the project (2026-11-08); the project lead confirmed every
+claim on 2026-11-09. -->
 
 ## Problem
 
@@ -23,13 +23,13 @@ Google offers two ways out, and each costs something people use:
   search across apps lives inside Google's home screen, so it is lost. Voice search still works.
 
 So today a household chooses between a quiet home screen and being able to type the name of a show
-and find which app has it. [proposed]
+and find which app has it.
 
 ## Audience
 
 People who share a Google TV at home and want it to feel like their own device: they know which
 apps they use, they find the promotion distracting, and they still want to find a show without
-opening each app in turn. [proposed]
+opening each app in turn.
 
 The product is for one household: the project lead's own, on a Chromecast with Google TV. The
 repository is public and others may use it, but it is not published or supported for other
@@ -42,18 +42,17 @@ Pressing Home shows the household's apps and nothing else: no suggestions, banne
 advertising. From the same screen, anyone can type or say what they want to watch and find which
 app has it, across all the household's apps. Typed search across apps is the reason to build this
 rather than use an existing replacement home screen. Turning it off returns the TV to exactly how
-it was. [proposed]
+it was.
 
 ## Non-goals
 
 - Recommending what to watch. The product never adds content the household did not ask for.
-  [proposed]
 - Building its own catalogue of what streams where, as long as Google's search or each app's own
-  search can be reached instead. [proposed]
-- Phones, tablets, or TVs that do not run Google TV or Android TV. [proposed]
+  search can be reached instead.
+- Phones, tablets, or TVs that do not run Google TV or Android TV.
 - Changes that need root access, or that leave the TV without a working home screen if the
-  product is removed. [proposed]
-- Showing advertising, or collecting usage data. [proposed]
+  product is removed.
+- Showing advertising, or collecting usage data.
 - Publishing to the Play Store, or supporting households other than the project lead's.
 - Keeping Google TV's other features reachable from the new home screen (the watchlist, Google
   Play purchases, live TV channels), for now.

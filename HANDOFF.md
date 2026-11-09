@@ -18,7 +18,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 | Local | `C:\AI Projects\quiet-launcher` |
 | State | `main` at `d711e87` (PLAN.md and HANDOFF.md); branch `concept-answers` writes the project lead's answers into the concept |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
-| Checks | `node "C:/Unreal Projects/rules-for-robots/checks/process-trace.mjs" .` (rules-for-robots is in `C:\Unreal Projects`, not beside this repository, so the `../rules-for-robots` paths in `AGENTS.md` do not resolve here) |
+| Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
 Every change from here on goes through a pull request with a tier label (`tier:epic` for concept,
 requirements, personas, and epics). Do not merge a pull request that touches `docs/product/`,
@@ -43,9 +43,9 @@ the app that has it. So the concept holds, with two limits now in its Feasibilit
 Google TV home app must stay installed and unblocked (the results page is its), and a vague query
 can get a Gemini chat reply instead. Details are in `docs/product/notes.md`.
 
-The concept stays `draft` (draft PR #3). Before approval, the project lead confirms the 8
-remaining `[proposed]` markers. Nothing downstream should be written until the concept is
-approved. Still untested: `WEB_SEARCH`, and `cmd package set-home-activity` (which changes the
+Later that day the project lead confirmed all 8 `[proposed]` claims as written. The concept now
+says `status: approved` in PR #3 (`tier:epic`), and is approved when the project lead merges #3.
+Nothing downstream should be written until then. Next is requirements (`PLAN.md`, step 4). Still untested: `WEB_SEARCH`, and `cmd package set-home-activity` (which changes the
 home screen, so ask first).
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
