@@ -89,8 +89,18 @@ in for this product:
   Google TV. The priority-2 filter wins over the role holder on this build.
 - Restored with `cmd package set-home-activity com.google.android.tungsten.setupwraith`; Home opens
   Google TV again.
-- So the role is not the way in. Untried routes that would leave launcherx's search pages working:
-  an accessibility service that answers only Google TV's home screen (`HomeActivity`) coming to the
-  front, not its other pages, and disabling only launcherx's two home activities over ADB
-  (`pm disable-user` on components), which would also need setupwraith's `RecoveryActivity` out of
-  the way. Both change the TV, so each needs the project lead's go-ahead.
+- So the role is not the way in.
+
+## Spike: disabling only Google TV's home screen (2026-11-09)
+
+`pm disable --user 0 com.google.android.apps.tv.launcherx/.home.HomeActivity` (and the same for
+`.home.VanillaModeHomeActivity`) failed with `SecurityException: Shell cannot change component
+state for ComponentInfo{...} to 2`. On Android 14 the shell can disable a whole system package but
+not one of its components, and disabling the whole of launcherx would break search. Nothing on the
+TV changed.
+
+That leaves one known route that keeps launcherx's search pages working: an accessibility service
+that answers only Google TV's home screen (`HomeActivity`) coming to the front, and lets its other
+pages (such as `.entity.EntityActivity`, the search results) through. Projectivy's service reacts to
+every launcherx page, which is why it broke search. Trying this needs a small test app installed on
+the TV.

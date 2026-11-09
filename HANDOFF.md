@@ -50,8 +50,10 @@ Then the project lead answered the requirements questions, and branch `requireme
 areas (`docs/product/requirements/home.md`, `search.md`, `setup.md`) as drafts, with no open
 questions. One `[assumed]` is left: REQ-setup-2 assumes the Home button can be taken over while
 Google TV's home app keeps working. `cmd package set-home-activity` was tried the same day and does not work on this build
-(`docs/product/notes.md`); the TV was put back. Next try one of the two routes in notes (ask first:
-each changes the TV), or the project lead accepts it as `[to validate]`.
+(`docs/product/notes.md`); the TV was put back. Disabling only Google TV's home screens over ADB is
+refused by Android 14. The remaining route is an accessibility service that answers only Google
+TV's home screen (needs a test app installed: ask first), or the project lead accepts it as
+`[to validate]`.
 Then set the three files to `approved`, record hashes with `process-relink`, and merge with the
 project lead's go-ahead. Personas come next.
 

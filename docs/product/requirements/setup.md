@@ -32,7 +32,7 @@ Feasibility section.)
 
 [assumed] There is a way to take over the Home button that leaves Google TV's home app working. It
 is not yet shown on the reference device: making another app the home role holder does not work
-there, because Google TV's home screen still wins. The concept depends on this.
+there, because Google TV's home screen still wins, and ADB cannot turn off only that screen. The concept depends on this.
 
 ## REQ-setup-3: It stays the home screen after a restart
 
