@@ -15,10 +15,10 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 | | |
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
-| Local | `C:\Unreal Projects\quiet-launcher` |
-| State | One commit on `main` (`2c3f4fb`, set-up with the draft concept); CI green |
+| Local | `C:\AI Projects\quiet-launcher` |
+| State | `main` at `d711e87` (PLAN.md and HANDOFF.md); branch `concept-answers` writes the project lead's answers into the concept |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
-| Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository) |
+| Checks | `node "C:/Unreal Projects/rules-for-robots/checks/process-trace.mjs" .` (rules-for-robots is in `C:\Unreal Projects`, not beside this repository, so the `../rules-for-robots` paths in `AGENTS.md` do not resolve here) |
 
 Every change from here on goes through a pull request with a tier label (`tier:epic` for concept,
 requirements, personas, and epics). Do not merge a pull request that touches `docs/product/`,
@@ -29,13 +29,19 @@ approval.
 
 ## Where we stopped
 
-The concept is drafted and waiting for the project lead. It has 12 open items: `[proposed]` and
-`[assumed]` markers on every claim, and three `[open]` questions (household only or published;
-typed search across apps required or not; whether the watchlist, Play purchases, and live TV must
-stay reachable). Nothing downstream should be written until the concept is approved.
+On 2026-11-09 the project lead answered the concept's three open questions, and branch
+`concept-answers` writes the answers into the concept:
 
-A spike is proposed but not started: test whether Google's search accepts a typed query sent by
-another app (see `PLAN.md`, next steps). Ask before running it.
+- The product is for the household only. The repository is public and may be shared, but nothing
+  is published or supported for others, so setup may use ADB and accessibility permissions.
+- Typed search across all apps is the main reason for the product.
+- The watchlist, Play purchases, and live TV do not need to stay reachable, for now.
+
+The concept stays `draft`. One question is still open: can another app reach Google's typed
+search? Because that search is now the reason for the product, the spike in `PLAN.md` decides
+whether the concept holds. Ask before running it. The 8 remaining `[proposed]` markers also need
+the project lead's confirmation before approval. Nothing downstream should be written until the
+concept is approved.
 
 ## The reference device
 

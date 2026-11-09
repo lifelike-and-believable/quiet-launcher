@@ -31,15 +31,18 @@ People who share a Google TV at home and want it to feel like their own device: 
 apps they use, they find the promotion distracting, and they still want to find a show without
 opening each app in turn. [proposed]
 
-The first household is the project lead's own, on a Chromecast with Google TV. [assumed] whether
-the product is for that household only or for anyone who installs it (see Open questions).
+The product is for one household: the project lead's own, on a Chromecast with Google TV. The
+repository is public and others may use it, but it is not published or supported for other
+households, so its setup can ask for things a published app could not (ADB from a computer,
+accessibility permissions).
 
 ## Vision
 
 Pressing Home shows the household's apps and nothing else: no suggestions, banners, or
-advertising. From the same screen, anyone can type or say what they want to watch and get to it,
-either inside one app or across all of them. Turning it off returns the TV to exactly how it was.
-[proposed]
+advertising. From the same screen, anyone can type or say what they want to watch and find which
+app has it, across all the household's apps. Typed search across apps is the reason to build this
+rather than use an existing replacement home screen. Turning it off returns the TV to exactly how
+it was. [proposed]
 
 ## Non-goals
 
@@ -51,13 +54,12 @@ either inside one app or across all of them. Turning it off returns the TV to ex
 - Changes that need root access, or that leave the TV without a working home screen if the
   product is removed. [proposed]
 - Showing advertising, or collecting usage data. [proposed]
+- Publishing to the Play Store, or supporting households other than the project lead's.
+- Keeping Google TV's other features reachable from the new home screen (the watchlist, Google
+  Play purchases, live TV channels), for now.
 
 ## Open questions
 
-- [open] Is this for the project lead's household only, or something to publish (the Play Store,
-  or a sideloaded release) for other Google TV owners? This decides how much setup a person can be
-  asked to do (ADB, accessibility permissions).
-- [open] Is typed search across all apps a must, or is searching inside one app at a time enough
-  for a first release, if Google's search turns out not to accept a typed query from another app?
-- [open] Should the household's other Google TV features stay reachable from the new home screen
-  (the watchlist, Google Play purchases, live TV channels), or is leaving them behind acceptable?
+- [open] Can another app reach Google's typed search across apps, for example by sending it the
+  typed text? If not, the product has to find another route to cross-app search, or it loses the
+  reason it exists. A spike on the reference device answers this (`docs/product/notes.md`).

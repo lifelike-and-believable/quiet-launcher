@@ -9,8 +9,8 @@ file tracks where the project is; it is not a process artifact.
 | # | Stage | Artifacts | Status | Pull requests |
 |---|---|---|---|---|
 | 0 | Set-up | `docs/product/process.yml`, `.github/workflows/rfr-process.yml`, `AGENTS.md` | Done (`2c3f4fb`, first commit) | none (first commit) |
-| 1 | Concept | `docs/product/concept.md` | Draft, waiting for the project lead's read and answers to its 3 open questions | |
-| – | Spike: search entry points | `docs/product/notes.md` | Not started; answers concept open question 2 | |
+| 1 | Concept | `docs/product/concept.md` | Draft; the 3 open questions are answered, and 1 feasibility question waits on the spike | |
+| – | Spike: search entry points | `docs/product/notes.md` | Not started; answers the concept's remaining open question | |
 | 2 | Discovery (optional) | `docs/product/discovery/<topic>.md` | Probably skip | |
 | 3 | Requirements | `docs/product/requirements/<area>.md` (likely areas: home, search, setup) | Not started | |
 | 4 | Personas | `docs/product/personas/` (only the web-app `end-user` starter so far) | Not started | |
@@ -24,16 +24,14 @@ file tracks where the project is; it is not a process artifact.
 
 ## Next steps
 
-1. The project lead reads the concept and answers its open questions:
-   - household only, or published for other Google TV owners;
-   - typed search across all apps a must for the first release, or search inside one app enough;
-   - whether the watchlist, Google Play purchases, and live TV must stay reachable.
+1. Done (2026-11-09): the project lead answered the concept's open questions (see Decisions).
 2. Spike (needs the project lead's go-ahead, since it touches the TV): send
    `android.search.action.GLOBAL_SEARCH` and `android.intent.action.WEB_SEARCH` with a
    `query` extra to `com.google.android.katniss`, and see whether Google's results open for the
    typed text. Also check whether `cmd package set-home-activity` works on this build. Record the
    results in `docs/product/notes.md`.
-3. Update the concept from the answers, set it to `status: approved`, and open a `tier:epic` pull
+3. Record the spike's result in the concept, confirm the remaining `[proposed]` claims with the
+   project lead, set it to `status: approved`, and open a `tier:epic` pull
    request. Merging it is the approval.
 4. Requirements: one file per area, then the cross-area check against the concept before approval.
 5. Personas, then check each requirement against each persona.
@@ -46,3 +44,6 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-08 | rfr-process in solo mode; `atgoldberg` approves every stage | `docs/product/process.yml` |
 | 2026-11-08 | Borrow the `web-app` profile's templates; no profile fits an Android TV app | `AGENTS.md` |
 | 2026-11-08 | Pin the process workflow to rules-for-robots `rfr-v5.1.4` | `.github/workflows/rfr-process.yml` |
+| 2026-11-09 | For the project lead's household only; the repository may be shared, but nothing is published | `docs/product/concept.md` |
+| 2026-11-09 | Typed search across all apps is the product's main value | `docs/product/concept.md` |
+| 2026-11-09 | The watchlist, Play purchases, and live TV need not stay reachable, for now | `docs/product/concept.md` |
