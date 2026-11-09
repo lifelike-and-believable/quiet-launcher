@@ -15,10 +15,10 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 | | |
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
-| Local | `C:\Unreal Projects\quiet-launcher` |
-| State | One commit on `main` (`2c3f4fb`, set-up with the draft concept); CI green |
+| Local | `C:\AI Projects\quiet-launcher` |
+| State | `main` at `d711e87` (PLAN.md and HANDOFF.md); branch `concept-answers` writes the project lead's answers into the concept |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
-| Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository) |
+| Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
 Every change from here on goes through a pull request with a tier label (`tier:epic` for concept,
 requirements, personas, and epics). Do not merge a pull request that touches `docs/product/`,
@@ -29,13 +29,29 @@ approval.
 
 ## Where we stopped
 
-The concept is drafted and waiting for the project lead. It has 12 open items: `[proposed]` and
-`[assumed]` markers on every claim, and three `[open]` questions (household only or published;
-typed search across apps required or not; whether the watchlist, Play purchases, and live TV must
-stay reachable). Nothing downstream should be written until the concept is approved.
+On 2026-11-09 the project lead answered the concept's three open questions, and branch
+`concept-answers` writes the answers into the concept:
 
-A spike is proposed but not started: test whether Google's search accepts a typed query sent by
-another app (see `PLAN.md`, next steps). Ask before running it.
+- The product is for the household only. The repository is public and may be shared, but nothing
+  is published or supported for others, so setup may use ADB and accessibility permissions.
+- Typed search across all apps is the main reason for the product.
+- The watchlist, Play purchases, and live TV do not need to stay reachable, for now.
+
+The search spike ran the same day, with the project lead's go-ahead. Sending a show's name to
+Google's search with `GLOBAL_SEARCH` and a `query` extra opened Google TV's page for the show, with
+the app that has it. So the concept holds, with two limits now in its Feasibility section: the
+Google TV home app must stay installed and unblocked (the results page is its), and a vague query
+can get a Gemini chat reply instead. Details are in `docs/product/notes.md`.
+
+Later that day the project lead confirmed all 8 `[proposed]` claims as written. The concept now
+says `status: approved` in PR #3 (`tier:epic`), and is approved when the project lead merges #3.
+Nothing downstream should be written until then. Next is requirements (`PLAN.md`, step 4). Still untested: `WEB_SEARCH`, and `cmd package set-home-activity` (which changes the
+home screen, so ask first).
+
+Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
+Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
+(the IP and the mDNS name), set `ANDROID_SERIAL=10.0.0.202:<port>`. `adb pull` needs a Windows
+path (`C:/...`), not `/c/...`.
 
 ## The reference device
 

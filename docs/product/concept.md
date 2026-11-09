@@ -1,13 +1,13 @@
 ---
 id: concept
-status: draft
+status: approved
 ---
 
 # Quiet Launcher
 
 <!-- docs/product/concept.md. The root artifact: it links to nothing. A first draft from the
-conversation that started the project (2026-11-08); every claim the approver has not confirmed is
-marked. -->
+conversation that started the project (2026-11-08); the project lead confirmed every
+claim on 2026-11-09. -->
 
 ## Problem
 
@@ -23,41 +23,47 @@ Google offers two ways out, and each costs something people use:
   search across apps lives inside Google's home screen, so it is lost. Voice search still works.
 
 So today a household chooses between a quiet home screen and being able to type the name of a show
-and find which app has it. [proposed]
+and find which app has it.
 
 ## Audience
 
 People who share a Google TV at home and want it to feel like their own device: they know which
 apps they use, they find the promotion distracting, and they still want to find a show without
-opening each app in turn. [proposed]
+opening each app in turn.
 
-The first household is the project lead's own, on a Chromecast with Google TV. [assumed] whether
-the product is for that household only or for anyone who installs it (see Open questions).
+The product is for one household: the project lead's own, on a Chromecast with Google TV. The
+repository is public and others may use it, but it is not published or supported for other
+households, so its setup can ask for things a published app could not (ADB from a computer,
+accessibility permissions).
 
 ## Vision
 
 Pressing Home shows the household's apps and nothing else: no suggestions, banners, or
-advertising. From the same screen, anyone can type or say what they want to watch and get to it,
-either inside one app or across all of them. Turning it off returns the TV to exactly how it was.
-[proposed]
+advertising. From the same screen, anyone can type or say what they want to watch and find which
+app has it, across all the household's apps. Typed search across apps is the reason to build this
+rather than use an existing replacement home screen. Turning it off returns the TV to exactly how
+it was.
 
 ## Non-goals
 
 - Recommending what to watch. The product never adds content the household did not ask for.
-  [proposed]
 - Building its own catalogue of what streams where, as long as Google's search or each app's own
-  search can be reached instead. [proposed]
-- Phones, tablets, or TVs that do not run Google TV or Android TV. [proposed]
+  search can be reached instead.
+- Phones, tablets, or TVs that do not run Google TV or Android TV.
 - Changes that need root access, or that leave the TV without a working home screen if the
-  product is removed. [proposed]
-- Showing advertising, or collecting usage data. [proposed]
+  product is removed.
+- Showing advertising, or collecting usage data.
+- Publishing to the Play Store, or supporting households other than the project lead's.
+- Keeping Google TV's other features reachable from the new home screen (the watchlist, Google
+  Play purchases, live TV channels), for now.
 
-## Open questions
+## Feasibility
 
-- [open] Is this for the project lead's household only, or something to publish (the Play Store,
-  or a sideloaded release) for other Google TV owners? This decides how much setup a person can be
-  asked to do (ADB, accessibility permissions).
-- [open] Is typed search across all apps a must, or is searching inside one app at a time enough
-  for a first release, if Google's search turns out not to accept a typed query from another app?
-- [open] Should the household's other Google TV features stay reachable from the new home screen
-  (the watchlist, Google Play purchases, live TV channels), or is leaving them behind acceptable?
+Another app can reach Google's typed search. On the reference device, sending the text of a show's
+name to Google's search opened Google TV's page for that show, with the app that has it (spike,
+2026-11-09, in `docs/product/notes.md`). Two limits follow:
+
+- The results page belongs to Google TV's own home app, so the product has to take over the Home
+  button while leaving that app installed and working, rather than disabling or blocking it.
+- Google's assistant decides what the text means: a vague query can get a chat reply instead of
+  results.
