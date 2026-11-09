@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `d711e87` (PLAN.md and HANDOFF.md); branch `concept-answers` writes the project lead's answers into the concept |
+| State | `main` at `bb761b9` (concept approved); branch `requirements` drafts the requirements |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -43,10 +43,16 @@ the app that has it. So the concept holds, with two limits now in its Feasibilit
 Google TV home app must stay installed and unblocked (the results page is its), and a vague query
 can get a Gemini chat reply instead. Details are in `docs/product/notes.md`.
 
-Later that day the project lead confirmed all 8 `[proposed]` claims as written. The concept now
-says `status: approved` in PR #3 (`tier:epic`), and is approved when the project lead merges #3.
-Nothing downstream should be written until then. Next is requirements (`PLAN.md`, step 4). Still untested: `WEB_SEARCH`, and `cmd package set-home-activity` (which changes the
-home screen, so ask first).
+Later that day the project lead confirmed every concept claim, and #3 merged: the concept is
+approved (`bb761b9`).
+
+Then the project lead answered the requirements questions, and branch `requirements` has the three
+areas (`docs/product/requirements/home.md`, `search.md`, `setup.md`) as drafts, with no open
+questions. One `[assumed]` is left: REQ-setup-2 assumes the Home button can be taken over while
+Google TV's home app keeps working. Settle it by trying `cmd package set-home-activity` on the TV
+(ask first: it changes the home screen) or by the project lead accepting it as `[to validate]`.
+Then set the three files to `approved`, record hashes with `process-relink`, and merge with the
+project lead's go-ahead. Personas come next.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
