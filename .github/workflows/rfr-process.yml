@@ -1,0 +1,23 @@
+# The rfr-process checks (docs/specs/project-process.md in rules-for-robots): the process check,
+# approvals, tier, and issue sync jobs. Pinned to a rules-for-robots release, so CI changes only
+# when this file is updated on purpose; keep `uses:` and `rules-ref` on the same tag.
+name: process
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  pull_request_review:
+    types: [submitted, dismissed]
+  push:
+    branches: [main]
+
+jobs:
+  process:
+    uses: lifelike-and-believable/rules-for-robots/.github/workflows/rfr-process.yml@rfr-v5.1.4
+    with:
+      rules-ref: rfr-v5.1.4
+    permissions:
+      contents: read
+      pull-requests: read
+      issues: write
+    secrets: inherit
