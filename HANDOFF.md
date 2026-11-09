@@ -1,0 +1,69 @@
+# Handoff: quiet-launcher
+
+Last updated: 2026-11-09. Keep this current: update it at the end of each step, before a pull
+request, and before any restart.
+
+## Goal
+
+A home screen for the household's Google TV that shows only their apps (no suggestions, banners, or
+advertising) and keeps search. Read `docs/product/concept.md` (draft) for the intent and
+`PLAN.md` for where the project is. Device facts and everything tried so far are in
+`docs/product/notes.md`.
+
+## Repository
+
+| | |
+|---|---|
+| GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
+| Local | `C:\Unreal Projects\quiet-launcher` |
+| State | One commit on `main` (`2c3f4fb`, set-up with the draft concept); CI green |
+| Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
+| Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository) |
+
+Every change from here on goes through a pull request with a tier label (`tier:epic` for concept,
+requirements, personas, and epics). Do not merge a pull request that touches `docs/product/`,
+`docs/design/`, `docs/user/`, or `docs/tutorials/` unless the project lead says to, and then comment
+quoting the instruction. In solo mode, open artifact pull requests with `status: approved` and
+hashes recorded (`node ../rules-for-robots/checks/process-relink.mjs <id>`); merging is the
+approval.
+
+## Where we stopped
+
+The concept is drafted and waiting for the project lead. It has 12 open items: `[proposed]` and
+`[assumed]` markers on every claim, and three `[open]` questions (household only or published;
+typed search across apps required or not; whether the watchlist, Play purchases, and live TV must
+stay reachable). Nothing downstream should be written until the concept is approved.
+
+A spike is proposed but not started: test whether Google's search accepts a typed query sent by
+another app (see `PLAN.md`, next steps). Ask before running it.
+
+## The reference device
+
+A Chromecast with Google TV (Android 14) in the family room, at `10.0.0.202`, paired with this PC
+for wireless ADB.
+
+- ADB: `C:\Users\Demo\AppData\Local\Microsoft\WinGet\Packages\Google.PlatformTools_Microsoft.Winget.Source_8wekyb3d8bbwe\platform-tools\adb.exe`
+  (installed with winget; plain `adb` works in a new terminal).
+- The connection port changes whenever wireless debugging restarts. Run `adb mdns services` to find
+  the `_adb-tls-connect` port, then `adb connect 10.0.0.202:<port>`. The last port was `39423`.
+- In Git Bash, set `MSYS_NO_PATHCONV=1` before `adb shell` commands that name `/sdcard/...`, or Git
+  Bash rewrites the path.
+- Screenshot: `adb shell screencap -p /sdcard/c.png`, `adb pull /sdcard/c.png <local path>`, then
+  delete the file on the TV.
+
+This is the household's TV. Ask before changing settings, installing or removing apps, or changing
+what the Home button opens. Look at a screenshot before pressing select in an unfamiliar screen:
+one test intent (`com.google.assistant.SEARCH_TAB`) opened the Play Store with **Uninstall**
+(Google TV Home) focused.
+
+Current state of the TV: Google TV is the home screen, apps only mode is off, Projectivy Launcher
+is installed with its override and accessibility service off, and DAZN was uninstalled at the
+project lead's request.
+
+## Lessons from the first session
+
+- Apps only mode turns off typed search, voice, the watchlist, and Play purchases, and still shows
+  a featured banner. The project lead rejected it for losing search.
+- A replacement launcher that overrides Home blocks typed search, because search is inside the
+  Google TV home app. Voice search (Gemini) survives.
+- Other apps' search providers are closed to non-system apps (`GLOBAL_SEARCH` permission).
