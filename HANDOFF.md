@@ -37,11 +37,21 @@ On 2026-11-09 the project lead answered the concept's three open questions, and 
 - Typed search across all apps is the main reason for the product.
 - The watchlist, Play purchases, and live TV do not need to stay reachable, for now.
 
-The concept stays `draft`. One question is still open: can another app reach Google's typed
-search? Because that search is now the reason for the product, the spike in `PLAN.md` decides
-whether the concept holds. Ask before running it. The 8 remaining `[proposed]` markers also need
-the project lead's confirmation before approval. Nothing downstream should be written until the
-concept is approved.
+The search spike ran the same day, with the project lead's go-ahead. Sending a show's name to
+Google's search with `GLOBAL_SEARCH` and a `query` extra opened Google TV's page for the show, with
+the app that has it. So the concept holds, with two limits now in its Feasibility section: the
+Google TV home app must stay installed and unblocked (the results page is its), and a vague query
+can get a Gemini chat reply instead. Details are in `docs/product/notes.md`.
+
+The concept stays `draft` (draft PR #3). Before approval, the project lead confirms the 8
+remaining `[proposed]` markers. Nothing downstream should be written until the concept is
+approved. Still untested: `WEB_SEARCH`, and `cmd package set-home-activity` (which changes the
+home screen, so ask first).
+
+Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
+Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
+(the IP and the mDNS name), set `ANDROID_SERIAL=10.0.0.202:<port>`. `adb pull` needs a Windows
+path (`C:/...`), not `/c/...`.
 
 ## The reference device
 

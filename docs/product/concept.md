@@ -58,8 +58,13 @@ it was. [proposed]
 - Keeping Google TV's other features reachable from the new home screen (the watchlist, Google
   Play purchases, live TV channels), for now.
 
-## Open questions
+## Feasibility
 
-- [open] Can another app reach Google's typed search across apps, for example by sending it the
-  typed text? If not, the product has to find another route to cross-app search, or it loses the
-  reason it exists. A spike on the reference device answers this (`docs/product/notes.md`).
+Another app can reach Google's typed search. On the reference device, sending the text of a show's
+name to Google's search opened Google TV's page for that show, with the app that has it (spike,
+2026-11-09, in `docs/product/notes.md`). Two limits follow:
+
+- The results page belongs to Google TV's own home app, so the product has to take over the Home
+  button while leaving that app installed and working, rather than disabling or blocking it.
+- Google's assistant decides what the text means: a vague query can get a chat reply instead of
+  results.
