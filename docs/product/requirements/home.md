@@ -25,7 +25,8 @@ Release: first
 
 The home screen shows the installed apps that can be opened from a TV home screen, and nothing that
 promotes content: no suggested shows, previews, featured banners, rows of content from apps,
-advertising, or apps that are not installed.
+advertising, or apps that are not installed. This holds at every moment, including while Home is
+being pressed: Google TV's home screen must not show, even briefly, before this one.
 
 ## REQ-home-3: The household arranges the apps
 

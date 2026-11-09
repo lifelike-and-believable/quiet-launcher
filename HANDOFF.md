@@ -52,9 +52,30 @@ questions. REQ-setup-2 assumed the Home button could be taken over while Google 
 working. Three spikes the same day settled it (`docs/product/notes.md`): `set-home-activity` and
 disabling only Google TV's home screen do not work, but an accessibility service that answers only
 Google TV's `HomeActivity` does, and search results still open. The test app is in
-`spikes/home-takeover/`; it was removed from the TV afterwards and the TV put back. Open: Google
-TV's home screen flashes for 0.15 to 0.4 s at each Home press, which REQ-home-2 may forbid; catching
-the Home key instead needs a person at the remote to test. Build tools are per user in
+`spikes/home-takeover/`; it was removed from the TV afterwards and the TV put back. But Google
+TV's home screen flashes for 0.15 to 0.4 s at each Home press, and the project lead decided no flash
+is allowed (REQ-home-2 now says so). So the requirements wait for one more test, which the project
+lead will do at the TV on the evening of 2026-11-09: catching the Home key itself.
+
+The remote test (keys sent over ADB never reach an accessibility service, so it needs the real
+remote). The APK is already built at `spikes/home-takeover/build/quiet-spike.apk` (`bash
+spikes/home-takeover/build.sh` rebuilds it). Install it, turn on its service, and set `key` mode:
+
+```
+adb install spikes/home-takeover/build/quiet-spike.apk
+adb shell settings put secure enabled_accessibility_services quiet.launcher.spike/.HomeWatcher
+adb shell settings put secure accessibility_enabled 1
+adb shell am start -n quiet.launcher.spike/.MainActivity --es mode key
+adb logcat -c; adb logcat -s QLSPIKE
+```
+
+The project lead opens an app with the remote, presses Home a few times (from an app, and from a
+show page after searching with the test screen's button), and watches for any glimpse of Google TV.
+The log shows whether `key KEYCODE_HOME` arrives. If it does not, or Google TV still shows, the
+flash is not avoidable this way: bring REQ-home-2 back to the project lead. Then undo:
+`adb shell settings delete secure enabled_accessibility_services`,
+`adb shell settings put secure accessibility_enabled 0`, `adb uninstall quiet.launcher.spike`, and
+check that Home opens Google TV. Build tools are per user in
 `%LOCALAPPDATA%\AndroidBuild`.
 Then set the three files to `approved`, record hashes with `process-relink`, and merge with the
 project lead's go-ahead. Personas come next.
