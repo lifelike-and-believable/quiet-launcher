@@ -48,12 +48,14 @@ approved (`bb761b9`).
 
 Then the project lead answered the requirements questions, and branch `requirements` has the three
 areas (`docs/product/requirements/home.md`, `search.md`, `setup.md`) as drafts, with no open
-questions. One `[assumed]` is left: REQ-setup-2 assumes the Home button can be taken over while
-Google TV's home app keeps working. `cmd package set-home-activity` was tried the same day and does not work on this build
-(`docs/product/notes.md`); the TV was put back. Disabling only Google TV's home screens over ADB is
-refused by Android 14. The remaining route is an accessibility service that answers only Google
-TV's home screen (needs a test app installed: ask first), or the project lead accepts it as
-`[to validate]`.
+questions. REQ-setup-2 assumed the Home button could be taken over while Google TV's home app keeps
+working. Three spikes the same day settled it (`docs/product/notes.md`): `set-home-activity` and
+disabling only Google TV's home screen do not work, but an accessibility service that answers only
+Google TV's `HomeActivity` does, and search results still open. The test app is in
+`spikes/home-takeover/`; it was removed from the TV afterwards and the TV put back. Open: Google
+TV's home screen flashes for 0.15 to 0.4 s at each Home press, which REQ-home-2 may forbid; catching
+the Home key instead needs a person at the remote to test. Build tools are per user in
+`%LOCALAPPDATA%\AndroidBuild`.
 Then set the three files to `approved`, record hashes with `process-relink`, and merge with the
 project lead's go-ahead. Personas come next.
 
