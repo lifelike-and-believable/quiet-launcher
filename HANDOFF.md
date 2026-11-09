@@ -49,8 +49,9 @@ approved (`bb761b9`).
 Then the project lead answered the requirements questions, and branch `requirements` has the three
 areas (`docs/product/requirements/home.md`, `search.md`, `setup.md`) as drafts, with no open
 questions. One `[assumed]` is left: REQ-setup-2 assumes the Home button can be taken over while
-Google TV's home app keeps working. Settle it by trying `cmd package set-home-activity` on the TV
-(ask first: it changes the home screen) or by the project lead accepting it as `[to validate]`.
+Google TV's home app keeps working. `cmd package set-home-activity` was tried the same day and does not work on this build
+(`docs/product/notes.md`); the TV was put back. Next try one of the two routes in notes (ask first:
+each changes the TV), or the project lead accepts it as `[to validate]`.
 Then set the three files to `approved`, record hashes with `process-relink`, and merge with the
 project lead's go-ahead. Personas come next.
 

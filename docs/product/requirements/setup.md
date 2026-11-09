@@ -31,9 +31,8 @@ Google's search sends the household to them. (Search results are its pages; see 
 Feasibility section.)
 
 [assumed] There is a way to take over the Home button that leaves Google TV's home app working. It
-is not yet shown on the reference device. The candidates are `set-home-activity` over ADB, or
-catching only the Home button rather than every launch of Google TV's app. The concept depends on
-this.
+is not yet shown on the reference device: making another app the home role holder does not work
+there, because Google TV's home screen still wins. The concept depends on this.
 
 ## REQ-setup-3: It stays the home screen after a restart
 

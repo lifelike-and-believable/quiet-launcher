@@ -47,8 +47,7 @@ From `cmd package query-activities` and `dumpsys package`:
 ## Becoming the home screen
 
 Google TV has no setting for choosing a home screen. Known routes: an accessibility service that
-intercepts Home (Projectivy's approach), or disabling `launcherx` over ADB. Whether
-`cmd package set-home-activity` works on this build is not yet tested.
+intercepts Home (Projectivy's approach), or disabling `launcherx` over ADB. `cmd package set-home-activity` does not work on this build: see the spike below.
 
 ## Spike: a typed query from another app (2026-11-09)
 
@@ -71,6 +70,27 @@ am start -a android.search.action.GLOBAL_SEARCH   -n com.google.android.katniss/
   and `KEYCODE_SLEEP` returned it to Google TV's home screen, asleep. A launcher only sends the
   query while someone is using the TV, so waking is not a concern for the product, but further
   tests should expect the TV to turn on.
-- Not tried: `android.intent.action.WEB_SEARCH`, whether a query naming several shows or a person
-  gives a results list, and `cmd package set-home-activity` (it changes the home screen, so it
-  needs the project lead's go-ahead).
+- Not tried: `android.intent.action.WEB_SEARCH`, and whether a query naming several shows or a
+  person gives a results list.
+
+## Spike: `set-home-activity` (2026-11-09)
+
+With the project lead's go-ahead, and Projectivy (override and accessibility service off) standing
+in for this product:
+
+- Before: the `android.app.role.HOME` role holder was `com.google.android.tungsten.setupwraith`
+  (not the Google TV home app), and Home resolved to
+  `com.google.android.apps.tv.launcherx/.home.HomeActivity`. Activities answering HOME: launcherx
+  `HomeActivity` and `VanillaModeHomeActivity` (filter priority 2), setupwraith `RecoveryActivity`
+  (priority 1), Projectivy (priority 0), and `com.android.tv.settings/.system.FallbackHome`
+  (priority -1000).
+- `cmd package set-home-activity com.spocky.projengmenu` printed `Success` and made Projectivy the
+  role holder, but Home still resolved to launcherx's `HomeActivity`, and pressing Home opened
+  Google TV. The priority-2 filter wins over the role holder on this build.
+- Restored with `cmd package set-home-activity com.google.android.tungsten.setupwraith`; Home opens
+  Google TV again.
+- So the role is not the way in. Untried routes that would leave launcherx's search pages working:
+  an accessibility service that answers only Google TV's home screen (`HomeActivity`) coming to the
+  front, not its other pages, and disabling only launcherx's two home activities over ADB
+  (`pm disable-user` on components), which would also need setupwraith's `RecoveryActivity` out of
+  the way. Both change the TV, so each needs the project lead's go-ahead.
