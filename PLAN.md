@@ -33,11 +33,10 @@ file tracks where the project is; it is not a process artifact.
 3. Done (2026-11-09): the project lead confirmed every `[proposed]` claim; the concept says
    `status: approved` in #3 (`tier:epic`), merged 2026-11-09.
 4. In progress: requirements for home, search, and setup, written from the project lead's answers
-   of 2026-11-09. Left before approval: REQ-setup-2 assumes Home can be taken over while Google TV's
-   home app keeps working. On 2026-11-09, `set-home-activity` did not work and Android 14 refused to
-   disable only Google TV's home screens (notes). Next: spike an accessibility service that answers
-   only Google TV's home screen (installs a test app, so ask first), or the project lead accepts
-   `[to validate]`.
+   of 2026-11-09. REQ-setup-2's assumption is settled: on 2026-11-09 an accessibility service that
+   answers only Google TV's home screen took over Home while search results kept working
+   (`set-home-activity` and disabling only Google TV's home screens did not work; notes). Left before
+   approval: Google TV's home screen flashes for 0.15 to 0.4 s at each Home press (REQ-home-2).
 5. Personas, then check each requirement against each persona.
 
 ## Decisions so far

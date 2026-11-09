@@ -12,8 +12,7 @@ derived-from:
 
 <!-- docs/product/requirements/setup.md. Installing the product, making it the home screen, keeping
 it there, and removing it. The project lead's answers of 2026-11-09 are written as decided; the
-project lead also accepted the agent's proposals for the rest. One assumption, marked [assumed],
-is still to be shown on the device. -->
+project lead also accepted the agent's proposals for the rest. -->
 
 ## REQ-setup-1: Set up once, by the project lead, from a computer
 
@@ -29,10 +28,6 @@ Release: first
 After setup, Google TV's own home app is still installed and enabled, and its pages still open when
 Google's search sends the household to them. (Search results are its pages; see the concept's
 Feasibility section.)
-
-[assumed] There is a way to take over the Home button that leaves Google TV's home app working. It
-is not yet shown on the reference device: making another app the home role holder does not work
-there, because Google TV's home screen still wins, and ADB cannot turn off only that screen. The concept depends on this.
 
 ## REQ-setup-3: It stays the home screen after a restart
 
