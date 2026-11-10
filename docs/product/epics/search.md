@@ -37,7 +37,9 @@ has it, without opening each app in turn. Back brings them home. Voice search st
 
 ## Stories
 
-- None written yet.
+- story-search-back-from-results
+- story-search-type-and-search
+- story-search-voice-search
 
 ## Release groups
 

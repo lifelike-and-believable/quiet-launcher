@@ -14,8 +14,8 @@ file tracks where the project is; it is not a process artifact.
 | 2 | Discovery (optional) | `docs/product/discovery/<topic>.md` | Probably skip | |
 | 3 | Requirements | `docs/product/requirements/{home,search,setup}.md` | Approved 2026-11-09 (#4 merged, `13f6a23`) | #4 |
 | 4 | Personas | `docs/product/personas/viewer.md`, `setup-person.md` | Approved 2026-11-09 (#5, #6) | #5, #6 |
-| 5 | Epics | `docs/product/epics/{quiet-home,search,arranging,setup}.md` | `status: approved` in the epics PR; approved when it merges | |
-| 6 | Stories | `docs/product/stories/` | Not started | |
+| 5 | Epics | `docs/product/epics/{quiet-home,search,arranging,setup}.md` | Approved 2026-11-09 (#11) | #11 |
+| 6 | Stories | `docs/product/stories/{quiet-home,search,setup}/` (first release, 12) | `status: approved` in #16; approved when it merges | #16 |
 | 7 | Design and UX, with mock-ups | `docs/design/` | Not started | |
 | 8 | User documentation | `docs/user/` | Not started | |
 | 9 | Specs, tests first, implementation | | Not started | |
@@ -45,8 +45,11 @@ file tracks where the project is; it is not a process artifact.
 6. Done (2026-11-09): four epics. First release: quiet-home, search, setup (apps in install
    order). Second release: arranging (on the TV behind a guard, and from the PC); REQ-home-3 and 4
    moved to `Release: second`.
-7. Next: stories for the first-release epics, starting with the release groups that must ship
-   together (Home opens this screen + the apps; type and search + back; set up + restart + undo).
+7. Done (2026-11-09): 12 first-release stories, revised after a persona walkthrough, approved in
+   #16. Arranging's stories come with the second release.
+8. Next: design and UX (stage 7) for the first release, with mock-ups: every state, including the
+   ones the walkthrough left for design (initial focus, layout and overflow, focus indicator, clock,
+   the searching state, offline).
 
 ## Decisions so far
 
@@ -65,4 +68,5 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | Personas: household viewer and set-up person, as working assumptions | `docs/product/personas/` |
 | 2026-11-09 | Only the set-up person arranges and hides apps; apps show their own artwork and name | `docs/product/requirements/home.md` |
 | 2026-11-09 | First release: home, search, setup; arranging and hiding in the second release, on the TV behind a guard and from the PC | `docs/product/epics/` |
+| 2026-11-09 | If the product stops working, Google TV's home screen is the fallback; no self-detection or recovery in the first release | `docs/product/epics/setup.md` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |
