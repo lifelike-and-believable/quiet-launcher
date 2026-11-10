@@ -1,15 +1,15 @@
 ---
 id: design-setup
-status: draft
+status: approved
 derived-from:
-  - story-setup-set-up:
-  - story-setup-restart:
-  - story-setup-recover:
-  - story-setup-undo:
-  - decision-home-takeover:
-  - persona-setup-person#goals:
-  - persona-setup-person#skills-and-tools:
-  - persona-setup-person#frustrations:
+  - story-setup-set-up: 6a69bd06742a
+  - story-setup-restart: 1f1806140267
+  - story-setup-recover: 734f151fb73e
+  - story-setup-undo: 37a930b0c7c5
+  - decision-home-takeover: d5aa5ee157da
+  - persona-setup-person#goals: 1b5715ea18d9
+  - persona-setup-person#skills-and-tools: 0ba05e70b88d
+  - persona-setup-person#frustrations: 3e2f3fa89e9f
 ---
 
 # Setup design

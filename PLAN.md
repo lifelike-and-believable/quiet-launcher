@@ -15,8 +15,8 @@ file tracks where the project is; it is not a process artifact.
 | 3 | Requirements | `docs/product/requirements/{home,search,setup}.md` | Approved 2026-11-09 (#4 merged, `13f6a23`) | #4 |
 | 4 | Personas | `docs/product/personas/viewer.md`, `setup-person.md` | Approved 2026-11-09 (#5, #6) | #5, #6 |
 | 5 | Epics | `docs/product/epics/{quiet-home,search,arranging,setup}.md` | Approved 2026-11-09 (#11) | #11 |
-| 6 | Stories | `docs/product/stories/{quiet-home,search,setup}/` (first release, 12) | `status: approved` in #16; approved when it merges | #16 |
-| 7 | Design and UX, with mock-ups | `docs/design/` | Not started | |
+| 6 | Stories | `docs/product/stories/{quiet-home,search,setup}/` (first release, 12) | Approved 2026-11-09 (#16) | #16 |
+| 7 | Design and UX, with mock-ups | `docs/design/home-screen.md`, `setup.md`, `decisions/home-takeover.md` | `status: approved` in #29; approved when it merges | #29 |
 | 8 | User documentation | `docs/user/` | Not started | |
 | 9 | Specs, tests first, implementation | | Not started | |
 | 10 | Tutorials (`runner: manual` until there is an on-device runner) | `docs/tutorials/` | Not started | |
@@ -47,9 +47,14 @@ file tracks where the project is; it is not a process artifact.
    moved to `Release: second`.
 7. Done (2026-11-09): 12 first-release stories, revised after a persona walkthrough, approved in
    #16. Arranging's stories come with the second release.
-8. Next: design and UX (stage 7) for the first release, with mock-ups: every state, including the
-   ones the walkthrough left for design (initial focus, layout and overflow, focus indicator, clock,
-   the searching state, offline).
+8. Done (2026-11-09): the first-release design, checked on the TV (the app list, the search wait)
+   and revised after a persona walkthrough, a UX review, and an accessibility review; approved in
+   #29. Four `[to validate]` items for the first build's on-TV tests: the service is running at
+   start-up before Google TV's home screen appears; Back from an app opened from the quiet home
+   screen returns to it; the remote's voice button is unaffected; Google's search screen opens in
+   about half a second.
+9. Next: user documentation (stage 8): the household's guide to the quiet home screen, and the set-up
+   person's setup, recover, and undo procedures, written from the designs.
 
 ## Decisions so far
 
@@ -69,4 +74,5 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | Only the set-up person arranges and hides apps; apps show their own artwork and name | `docs/product/requirements/home.md` |
 | 2026-11-09 | First release: home, search, setup; arranging and hiding in the second release, on the TV behind a guard and from the PC | `docs/product/epics/` |
 | 2026-11-09 | If the product stops working, Google TV's home screen is the fallback; no self-detection or recovery in the first release | `docs/product/epics/setup.md` |
+| 2026-11-09 | Apps stay in install order until arranging; other home-screen apps (Projectivy) are left out | `docs/design/home-screen.md` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |

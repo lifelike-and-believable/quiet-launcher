@@ -1,19 +1,19 @@
 ---
 id: design-home-screen
-status: draft
+status: approved
 derived-from:
-  - story-quiet-home-home-key:
-  - story-quiet-home-apps:
-  - story-quiet-home-new-and-removed-apps:
-  - story-quiet-home-tv-settings:
-  - story-quiet-home-clock:
-  - story-search-type-and-search:
-  - story-search-back-from-results:
-  - story-search-voice-search:
-  - decision-home-takeover:
-  - persona-viewer#goals:
-  - persona-viewer#frustrations:
-  - persona-viewer#skills-and-tools:
+  - story-quiet-home-home-key: 7adbfcde7ee1
+  - story-quiet-home-apps: de56391dc699
+  - story-quiet-home-new-and-removed-apps: bbd39a3046ae
+  - story-quiet-home-tv-settings: 3d83f1d1826f
+  - story-quiet-home-clock: 398abb5f2f2e
+  - story-search-type-and-search: e7e72556b2ae
+  - story-search-back-from-results: 47ec4dd4e43f
+  - story-search-voice-search: a8131087ae80
+  - decision-home-takeover: d5aa5ee157da
+  - persona-viewer#goals: 24b5a84b1f16
+  - persona-viewer#frustrations: 8722d20eb95e
+  - persona-viewer#skills-and-tools: 401370018d77
 ---
 
 # Home screen design

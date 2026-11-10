@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `4c5ac56` (through epics approved); branch `stories-first-release` (#16) in review |
+| State | `main` at `b442222` (through stories approved); branch `design-first-release` (#29) in review |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -74,8 +74,16 @@ and `epic-arranging` (the second release: on the TV behind a guard, and from the
 Then 12 first-release stories (`docs/product/stories/`), revised after a `persona-walkthrough`
 pass, `status: approved` in PR #16 (`tier:story`); approved when it merges. The set-up persona's
 title became "Set-up person" so the process check matches "As the set-up person". The project lead
-accepted that if the product stops working, Google TV's home screen is the fallback. Next: design
-and UX for the first release (`PLAN.md`, step 8).
+accepted that if the product stops working, Google TV's home screen is the fallback. Merged as #16.
+
+Then the first-release design, `status: approved` in PR #29 (`tier:story`), approved when it
+merges: `design-home-screen` (with mock-ups rendered from `docs/design/home-screen/mockup.html` by
+`render.sh`, headless Edge), `design-setup` (PowerShell scripts `quiet-setup.ps1` and
+`quiet-undo.ps1`), and `decision-home-takeover`. Two read-only checks on the TV settled the app list
+(Android's TV apps minus four Google system apps, and minus other home screens) and what Google
+shows while a search loads. A persona walkthrough, UX review, and accessibility review led to a
+revision. Four `[to validate]` items wait for the first build's on-TV tests (`PLAN.md`, step 8).
+Next: user documentation (`PLAN.md`, step 9).
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV

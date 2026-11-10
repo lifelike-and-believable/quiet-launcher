@@ -1,12 +1,12 @@
 ---
 id: decision-home-takeover
-status: draft
+status: approved
 derived-from:
-  - requirements-home#REQ-home-2:
-  - epic-quiet-home#outcome:
-  - epic-setup#outcome:
-  - persona-viewer#frustrations:
-  - persona-setup-person#goals:
+  - requirements-home#REQ-home-2: 5a569bef7afc
+  - epic-quiet-home#outcome: ad1e8e9b386c
+  - epic-setup#outcome: fcfa341d2d11
+  - persona-viewer#frustrations: 8722d20eb95e
+  - persona-setup-person#goals: 1b5715ea18d9
 ---
 
 # Decision: take over Home with an accessibility service that catches the Home key
