@@ -46,7 +46,9 @@ switch -Regex ($argv -join ' ') {
             $out = "connected to $($argv[1])"
         } else { $out = "failed to connect to $($argv[1])" }
     }
-    '^get-serialno$' {
+    # As the reference device answered: get-serialno gives the connection's name, not the TV's.
+    '^get-serialno$' { $out = if ($device) { $device } else { @($s.devices)[0] } }
+    '^shell getprop ro\.serialno$' {
         # One TV can be listed twice (its address and its mDNS name); another device has its own.
         $own = if ($device -and $s.serials) { $s.serials.$device } else { $null }
         $out = if ($own) { $own } else { $s.serialno }
