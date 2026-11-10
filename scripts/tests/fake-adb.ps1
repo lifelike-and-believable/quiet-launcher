@@ -78,10 +78,16 @@ switch -Regex ($argv -join ' ') {
         else { $out = @($out, '     Bound services:{}') }
     }
     '^shell am start -a android\.intent\.action\.MAIN -c android\.intent\.category\.HOME$' {
-        $s.top = if ((Bound) -and $s.covers) { 'quiet.launcher/.HomeActivity' } else { "$LAUNCHERX/.home.HomeActivity" }
+        # Already in front, Google TV's home screen opens no window, so there is nothing to cover.
+        $alreadyHome = $s.top -eq "$LAUNCHERX/.home.HomeActivity"
+        $s.top = if ((Bound) -and $s.covers -and -not $alreadyHome) { 'quiet.launcher/.HomeActivity' } else { "$LAUNCHERX/.home.HomeActivity" }
         $out = 'Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] }'
         # The reference device wrote this to stderr (Google TV's home was already running).
         $err = 'Warning: Activity not started, its current task has been brought to the front'
+    }
+    '^shell am start -a android\.settings\.SETTINGS$' {
+        $s.top = 'com.android.tv.settings/.MainSettings'
+        $out = 'Starting: Intent { act=android.settings.SETTINGS }'
     }
     '^shell input keyevent KEYCODE_WAKEUP$' { $s | Add-Member -Force -NotePropertyName awake -NotePropertyValue $true }
     '^shell dumpsys activity activities$' {
