@@ -315,6 +315,28 @@ class test_setup_checks(unittest.TestCase):
         self.assertIn("open an issue", out)
 
 
+class test_setup_asleep(unittest.TestCase):
+    # setup-scripts#AC-6: the reference device was asleep when the project lead ran setup; a
+    # sleeping TV shows no home screen, so setup wakes it for the picture and the checks.
+    def test_setup_wakes_a_sleeping_tv(self):
+        pc = Pc(self, tv(awake=False))
+        code, out = pc.setup()
+        self.assertEqual(code, 0, out)
+        self.assertIn("Google TV's home screen covered when it opens: yes", out)
+        calls = pc.tv["calls"]
+        wake = [i for i, c in enumerate(calls) if c.endswith("input keyevent KEYCODE_WAKEUP")]
+        picture = [i for i, c in enumerate(calls) if "screencap" in c]
+        self.assertTrue(wake, calls)
+        self.assertLess(wake[0], picture[0])
+
+    # setup-scripts#AC-8: undo checks the home screen too.
+    def test_undo_wakes_a_sleeping_tv(self):
+        pc = Pc(self, tv(awake=False))
+        code, out = pc.undo()
+        self.assertEqual(code, 0, out)
+        self.assertTrue(any(c.endswith("input keyevent KEYCODE_WAKEUP") for c in pc.tv["calls"]))
+
+
 class test_setup_remote_checks(unittest.TestCase):
     # setup-scripts#AC-7
     def test_the_answers_go_in_the_log(self):
@@ -416,6 +438,18 @@ class test_common(unittest.TestCase):
         code, out = pc.setup(shell="powershell")
         self.assertEqual(code, 0, out)
         code, out = pc.undo(shell="powershell")
+        self.assertEqual(code, 0, out)
+
+    # setup-scripts#AC-10: with ADB a separate program, as a set-up person has it, its warnings on
+    # stderr (am start: "Activity not started...") do not stop Windows PowerShell 5.1.
+    @unittest.skipUnless(shutil.which("powershell"), "Windows PowerShell 5.1 is only on Windows")
+    def test_adb_warnings_do_not_stop_windows_powershell_5(self):
+        pc = Pc(self, tv())
+        code, out = pc.setup(shell="powershell", adb_on_path=True)
+        self.assertNotIn("NativeCommandError", out)
+        self.assertEqual(code, 0, out)
+        code, out = pc.undo(shell="powershell", adb_on_path=True)
+        self.assertNotIn("NativeCommandError", out)
         self.assertEqual(code, 0, out)
 
 

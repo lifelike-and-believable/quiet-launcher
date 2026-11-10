@@ -25,6 +25,7 @@ $device = $null
 if ($argv.Count -ge 2 -and $argv[0] -eq '-s') { $device = $argv[1]; $argv = $argv[2..($argv.Count - 1)] }
 $code = 0
 $out = @()
+$err = $null
 
 switch -Regex ($argv -join ' ') {
     '^version$' { $out = 'Android Debug Bridge version 1.0.41', 'Version 36.0.0-13206524' }
@@ -79,9 +80,13 @@ switch -Regex ($argv -join ' ') {
     '^shell am start -a android\.intent\.action\.MAIN -c android\.intent\.category\.HOME$' {
         $s.top = if ((Bound) -and $s.covers) { 'quiet.launcher/.HomeActivity' } else { "$LAUNCHERX/.home.HomeActivity" }
         $out = 'Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] }'
+        # The reference device wrote this to stderr (Google TV's home was already running).
+        $err = 'Warning: Activity not started, its current task has been brought to the front'
     }
+    '^shell input keyevent KEYCODE_WAKEUP$' { $s.awake = $true }
     '^shell dumpsys activity activities$' {
-        $out = "      topResumedActivity=ActivityRecord{a1 u0 $($s.top) t1}"
+        # A sleeping TV has no resumed activity.
+        if ($s.awake -ne $false) { $out = "      topResumedActivity=ActivityRecord{a1 u0 $($s.top) t1}" }
     }
     '^shell cmd package resolve-activity --brief -a android\.intent\.action\.MAIN -c android\.intent\.category\.HOME$' {
         $out = 'priority=2 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true', "$LAUNCHERX/.home.HomeActivity"
@@ -110,4 +115,5 @@ switch -Regex ($argv -join ' ') {
 
 Save
 $out | ForEach-Object { Write-Output $_ }
+if ($err) { [Console]::Error.WriteLine($err) }
 exit $code
