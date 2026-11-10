@@ -1,11 +1,11 @@
 ---
 id: requirements-setup
-status: draft
+status: approved
 derived-from:
-  - concept#audience:
-  - concept#vision:
-  - concept#non-goals:
-  - concept#feasibility:
+  - concept#audience: be038af174a9
+  - concept#vision: b94432cae6a3
+  - concept#non-goals: 54f57f35eb0d
+  - concept#feasibility: 5a6fcb1f845f
 ---
 
 # Setup requirements

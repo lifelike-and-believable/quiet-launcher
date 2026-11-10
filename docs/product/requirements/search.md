@@ -1,9 +1,9 @@
 ---
 id: requirements-search
-status: draft
+status: approved
 derived-from:
-  - concept#vision:
-  - concept#feasibility:
+  - concept#vision: b94432cae6a3
+  - concept#feasibility: 5a6fcb1f845f
 ---
 
 # Search requirements

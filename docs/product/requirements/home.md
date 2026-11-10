@@ -1,9 +1,9 @@
 ---
 id: requirements-home
-status: draft
+status: approved
 derived-from:
-  - concept#vision:
-  - concept#non-goals:
+  - concept#vision: b94432cae6a3
+  - concept#non-goals: 54f57f35eb0d
 ---
 
 # Home screen requirements
@@ -25,8 +25,10 @@ Release: first
 
 The home screen shows the installed apps that can be opened from a TV home screen, and nothing that
 promotes content: no suggested shows, previews, featured banners, rows of content from apps,
-advertising, or apps that are not installed. This holds at every moment, including while Home is
-being pressed: Google TV's home screen must not show, even briefly, before this one.
+advertising, or apps that are not installed.
+
+Pressing Home never shows Google TV's home screen, even briefly, before this one. If Google TV
+brings its home screen up on its own, this home screen covers it within 0.5 seconds.
 
 ## REQ-home-3: The household arranges the apps
 

@@ -123,9 +123,9 @@ Findings:
   ours) before the test screen covers it, so its promotion can flash on screen at each Home press.
   A launcherx `coreservices.bootmode.DispatchActivity` window also appears on Home and on wake; it
   is not the home screen and was ignored.
-- Catching the Home key itself (the service's `key` mode) could not be tried: keys injected with
-  `adb shell input keyevent` never reached the service's `onKeyEvent` (no Home, Back, or select was
-  logged). It needs someone pressing the real remote. If it works it would avoid the flash.
+- Catching the Home key itself (the service's `key` mode) could not be tried over ADB: keys injected
+  with `adb shell input keyevent` never reached the service's `onKeyEvent`. It was tried that
+  evening with the real remote; see the next section.
 - Not tried: surviving a restart, a long sleep (when Google TV may go to its home screen on wake),
   and Google TV updates.
 
@@ -136,3 +136,25 @@ Google TV again; the home role holder is still `com.google.android.tungsten.setu
 Build tools for the spike, per user with no administrator rights: Microsoft OpenJDK 17 and the
 Android command-line tools (platform 34, build-tools 34.0.0) under `%LOCALAPPDATA%\AndroidBuild`.
 The JDK's MSI installer needs administrator approval, which was cancelled.
+
+## Spike: catching the Home key with the real remote (2026-11-09, evening)
+
+The same test app in `key` mode (it consumes `KEYCODE_HOME` and opens its own screen; it does not
+react to windows), with the project lead pressing the remote's buttons and the log read over ADB.
+
+- The real remote's keys reach the service's `onKeyEvent`: Home, Back, select, the direction pad,
+  and the YouTube and Netflix buttons (`KEYCODE_BUTTON_3` and `KEYCODE_BUTTON_4`). A Home press
+  usually arrives as down and up 0 to 7 ms apart; held presses arrive with the real gap.
+- 11 Home presses, from the Apple TV app, YouTube, Netflix, Google TV's page for a show, and the test
+  screen, including three held for 2 to 6.5 s. Every one opened the test screen, 0.03 to 0.7 s after
+  the press, and the project lead saw no Google TV home screen before it.
+- Once, on the first press (from the Apple TV app, held 0.22 s), Google TV's `home.HomeActivity`
+  came up 1.8 s after the test screen and stayed, because `key` mode does not react to windows.
+  Repeating the same steps from the Apple TV app, and short and held presses from other apps, did
+  not bring it back. Cause unknown.
+- Consuming Home also stops Google TV's own long-press Home action.
+- So catching the key avoids the flash. A product would also need the window check from the earlier
+  spike as a fallback, so that Google TV's home screen, if it comes up on its own as it did once, is
+  covered within about 0.4 s.
+
+Cleanup as before; Home opens Google TV again. The full log was kept outside the repository.

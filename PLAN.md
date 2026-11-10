@@ -12,7 +12,7 @@ file tracks where the project is; it is not a process artifact.
 | 1 | Concept | `docs/product/concept.md` | Approved 2026-11-09 (#3 merged, `bb761b9`) | #3 |
 | – | Spike: search entry points | `docs/product/notes.md` | Done 2026-11-09: a typed query from another app opens Google TV's results | #3 |
 | 2 | Discovery (optional) | `docs/product/discovery/<topic>.md` | Probably skip | |
-| 3 | Requirements | `docs/product/requirements/{home,search,setup}.md` | Draft; every answer written in; one `[assumed]` left (REQ-setup-2) | (this branch) |
+| 3 | Requirements | `docs/product/requirements/{home,search,setup}.md` | `status: approved` in #4; approved when #4 merges | #4 |
 | 4 | Personas | `docs/product/personas/` (only the web-app `end-user` starter so far) | Not started | |
 | 5 | Epics | `docs/product/epics/` | Not started | |
 | 6 | Stories | `docs/product/stories/` | Not started | |
@@ -32,13 +32,11 @@ file tracks where the project is; it is not a process artifact.
    results in `docs/product/notes.md`.
 3. Done (2026-11-09): the project lead confirmed every `[proposed]` claim; the concept says
    `status: approved` in #3 (`tier:epic`), merged 2026-11-09.
-4. In progress: requirements for home, search, and setup, written from the project lead's answers
-   of 2026-11-09. REQ-setup-2's assumption is settled: on 2026-11-09 an accessibility service that
-   answers only Google TV's home screen took over Home while search results kept working
-   (`set-home-activity` and disabling only Google TV's home screens did not work; notes). But Google
-   TV's home screen flashes for 0.15 to 0.4 s at each Home press, and the project lead decided no
-   flash is allowed (REQ-home-2). Left before approval: the project lead tests catching the Home
-   key with the real remote (spike `key` mode; see HANDOFF.md).
+4. Done (2026-11-09): requirements for home, search, and setup, from the project lead's answers.
+   Four spikes on the TV settled how to take over Home (notes): `set-home-activity` and disabling
+   only Google TV's home screens fail; an accessibility service that catches the Home key, with a
+   check that covers Google TV's home screen if it comes up anyway, works and keeps search. The
+   files say `status: approved` in #4; merging #4 is the approval.
 5. Personas, then check each requirement against each persona.
 
 ## Decisions so far
@@ -54,5 +52,5 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | The watchlist, Play purchases, and live TV need not stay reachable, for now | `docs/product/concept.md` |
 | 2026-11-09 | Every concept claim confirmed as written | `docs/product/concept.md` |
 | 2026-11-09 | Requirements answers: all apps shown, household arranges and hides them; one shared screen; search box on Home sends text to Google's results; chat replies accepted; voice button, settings, clock; set up and undone by the project lead from a PC; Home in 1 second; survives reboots | `docs/product/requirements/` |
-| 2026-11-09 | Google TV's home screen must not show, even briefly, when Home is pressed | `docs/product/requirements/home.md` (REQ-home-2) |
+| 2026-11-09 | Pressing Home never shows Google TV's home screen; if it comes up on its own, it is covered within 0.5 s | `docs/product/requirements/home.md` (REQ-home-2) |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |

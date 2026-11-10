@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `bb761b9` (concept approved); branch `requirements` drafts the requirements |
+| State | `main` at `bb761b9` (concept approved); branch `requirements` (PR #4) approves the requirements |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -46,39 +46,20 @@ can get a Gemini chat reply instead. Details are in `docs/product/notes.md`.
 Later that day the project lead confirmed every concept claim, and #3 merged: the concept is
 approved (`bb761b9`).
 
-Then the project lead answered the requirements questions, and branch `requirements` has the three
-areas (`docs/product/requirements/home.md`, `search.md`, `setup.md`) as drafts, with no open
-questions. REQ-setup-2 assumed the Home button could be taken over while Google TV's home app keeps
-working. Three spikes the same day settled it (`docs/product/notes.md`): `set-home-activity` and
-disabling only Google TV's home screen do not work, but an accessibility service that answers only
-Google TV's `HomeActivity` does, and search results still open. The test app is in
-`spikes/home-takeover/`; it was removed from the TV afterwards and the TV put back. But Google
-TV's home screen flashes for 0.15 to 0.4 s at each Home press, and the project lead decided no flash
-is allowed (REQ-home-2 now says so). So the requirements wait for one more test, which the project
-lead will do at the TV on the evening of 2026-11-09: catching the Home key itself.
+Then the project lead answered the requirements questions, and branch `requirements` (PR #4,
+`tier:epic`) has the three areas (`docs/product/requirements/home.md`, `search.md`, `setup.md`),
+now `status: approved` with hashes recorded. They are approved when the project lead merges #4.
 
-The remote test (keys sent over ADB never reach an accessibility service, so it needs the real
-remote). The APK is already built at `spikes/home-takeover/build/quiet-spike.apk` (`bash
-spikes/home-takeover/build.sh` rebuilds it). Install it, turn on its service, and set `key` mode:
+Four spikes the same day settled how to take over Home (`docs/product/notes.md`): `set-home-activity`
+and disabling only Google TV's home screen do not work. An accessibility service does: catching the
+Home key (tested that evening with the project lead at the remote: 11 presses, no Google TV home
+screen seen) avoids a flash, and a check on Google TV's `home.HomeActivity` window covers it if it
+comes up on its own (it did once, 1.8 s after a Home press, not reproduced). Search results still
+open. The test app is in `spikes/home-takeover/` and was removed from the TV afterwards. REQ-home-2
+records the project lead's decision: Home never shows Google TV's home screen, and a stray one is
+covered within 0.5 s. Build tools are per user in `%LOCALAPPDATA%\AndroidBuild`.
 
-```
-adb install spikes/home-takeover/build/quiet-spike.apk
-adb shell settings put secure enabled_accessibility_services quiet.launcher.spike/.HomeWatcher
-adb shell settings put secure accessibility_enabled 1
-adb shell am start -n quiet.launcher.spike/.MainActivity --es mode key
-adb logcat -c; adb logcat -s QLSPIKE
-```
-
-The project lead opens an app with the remote, presses Home a few times (from an app, and from a
-show page after searching with the test screen's button), and watches for any glimpse of Google TV.
-The log shows whether `key KEYCODE_HOME` arrives. If it does not, or Google TV still shows, the
-flash is not avoidable this way: bring REQ-home-2 back to the project lead. Then undo:
-`adb shell settings delete secure enabled_accessibility_services`,
-`adb shell settings put secure accessibility_enabled 0`, `adb uninstall quiet.launcher.spike`, and
-check that Home opens Google TV. Build tools are per user in
-`%LOCALAPPDATA%\AndroidBuild`.
-Then set the three files to `approved`, record hashes with `process-relink`, and merge with the
-project lead's go-ahead. Personas come next.
+Next: personas (`PLAN.md`, step 5), then the check of each requirement against each persona.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
