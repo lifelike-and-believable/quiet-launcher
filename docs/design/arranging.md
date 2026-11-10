@@ -184,9 +184,9 @@ Tubi
 
 ## States and errors
 
-- **Holding select**: nothing shows during the 5 seconds [assumed: no hint, so a viewer holding
+- **Holding select**: nothing shows during the 5 seconds [assumed]: with no hint, a viewer holding
   select out of habit only sees their app open, and nothing on the screen invites a guest to keep
-  holding]. The app opens when select is let go before 5 seconds, as it does now.
+  holding. The app opens when select is let go before 5 seconds, as it does now.
 - **A viewer who chose Arrange apps by mistake**: nothing changes until an app is moved or hidden;
   Back or Home leaves. The viewer's documentation says so.
 - **Leaving arrange mode**: Back (with no menu open and nothing being moved), Home, or 2 minutes with

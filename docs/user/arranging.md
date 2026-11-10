@@ -2,7 +2,7 @@
 id: docs-arranging
 status: draft
 derived-from:
-  - design-arranging: 92d1337041d5
+  - design-arranging: 8ddf3ffce6ae
   - story-arranging-reorder: 9b4b345c6750
   - story-arranging-hide: 840d019d7142
   - story-arranging-guard: 3683dae6a4bf
