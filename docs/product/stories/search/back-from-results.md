@@ -1,0 +1,19 @@
+---
+id: story-search-back-from-results
+status: draft
+derived-from:
+  - epic-search#outcome:
+  - persona-viewer#goals:
+---
+
+# Back from the results returns home
+
+<!-- docs/product/stories/search/back-from-results.md. Release: first. -->
+
+As a household viewer, I want Back to take me from the search results to the home screen, so that a
+search never leaves me stuck on Google's screens.
+
+## Acceptance criteria
+
+- Pressing Back on Google's page for a show, or on its chat reply, returns to the quiet home screen.
+- The search box is empty when I return.

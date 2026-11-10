@@ -5,7 +5,7 @@ derived-from:
   - concept#audience: be038af174a9
 ---
 
-# The set-up person
+# Set-up person
 
 <!-- docs/product/personas/setup-person.md. The project lead in the role of the one who installs,
 recovers, and removes the product. They are also a viewer (persona-viewer); this persona covers only
