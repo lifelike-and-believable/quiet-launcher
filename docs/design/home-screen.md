@@ -97,7 +97,10 @@ Play Store last.
   device) are left out (the project lead's decision, 2026-11-09).
 - **Selection**: the selected item has a white outline with a black edge outside it (so it shows on
   light and dark artwork alike), is slightly enlarged, and its name turns white and bold. Exactly
-  one item is selected at all times.
+  one item is selected at all times. On an app, the white outline pulses gently (brightening and
+  dimming about once a second, as Google TV's does) for about 5 seconds after the app is selected,
+  then stays steady. Banners and icons have rounded corners, the same as the outline, so no corner
+  shows outside it (the project lead's change request, 2026-11-09).
 - **Movement** (no wrapping anywhere):
   - Left and right move to the neighbour in the same row, and do nothing at the ends of a row.
   - Down from the top row goes to the app nearest below the control; Up from the first row of apps
@@ -212,5 +215,7 @@ Play Store last.
     did not open).
   - Pressing **Search** with nothing typed is announced as "Type something to search".
 - With the TV's "remove animations" setting on, nothing animates: the selection changes without
-  enlarging smoothly, the grid jumps a row, and the searching overlay shows its text without the
-  spinner.
+  enlarging smoothly, the outline does not pulse, the grid jumps a row, and the searching overlay
+  shows its text without the spinner.
+- The pulse stops after about 5 seconds, so nothing on the screen moves for longer than that on its
+  own (WCAG 2.2.2).
