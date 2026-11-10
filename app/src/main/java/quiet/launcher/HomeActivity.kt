@@ -57,10 +57,28 @@ class HomeActivity : Activity() {
             gravity = Gravity.CENTER
             visibility = View.GONE
         }
+        // STUB (tests-first commit, slice 3): the top-row views exist, with none of their behaviour.
+        val stubRow = android.widget.LinearLayout(this).apply {
+            id = R.id.top_row
+            addView(android.widget.EditText(this@HomeActivity).apply { id = R.id.search_box })
+            addView(TextView(this@HomeActivity).apply { id = R.id.voice_button; text = "Voice" })
+            addView(TextView(this@HomeActivity).apply { id = R.id.settings_button; text = "Prefs" })
+            addView(TextView(this@HomeActivity).apply { id = R.id.clock })
+        }
+        val stubStatus = TextView(this).apply { id = R.id.status_line; visibility = View.GONE }
+        val stubOverlay = FrameLayout(this).apply {
+            id = R.id.search_overlay
+            addView(TextView(this@HomeActivity).apply { id = R.id.search_overlay_title })
+            addView(TextView(this@HomeActivity).apply { id = R.id.search_overlay_note })
+            addView(View(this@HomeActivity).apply { id = R.id.search_spinner })
+        }
         setContentView(FrameLayout(this).apply {
             setBackgroundColor(Color.parseColor("#101418"))
             addView(grid, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             addView(emptyMessage, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            addView(stubRow)
+            addView(stubStatus)
+            addView(stubOverlay)
         })
 
         val filter = IntentFilter().apply {
