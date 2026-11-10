@@ -1,12 +1,12 @@
 ---
 id: docs-setup
-status: draft
+status: approved
 derived-from:
-  - design-setup:
-  - story-setup-set-up:
-  - story-setup-restart:
-  - story-setup-recover:
-  - story-setup-undo:
+  - design-setup: 918b06f0cecd
+  - story-setup-set-up: 6a69bd06742a
+  - story-setup-restart: 1f1806140267
+  - story-setup-recover: 734f151fb73e
+  - story-setup-undo: 37a930b0c7c5
 ---
 
 # Setting up, recovering, and removing the quiet home screen

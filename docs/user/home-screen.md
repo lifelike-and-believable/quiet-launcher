@@ -1,16 +1,16 @@
 ---
 id: docs-home-screen
-status: draft
+status: approved
 derived-from:
-  - design-home-screen:
-  - story-quiet-home-home-key:
-  - story-quiet-home-apps:
-  - story-quiet-home-new-and-removed-apps:
-  - story-quiet-home-tv-settings:
-  - story-quiet-home-clock:
-  - story-search-type-and-search:
-  - story-search-back-from-results:
-  - story-search-voice-search:
+  - design-home-screen: 6896cca3136d
+  - story-quiet-home-home-key: 7adbfcde7ee1
+  - story-quiet-home-apps: cef8c5e03e43
+  - story-quiet-home-new-and-removed-apps: bbd39a3046ae
+  - story-quiet-home-tv-settings: 3d83f1d1826f
+  - story-quiet-home-clock: 398abb5f2f2e
+  - story-search-type-and-search: e7e72556b2ae
+  - story-search-back-from-results: 47ec4dd4e43f
+  - story-search-voice-search: a8131087ae80
 ---
 
 # Using the quiet home screen
