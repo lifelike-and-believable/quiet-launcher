@@ -67,7 +67,7 @@ file tracks where the project is; it is not a process artifact.
     3. Merged as #33: the top row and search (search box, searching and failed states, voice
        search, Settings, clock, status line, TalkBack, movement); checked on the TV.
     4. The **Google TV** button (the project lead's request, 2026-11-09): documents approved in #34;
-       the code in #35, checked on the TV with the project lead.
+       the code in #36, checked on the TV with the project lead.
     5. The setup and undo scripts, tested against a fake ADB, then on the TV.
 
 ## Decisions so far

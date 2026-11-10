@@ -128,7 +128,7 @@ Slice 3, the top row and search, merged as #33 (merge commit):
 implementation; 49 tests pass; checked on the TV over ADB. The project lead's feature request, a **Google TV** button (top row next to **Settings**, anyone,
 uncovered until the next Home press or sleep), is in the documents in PR #34 (concept non-goal,
 REQ-home-12, story-quiet-home-google-tv, design with a mock-up, decision note, user docs). Merged as
-#34. Its code is in PR #35 (`docs/specs/google-tv-button.md`, implemented; 57 tests pass; checked
+#34. Its code is in PR #36 (`docs/specs/google-tv-button.md`, implemented; 57 tests pass; checked
 on the TV with the project lead). Next: slice 5, the setup and undo scripts. Wireless debugging turns off on restart; the TV's ADB port is now 34447.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
