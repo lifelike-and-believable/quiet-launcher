@@ -21,6 +21,8 @@ persona-viewer#goals. -->
 
 - Uses the remote: the direction pad, select, back, home, and the app buttons (YouTube, Netflix).
 - Types a title with the on-screen keyboard.
+- Occasionally uses voice search (Gemini) with the remote's voice button, but rarely; it should keep
+  working, though nobody would go out of their way for it.
 - Can operate a simple, predictable home screen, but does not change settings or configure the TV.
 - A guest knows common apps (YouTube, Netflix) by their icons, but has never seen this home screen.
 
@@ -45,4 +47,5 @@ the project lead not there to help; a guest uses the TV with no explanation.
   frustrations. Nobody else in the household was asked directly. [to validate]
 - Replaces the web-app profile's `end-user` starter. Guests were folded in rather than given their own
   persona: they want the same things, with less familiarity.
-- Voice search is not used today, according to the project lead.
+- Voice search: the project lead uses it occasionally but rarely, and wants the remote's voice
+  button to keep working (correction from the project lead, 2026-11-09).
