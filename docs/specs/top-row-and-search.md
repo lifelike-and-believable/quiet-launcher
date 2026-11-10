@@ -1,5 +1,5 @@
 ---
-status: draft
+status: implemented
 tests: [app/src/test]
 tests-commit: 11dc7420668d8b4430d553deca738b24cf4464ff
 ---
@@ -43,6 +43,16 @@ docs-home-screen.
 | AC-13 | On the reference device: typing a show's title and pressing **Search** opens Google's page for it; Google's search screen opens within about half a second of **Search** (the `[to validate]` item in design-home-screen); Back returns with the box selected and empty; **Voice search** and **Settings** work; the screen matches the design's mock-ups. | command: install the build (standing go-ahead), check with the remote and screenshots, restore the TV |
 
 A test cites a criterion as `top-row-and-search#AC-1` in its name or a comment.
+
+## Results on the reference device (2026-11-09)
+
+AC-13, driven over ADB with screenshots (no Home key needed): typing "Severance" and pressing
+**Search** handed over to Google's search screen within about 10 ms of the key (Google's page for
+the show followed about 5 s later), which confirms the design's `[to validate]` half-second; Back
+returned with **Search for a show** selected and empty; **Voice search** opened Google's listening
+prompt over the quiet home screen; **Settings** opened the TV's settings. The screen matches the
+mock-ups. Found and fixed: **Settings** reopened the Settings app wherever it had been left (deep in
+Developer options), so it now always opens a fresh Settings task at the top level.
 
 ## Scope
 

@@ -247,7 +247,8 @@ class HomeActivity : Activity() {
 
     private fun openSettings() {
         returnTo = R.id.settings_button
-        startActivity(Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        // A fresh Settings task, at its top level, not wherever it was last left.
+        startActivity(Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
     }
 
     private fun googleSearch() = Intent("android.search.action.GLOBAL_SEARCH")
