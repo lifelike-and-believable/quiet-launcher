@@ -26,6 +26,9 @@
   .focused { outline: 5px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 11px var(--ring);
              background: #2b343c; color: var(--text); border-color: transparent; transform: scale(1.04); }
   .head { min-height: 96px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+  .headrow { display: flex; align-items: baseline; justify-content: space-between; }
+  .count { font-size: 30px; color: var(--text); }
+  body.arranging .viewport { padding-top: 34px; clip-path: inset(12px -40px 0 -40px); }
   .head h1 { margin: 0; font-size: 44px; font-weight: 600; }
   .head p { margin: 0; font-size: 30px; color: var(--muted); }
   .status { height: 56px; display: flex; align-items: center; padding-left: 36px; font-size: 28px; color: var(--note); }
@@ -101,6 +104,8 @@
                'MUBI', 'Spotify', 'Plex', 'Vimeo', 'STACKTV', 'TuneIn Radio', 'VLC', 'myfilmfriend', 'Google Play Store'];
   let hidden = ['ExpressVPN', 'Tubi'];
   if (state === 'no-hidden') { shown = shown.concat(hidden); hidden = []; }
+  if (state === 'after-hide') { shown.splice(shown.indexOf('Plex') - 1, 0); }
+  if (state === 'last-app') { hidden = shown.slice(1).concat(hidden); shown = shown.slice(0, 1); }
   if (state === 'moving') { shown.splice(shown.indexOf('Prime Video'), 1); shown.splice(1, 0, 'Prime Video'); }
 
   const tile = (name, id, extra = '') => {
@@ -116,8 +121,10 @@
 
   const arranging = state !== 'confirm';
   if (arranging) {
+    document.body.classList.add('arranging');
+    const count = hidden.length ? `${hidden.length} hidden app${hidden.length > 1 ? 's' : ''}, at the end` : 'No hidden apps';
     document.getElementById('top').outerHTML =
-      '<div class="head"><h1>Arranging apps</h1><p>Select an app to move or hide it. Press Back when you are done; changes are saved as you go.</p></div>';
+      `<div class="head"><div class="headrow"><h1>Arranging apps</h1><span class="count">${count}</span></div><p>Select an app to move or hide it. Press Back when you are done; changes are saved as you go.</p></div>`;
     const area = document.getElementById('hiddenArea');
     area.insertAdjacentHTML('beforeend', `<div class="rowlabel"><b>Hidden apps</b><span>${hidden.length ? 'Not on the home screen. Select one to show it again.' : ''}</span></div>`);
     if (hidden.length) {
@@ -144,7 +151,9 @@
     'menu': 'Select on an app in arrange mode: Move or Hide',
     'moving': 'Moving Prime Video: the arrows move it, select puts it down',
     'hidden-menu': 'Select on a hidden app: Show',
-    'no-hidden': 'Arrange mode with no hidden apps',
+    'no-hidden': 'Arrange mode with no hidden apps, scrolled to the end',
+    'after-hide': 'After Hide on Tubi: it is in the Hidden apps row; the next app is selected',
+    'last-app': 'The last app on the home screen: no Hide',
   };
   document.getElementById('label').textContent = 'Mock-up — ' + (labels[state] || state);
 
@@ -155,7 +164,14 @@
       '<p>You can change the order of the apps and hide the ones nobody uses. The changes are for everyone who uses this TV.</p>' +
       '<div class="buttons"><div class="pill focused">Cancel</div><div class="pill">Arrange apps</div></div></div></div>');
   }
-  if (state === 'arrange' || state === 'no-hidden') focus('app0');
+  if (state === 'arrange') focus('app3');
+  const scroll = px => ['grid', 'hiddenArea'].forEach(id => document.getElementById(id).style.transform = `translateY(${px}px)`);
+  if (state === 'no-hidden') { scroll(-486); focus('app15'); }
+  if (state === 'after-hide') {
+    scroll(-486); focus('app' + shown.indexOf('Plex'));
+    status('Tubi hidden. It is in the Hidden apps row.');
+  }
+  if (state === 'last-app') { focus('app0'); menuAt('app0', ['Move', 'Cancel']); status('Keep at least one app on the home screen.'); }
   if (state === 'menu') { focus('app3'); menuAt('app3', ['Move', 'Hide', 'Cancel']); }
   if (state === 'moving') {
     const t = document.getElementById('app1'); t.classList.add('moving');
@@ -164,9 +180,7 @@
     status('Moving Prime Video. Use the arrows, then press select to put it here. Back puts it back.');
   }
   if (state === 'hidden-menu') {
-    document.getElementById('grid').style.transform = 'translateY(-486px)';
-    document.getElementById('hiddenArea').style.transform = 'translateY(-486px)';
-    focus('hid1'); menuAt('hid1', ['Show', 'Cancel']);
+    scroll(-486); focus('hid1'); menuAt('hid1', ['Show', 'Cancel']);
   }
 </script>
 </body>

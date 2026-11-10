@@ -15,8 +15,8 @@ later, so that the home screen shows only what we use, without uninstalling anyt
 
 ## Acceptance criteria
 
-- In arrange mode, I can hide any app. It is no longer on the quiet home screen, and it stays
-  installed.
+- In arrange mode, I can hide any app except the last one left on the home screen. It is no
+  longer on the quiet home screen, and it stays installed.
 - In arrange mode, the hidden apps are in their own **Hidden apps** row, so I can always see which
   apps are hidden, and I can show any of them again. It comes back at the end of the list.
 - A hidden app still opens from Google's search and voice results.

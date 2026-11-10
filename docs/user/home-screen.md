@@ -108,8 +108,9 @@ The time is at the top right. It follows the TV's own time settings, including w
 
 - The apps stay where they are. A newly installed app appears at the end; an app that is
   uninstalled disappears. Only the person who set up the TV can move or hide apps.
-- If you hold select on an app for a long time, the TV asks whether to arrange the apps. Press
-  select on **Cancel**, or press Back: nothing changes.
+- If you hold select on an app for 5 seconds, the TV asks whether to arrange the apps. Press
+  select on **Cancel**, or press Back: nothing changes. If you went past the question by mistake,
+  the screen says "Arranging apps" at the top: press Back, and everything is as it was.
 - Some apps are not shown: the TV's own settings app (use **Settings** instead), Play Games, Google
   TV, other home-screen apps, and any apps the person who set up the TV has hidden. Hidden apps
   still open from search and voice results.

@@ -22,5 +22,11 @@ hunt for one or call the set-up person over because something moved.
 - Arranging starts only after holding select on an app for 5 seconds and then choosing
   **Arrange apps** on a screen that asks first. On that screen **Cancel** is selected at first, so
   pressing select again changes nothing.
-- Back or Home leaves arrange mode. After 2 minutes with no button pressed, arrange mode closes by
-  itself, so it is never left open for the next person.
+- If I get past the question by mistake, Back or Home leaves arrange mode with nothing changed.
+  After 2 minutes with no button pressed, arrange mode closes by itself, so it is never left open
+  for the next person.
+
+[open] REQ-home-3 and 4 say nobody but the set-up person can arrange the apps "on purpose or by
+accident". The hold and the question stop accidents; a guest who knows about the hold could still
+arrange the apps on purpose. Either the requirements change to "by accident", or the guard needs
+something only the set-up person knows.

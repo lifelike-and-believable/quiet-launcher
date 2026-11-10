@@ -2,7 +2,7 @@
 id: docs-setup
 status: approved
 derived-from:
-  - design-setup: 918b06f0cecd
+  - design-setup: 42f29dde6285
   - story-setup-set-up: 6a69bd06742a
   - story-setup-restart: 1f1806140267
   - story-setup-recover: 734f151fb73e
@@ -133,9 +133,11 @@ Undo works even if the quiet home screen is not working, or setup stopped half w
 already removed, step 3 says it is already removed. The script keeps the backup, renamed
 `backup-<serial>-undone-<date>.json`, so the next setup takes a fresh one.
 
-Undo also removes the arrangement of the apps (docs-arranging). If you have arranged them, run
-Arrange apps (`quiet-arrange.cmd`) first and keep the file it saves, so you can put the arrangement back after setting
-up again (docs-arranging#put-a-saved-arrangement-back).
+If you have arranged the apps (docs-arranging), undo saves the arrangement to Documents\QuietLauncher
+before it removes the app, and says so under step 3. After you set it up again, the arrangement
+script offers to put it back (docs-arranging#put-an-arrangement-back-after-setting-up-again). If the
+quiet home screen is not working, undo cannot read the arrangement; the copy saved the last time
+you used the arrangement script is still there.
 
 ## Options
 
