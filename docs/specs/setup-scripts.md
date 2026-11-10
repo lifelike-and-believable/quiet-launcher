@@ -54,7 +54,7 @@ A test cites a criterion as `setup-scripts#AC-1` in its name or a comment.
 - ADB commands, all seen on the reference device in the spikes: `devices`, `mdns services`, `pair`,
   `connect`, `install -r`, `uninstall`, `shell settings get|put|delete secure ...`, `shell pm list
   packages -e`, `shell pm path`, `shell sha256sum`, `shell dumpsys package|accessibility|activity`,
-  `shell am start`, `shell screencap`, `pull`, `get-serialno`, `shell getprop`.
+  `shell am start`, `shell screencap`, `pull`, `shell getprop` (`ro.serialno` names the TV: `get-serialno` gives the connection, which changes).
 - For tests: the scripts use the ADB named by `QUIET_ADB` if set, the folder named by
   `QUIET_FOLDER` if set (instead of Documents\QuietLauncher), and the answers in `QUIET_ANSWERS`
   (separated by `|`) before asking at the console. Set-up persons never need these.

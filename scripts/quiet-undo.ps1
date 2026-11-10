@@ -108,6 +108,18 @@ function Get-Devices {
     return @((Adb devices) -split "`n" | Where-Object { $_ -match "^(\S+)\s+device$" } | ForEach-Object { ($_ -split '\s+')[0] })
 }
 
+# ADB can list one TV twice, by its address and by its mDNS name. One entry for each serial number,
+# the address when there is one.
+function Get-Tvs {
+    $bySerial = [ordered]@{}
+    foreach ($d in @(Get-Devices)) {
+        $serial = "$(Adb -s $d shell getprop ro.serialno)".Trim()
+        if (-not $serial) { $serial = $d }
+        if (-not $bySerial.Contains($serial) -or $d -match '^\d+\.\d+\.\d+\.\d+:\d+$') { $bySerial[$serial] = $d }
+    }
+    return @($bySerial.Values)
+}
+
 function Get-MdnsAddress {
     foreach ($line in ((Adb mdns services) -split "`n")) {
         if ($line -match '_adb-tls-connect\._tcp\s+(\S+)') { return $Matches[1] }
@@ -130,7 +142,7 @@ function Could-Not-Connect([string]$step) {
 
 # The TV step, shared with quiet-undo.ps1 (design-setup: TV states).
 function Connect-Tv([string]$step) {
-    $devices = @(Get-Devices)
+    $devices = @(Get-Tvs)
     if ($Tv) {
         if ($devices -notcontains $Tv) {
             Adb connect $Tv | Out-Null
@@ -210,7 +222,7 @@ if (-not $script:adb) {
     Stop-Setup
 }
 $script:serial = Connect-Tv '[1/4]'
-$tvSerial = (Tv get-serialno).Trim()
+$tvSerial = (Tv shell getprop ro.serialno).Trim()
 
 # ---- 2. Accessibility settings ----
 
