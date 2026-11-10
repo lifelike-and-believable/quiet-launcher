@@ -10,7 +10,8 @@ derived-from:
 
 <!-- docs/product/requirements/home.md. What the screen shown by the Home button must do. The
 project lead's answers of 2026-11-09 are written as decided; the project lead also accepted
-the agent's proposals for the rest. -->
+the agent's proposals for the rest. REQ-home-3, 4, 9, and 11 were amended on 2026-11-09 after the
+check against the personas. -->
 
 ## REQ-home-1: Home opens the quiet home screen
 
@@ -30,20 +31,21 @@ advertising, or apps that are not installed.
 Pressing Home never shows Google TV's home screen, even briefly, before this one. If Google TV
 brings its home screen up on its own, this home screen covers it within 0.5 seconds.
 
-## REQ-home-3: The household arranges the apps
+## REQ-home-3: The set-up person arranges the apps
 
 Release: first
 
-Every installed app appears unless hidden (REQ-home-4). Anyone in the household can move an app to
-a different place in the list, using only the remote, and the order is kept after the TV restarts.
+Every installed app appears unless hidden (REQ-home-4). The set-up person can move an app to a
+different place in the list, and the order is kept after the TV restarts. Nobody else can change the
+order, on purpose or by accident: a viewer pressing buttons on the remote never moves an app.
 
 ## REQ-home-4: Hiding apps
 
 Release: first
 
-Anyone can hide an app from the home screen and show it again later. A hidden app stays installed
-and still opens in other ways (from search results or voice). The hidden apps are listed somewhere
-reachable from the home screen, so a hidden app can always be brought back.
+The set-up person can hide an app from the home screen and show it again later; nobody else can
+hide or show apps. A hidden app stays installed and still opens in other ways (from search results
+or voice). The set-up person can always see which apps are hidden and bring any of them back.
 
 ## REQ-home-5: New and removed apps
 
@@ -76,9 +78,9 @@ setting.
 
 Release: first
 
-Everything on the home screen, including arranging and hiding apps, works with the remote's
-direction pad, select, back, and home buttons. No keyboard, phone, or computer is needed once the
-product is set up.
+Everything a viewer does on the home screen (opening apps, searching, opening settings) works with
+the remote's direction pad, select, back, and home buttons. No keyboard, phone, or computer is
+needed for it once the product is set up.
 
 ## REQ-home-10: Home is fast
 
@@ -87,6 +89,13 @@ Release: first
 On the reference device, pressing Home from another app shows the home screen, with the apps
 visible and selectable, within 1 second, and the search box (REQ-search-1) accepts input within the
 same second.
+
+## REQ-home-11: Apps look like themselves
+
+Release: first
+
+Each app appears with the artwork it provides for TV home screens (its banner, or its icon if it has
+no banner) and its name, so someone who knows the app from elsewhere recognises it.
 
 ## Constraints
 
