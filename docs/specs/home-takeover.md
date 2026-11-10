@@ -1,5 +1,5 @@
 ---
-status: draft
+status: implemented
 tests: [app/src/test]
 tests-commit: [2e159e353d64b8e4106c270e7075d7d605fa93e3, e62af83011411daf0b001010e61b9afd442c9c72, 4b7e695ed2573b574dd110398190a4d80da23463]
 ---
@@ -41,6 +41,16 @@ results, must keep working (REQ-setup-2).
 | AC-10 | On the reference device, after a restart, the service is running before Google TV's home screen first appears, and covers it within half a second (the `[to validate]` item in design-setup). | command: restart the TV (needs the project lead's go-ahead), `adb logcat` from boot |
 
 A test cites a criterion as `home-takeover#AC-1` in its name or a comment.
+
+## Results on the reference device (2026-11-09)
+
+- AC-7: 20 of 20 Home presses on the final build with no Google TV home screen (rounds 4 to 6 in
+  `docs/product/notes.md`, "Slice 2 on the TV").
+- AC-8: 52 to 84 ms from Home to the quiet home screen drawn, after AC-12; 1.5 s once before it.
+- AC-9: Back from an app returns to the quiet home screen with that app selected; the remote's app and
+  voice buttons pass through; Google's page for a show stays open.
+- AC-10: after a restart the quiet home screen came up by itself; Google TV's home screen was resumed
+  3.7 s before it, and the project lead did not notice it. Not confirmed from the logs.
 
 ## Scope
 

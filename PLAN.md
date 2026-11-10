@@ -18,7 +18,7 @@ file tracks where the project is; it is not a process artifact.
 | 6 | Stories | `docs/product/stories/{quiet-home,search,setup}/` (first release, 12) | Approved 2026-11-09 (#16) | #16 |
 | 7 | Design and UX, with mock-ups | `docs/design/home-screen.md`, `setup.md`, `decisions/home-takeover.md` | Approved 2026-11-09 (#29; Play Store and build source amended in #30) | #29, #30 |
 | 8 | User documentation | `docs/user/home-screen.md`, `setup.md` | Approved 2026-11-09 (#30) | #30 |
-| 9 | Specs, tests first, implementation | `docs/specs/`, `app/`, `build.ps1` | Slice 1 (the app list) in #31; slices 2 to 4 not started | #31 |
+| 9 | Specs, tests first, implementation | `docs/specs/`, `app/`, `build.ps1` | Slice 1 merged (#31); slice 2 in #32; slices 3 and 4 not started | #31, #32 |
 | 10 | Tutorials (`runner: manual` until there is an on-device runner) | `docs/tutorials/` | Not started | |
 | 11 | Release | | Not started | |
 
@@ -57,10 +57,13 @@ file tracks where the project is; it is not a process artifact.
    persona walkthrough, approved in #30. With it, the Play Store is shown as the last app, and the
    Quiet Launcher folder is built from the repository (`.\build.ps1`); nothing is published.
 10. Delivery, in four slices, each a spec, a tests-first commit, and the implementation:
-    1. In #31: the project skeleton (Gradle, Kotlin, `build.ps1`, CI) and the app list
+    1. Merged as #31: the project skeleton (Gradle, Kotlin, `build.ps1`, CI) and the app list
        (`docs/specs/app-list.md`); checked on the TV.
-    2. Next: taking over Home (the accessibility service, Back doing nothing), with the four
-       `[to validate]` items and the 20-press screen recording (needs the project lead at the remote).
+    2. In #32: taking over Home (the accessibility service in its own process, an instant cover,
+       Back doing nothing, the list drawn before the apps are read again); 20 of 20 clean Home
+       presses on the TV, 52 to 84 ms to draw. Three of the four `[to validate]` items confirmed
+       (Back from an app, the voice button, restart as observed); the fourth (Google's search
+       screen opening in about half a second) belongs to slice 3.
     3. The top row and search (search box, keyboard, searching and failed states, voice search,
        settings, clock, status line, TalkBack, movement).
     4. The setup and undo scripts, tested against a fake ADB, then on the TV.

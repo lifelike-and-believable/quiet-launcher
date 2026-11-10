@@ -209,7 +209,9 @@ the remote, under the standing go-ahead for test installs. Evidence: Android's a
   quiet home screen was drawn 0.06 to 0.7 s after it, except once: 1.5 s after a Home press from
   Netflix with Google's sign-in dialog up (round 6), over the 1-second budget (REQ-home-10,
   home-takeover#AC-8). Likely cause: each time it is shown the screen re-reads every app and loads
-  all banners on its main thread, while the TV is short of memory.
+  all banners on its main thread, while the TV is short of memory. Fixed by loading each app's artwork once
+  and drawing the list the screen already has before reading the apps again (home-takeover#AC-12):
+  afterwards, 6 Home presses from Netflix, 3 with Google's sign-in dialog up, drew in 52 to 84 ms.
 - The remote's Netflix (`KEYCODE_BUTTON_4`, 191) and YouTube (`KEYCODE_BUTTON_3`) buttons and its voice
   button pass through the service untouched; voice search opened Google's page for the show each
   time.
@@ -220,8 +222,8 @@ the remote, under the standing go-ahead for test installs. Evidence: Android's a
 - Restart (AC-10): after `adb reboot`, Android showed its own start-up home screen
   (`com.android.tv.settings/.system.FallbackHome`), then Google TV's home screen at 22:14:14.5, then
   the quiet home screen at 22:14:18.2, 3.7 s later. The service's start-up log had rotated out, so
-  whether the cover hid those 3.7 s is not known from the logs. [open] Ask the project lead what was
-  on screen, or repeat with `adb logcat` captured from boot.
+  whether the cover hid those 3.7 s is not known from the logs. The project lead, watching, did not
+  notice Google TV's home screen. Next time the TV restarts anyway, capture `adb logcat` from boot.
 - After the restart, wireless debugging was off (Android does not keep it on across a restart on this
   build), and the address's port changed (39423 to 34447). Turning it back on needs Settings.
 - With this build there was no way into Settings with the remote (the **Settings** button is slice 3,
