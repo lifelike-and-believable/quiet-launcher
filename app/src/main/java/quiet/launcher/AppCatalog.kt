@@ -26,4 +26,7 @@ object AppCatalog {
                     .thenBy { it.firstInstallTime }
                     .thenBy { it.label.lowercase() },
             )
+
+    /** arranging-store#AC-1 to AC-4: the arrangement applied to the list [visible] gives. */
+    fun arranged(apps: List<AppEntry>, arrangement: Arrangement?): Arranged = TODO("arranging-store#AC-1")
 }
