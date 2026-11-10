@@ -18,7 +18,7 @@ file tracks where the project is; it is not a process artifact.
 | 6 | Stories | `docs/product/stories/{quiet-home,search,setup}/` (first release, 12) | Approved 2026-11-09 (#16) | #16 |
 | 7 | Design and UX, with mock-ups | `docs/design/home-screen.md`, `setup.md`, `decisions/home-takeover.md` | Approved 2026-11-09 (#29; Play Store and build source amended in #30) | #29, #30 |
 | 8 | User documentation | `docs/user/home-screen.md`, `setup.md` | Approved 2026-11-09 (#30) | #30 |
-| 9 | Specs, tests first, implementation | `docs/specs/`, `app/`, `build.ps1` | Slice 1 merged (#31); slice 2 in #32; slices 3 and 4 not started | #31, #32 |
+| 9 | Specs, tests first, implementation | `docs/specs/`, `app/`, `build.ps1` | Slices 1 to 4 merged (#31, #32, #33, #36); slice 5 (setup scripts) in #38, on-TV run pending | #31, #32, #33, #36, #38 |
 | 10 | Tutorials (`runner: manual` until there is an on-device runner) | `docs/tutorials/` | Not started | |
 | 11 | Release | | Not started | |
 
@@ -68,7 +68,9 @@ file tracks where the project is; it is not a process artifact.
        search, Settings, clock, status line, TalkBack, movement); checked on the TV.
     4. The **Google TV** button (the project lead's request, 2026-11-09): documents approved in #34;
        the code in #36, checked on the TV with the project lead.
-    5. The setup and undo scripts, tested against a fake ADB, then on the TV.
+    5. In #38: the setup and undo scripts (`docs/specs/setup-scripts.md`); tests first (`8837b1b`,
+       30 failing), then the scripts; 30 of 30 pass against a fake ADB, in Windows PowerShell 5.1
+       and PowerShell 7 (CI). AC-12, running both on the TV with the project lead, is next.
 
 ## Decisions so far
 

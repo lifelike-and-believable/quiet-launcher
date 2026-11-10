@@ -129,7 +129,11 @@ implementation; 49 tests pass; checked on the TV over ADB. The project lead's fe
 uncovered until the next Home press or sleep), is in the documents in PR #34 (concept non-goal,
 REQ-home-12, story-quiet-home-google-tv, design with a mock-up, decision note, user docs). Merged as
 #34. Its code is in PR #36 (`docs/specs/google-tv-button.md`, implemented; 57 tests pass; checked
-on the TV with the project lead). Next: slice 5, the setup and undo scripts. Wireless debugging turns off on restart; the TV's ADB port is now 34447.
+on the TV with the project lead). Slice 5, the setup and undo scripts, is in PR #38 (`docs/specs/setup-scripts.md`, draft): tests
+first (`8837b1b`), 30 of 30 pass against `scripts/tests/fake-adb.ps1`; `build.ps1` puts both
+scripts beside the APK in `out\QuietLauncher`. Next: AC-12, run `quiet-setup.ps1` then
+`quiet-undo.ps1` from that folder against the TV with the project lead (they answer the remote
+checks), then mark the spec implemented. Wireless debugging turns off on restart; the TV's ADB port is now 34447.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
