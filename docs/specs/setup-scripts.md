@@ -3,7 +3,8 @@ status: draft
 tests: [scripts/tests]
 tests-commit: 8837b1b69c4c13b21cd6c9e227404b62d06d2b5b
 unlocks:
-  - scripts/tests/test_scripts.py: AC-1 (ADB found or not) was only tested with QUIET_ADB set, so the project lead's first real run stopped at ADB NOT FOUND (the scripts' Adb function hid adb.exe); adds a run option that puts an adb program on PATH instead, and a test that both scripts find it; no existing test changes
+  - scripts/tests/test_scripts.py: AC-1 (ADB found or not) was only tested with QUIET_ADB set, so the project lead's first real run stopped at ADB NOT FOUND (the scripts' Adb function hid adb.exe); adds a run option that puts an adb program on PATH instead, and a test that both scripts find it; AC-2 (more than one device): the project lead's TV was listed twice (its address and its mDNS name, one serial number), which setup took for two devices, so a test lists the same TV twice and expects it to connect, and the existing two-device test gives the emulator its own serial number, as a real second device has; nothing else changes
+  - scripts/tests/fake-adb.ps1: AC-2: answers get-serialno for the device named with -s, from an optional serials map (default: the TV's serial number), so two entries can be one TV or two devices
 ---
 
 # The setup and undo scripts

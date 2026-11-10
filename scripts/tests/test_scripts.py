@@ -164,12 +164,27 @@ class test_setup_tv(unittest.TestCase):
 
     # setup-scripts#AC-2
     def test_more_than_one_device_lists_them(self):
-        pc = Pc(self, tv(devices=[ADDRESS, "emulator-5554"]))
+        pc = Pc(self, tv(devices=[ADDRESS, "emulator-5554"], serials={"emulator-5554": "EMULATOR36X1X18X0"}))
         code, out = pc.setup()
         self.assertNotEqual(code, 0)
         self.assertIn("[2/6] TV: MORE THAN ONE DEVICE", out)
         self.assertIn("emulator-5554", out)
         self.assertIn(f"-Tv {ADDRESS}", out)
+
+    # setup-scripts#AC-2: ADB lists one TV twice, by address and by mDNS name (seen on the
+    # reference device); that is one TV, used by its address.
+    def test_the_same_tv_listed_twice_is_one_tv(self):
+        mdns = "adb-17241HFDD2WLBM-LWjXi8._adb-tls-connect._tcp"
+        for devices in ([ADDRESS, mdns], [mdns, ADDRESS]):
+            pc = Pc(self, tv(devices=devices))
+            code, out = pc.setup()
+            self.assertNotIn("MORE THAN ONE DEVICE", out)
+            self.assertIn(f"[2/6] TV: connected to {ADDRESS}", out)
+            self.assertEqual(code, 0, out)
+            code, out = pc.undo()
+            self.assertNotIn("MORE THAN ONE DEVICE", out)
+            self.assertIn(f"TV: connected to {ADDRESS}", out)
+            self.assertEqual(code, 0, out)
 
 
 class test_setup_backup(unittest.TestCase):

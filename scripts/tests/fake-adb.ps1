@@ -21,7 +21,8 @@ function Bound {
 # A real adb.exe receives text: make every argument a string, as PowerShell would for a program.
 $argv = @($args | ForEach-Object { "$_" })
 $s.calls += , ($argv -join ' ')
-if ($argv.Count -ge 2 -and $argv[0] -eq '-s') { $argv = $argv[2..($argv.Count - 1)] }
+$device = $null
+if ($argv.Count -ge 2 -and $argv[0] -eq '-s') { $device = $argv[1]; $argv = $argv[2..($argv.Count - 1)] }
 $code = 0
 $out = @()
 
@@ -45,7 +46,11 @@ switch -Regex ($argv -join ' ') {
             $out = "connected to $($argv[1])"
         } else { $out = "failed to connect to $($argv[1])" }
     }
-    '^get-serialno$' { $out = $s.serialno }
+    '^get-serialno$' {
+        # One TV can be listed twice (its address and its mDNS name); another device has its own.
+        $own = if ($device -and $s.serials) { $s.serials.$device } else { $null }
+        $out = if ($own) { $own } else { $s.serialno }
+    }
     '^shell getprop ro\.product\.model$' { $out = $s.model }
     '^shell getprop ro\.build\.version\.release$' { $out = $s.release }
     '^shell settings get secure (\S+)$' { $out = Get-Setting $argv[4] }
