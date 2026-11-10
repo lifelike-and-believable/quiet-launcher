@@ -31,5 +31,21 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- docs/specs/home-takeover.md, AC-6: only Android can bind it. Its own process, so the
+             home screen loading on the main thread can never delay its answer to a Home key
+             (Android acts on the release itself if the answer is late; seen on the TV). -->
+        <service
+            android:name=".HomeWatcher"
+            android:process=":watcher"
+            android:exported="false"
+            android:label="@string/service_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/home_watcher" />
+        </service>
     </application>
 </manifest>

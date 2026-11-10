@@ -176,3 +176,57 @@ design:
   shows the query in a glowing box at the bottom for a few seconds, then the show's page fades in,
   blurred at first. The page was in front about 2 to 3 seconds after the request.
 
+## Slice 2 on the TV: taking over Home (2026-11-09, evening)
+
+The slice 2 build (`docs/specs/home-takeover.md`) on the reference device, with the project lead at
+the remote, under the standing go-ahead for test installs. Evidence: Android's activity log
+(`adb logcat -b events`, `wm_set_resumed_activity` and `wm_new_intent`), the service's own log (tag
+`QuietLauncher`), and screen recordings classified frame by frame.
+
+| Round | Build | Home presses | Google TV's home screen seen |
+|---|---|---|---|
+| 1 | first | 10 (5 YouTube, 5 Netflix) | once, about 0.75 s |
+| 2 | service in its own process | 10 (5 Netflix, 5 YouTube) | never |
+| 3 | same | 5 Netflix, then voice searches | once, about 2.3 s, after a voice search |
+| 4 | with the instant cover | 4 from Google's page after a voice search | never |
+| 5 | same | 5 Netflix, 4 with Google's sign-in dialog up | never |
+| 6 | same | 11 (4 YouTube, 4 Netflix with the sign-in dialog twice, 3 after a voice search) | never |
+
+- Both strays came after Google's own screens: Google's "sign in to Netflix with Google" dialog
+  (`com.google.android.gms/.auth.api.credentials.assistedsignin.ui.AtvAssistedSignInActivity`) in
+  round 1, and Google's voice search in round 3. Each time Android was asked to open Google TV's
+  home screen with the same flags (`wm_new_intent ... launcherx/.home.HomeActivity ... 276824320`),
+  and the service then covered it by starting the quiet home screen, which took 0.6 to 2.3 s
+  (longer when Android had to restart Google TV's app for lack of memory).
+- Two changes: the service runs in its own process (`:watcher`), so the home screen loading its
+  banners never delays its answer to a key; and it covers Google TV's home screen at once with a
+  plain overlay (`TYPE_ACCESSIBILITY_OVERLAY`) while the quiet home screen starts
+  (home-takeover#AC-11). With Google TV's home screen opened directly, a recording showed no frame of
+  it: quiet home screen, 0.9 s of plain cover, quiet home screen.
+- With the final build, 20 of 20 Home presses (rounds 4 to 6) showed no Google TV home screen: Android
+  never started it, and no recorded frame was classified as it (home-takeover#AC-7).
+- With the final build, every Home press reached the service (the service now logs every key). The
+  quiet home screen was drawn 0.06 to 0.7 s after it, except once: 1.5 s after a Home press from
+  Netflix with Google's sign-in dialog up (round 6), over the 1-second budget (REQ-home-10,
+  home-takeover#AC-8). Likely cause: each time it is shown the screen re-reads every app and loads
+  all banners on its main thread, while the TV is short of memory. Fixed by loading each app's artwork once
+  and drawing the list the screen already has before reading the apps again (home-takeover#AC-12):
+  afterwards, 6 Home presses from Netflix, 3 with Google's sign-in dialog up, drew in 52 to 84 ms.
+- The remote's Netflix (`KEYCODE_BUTTON_4`, 191) and YouTube (`KEYCODE_BUTTON_3`) buttons and its voice
+  button pass through the service untouched; voice search opened Google's page for the show each
+  time.
+- Back from an app opened from the quiet home screen (CBC News) returned straight to it with that
+  app selected; Google TV's home screen was not involved. The Vimeo app ignores Back: it shows its
+  own "we ended support for our TV apps" dialog.
+- Google's page for a show (`launcherx/.entity.EntityActivity`) is never covered.
+- Restart (AC-10): after `adb reboot`, Android showed its own start-up home screen
+  (`com.android.tv.settings/.system.FallbackHome`), then Google TV's home screen at 22:14:14.5, then
+  the quiet home screen at 22:14:18.2, 3.7 s later. The service's start-up log had rotated out, so
+  whether the cover hid those 3.7 s is not known from the logs. The project lead, watching, did not
+  notice Google TV's home screen. Next time the TV restarts anyway, capture `adb logcat` from boot.
+- After the restart, wireless debugging was off (Android does not keep it on across a restart on this
+  build), and the address's port changed (39423 to 34447). Turning it back on needs Settings.
+- With this build there was no way into Settings with the remote (the **Settings** button is slice 3,
+  and Google TV's own settings are covered); the project lead got there with the voice button
+  ("open settings"). Until slice 3 ships, a test build must not be left on the TV across a restart.
+

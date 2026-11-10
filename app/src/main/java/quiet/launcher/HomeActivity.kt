@@ -9,6 +9,9 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
+import android.util.Log
+import android.view.Choreographer
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -18,13 +21,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-/** The quiet home screen: the grid of apps (docs/specs/app-list.md). */
+/** The quiet home screen (docs/specs/app-list.md, docs/specs/home-takeover.md). */
 class HomeActivity : Activity() {
 
     private lateinit var grid: RecyclerView
     private lateinit var emptyMessage: TextView
     private val adapter = AppAdapter(::open)
     private var firstShow = true
+    private var homePressed = false
+
+    /** One reader for the screen's lifetime, so artwork is loaded once (home-takeover#AC-12). */
+    private val source by lazy { PackageSource(packageManager) }
 
     private val packageChanges = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) = rebuild(selectFirst = false)
@@ -69,11 +76,43 @@ class HomeActivity : Activity() {
         }
     }
 
+    /**
+     * home-takeover#AC-4: a Home press goes to the top with the first app selected; AC-12: at once,
+     * with the list the screen already has.
+     */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        if (intent.getBooleanExtra(EXTRA_HOME, false)) {
+            homePressed = true
+            selectFirstNow()
+            scheduleReload(selectFirst = true)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        // app-list#AC-6: the first time, the first app; app-list#AC-7: afterwards, keep the selection.
-        rebuild(selectFirst = firstShow)
+        if (firstShow) {
+            // app-list#AC-6: nothing to show yet, so read the apps now and select the first.
+            rebuild(selectFirst = true)
+        } else {
+            // home-takeover#AC-12: draw what is there first, then read the apps again (app-list#AC-7),
+            // keeping the selection, or the first app after a Home press (home-takeover#AC-4).
+            if (homePressed) selectFirstNow()
+            scheduleReload(selectFirst = homePressed)
+        }
         firstShow = false
+        homePressed = false
+        // For measuring the Home budget on the TV (home-takeover#AC-8).
+        Choreographer.getInstance().postFrameCallback {
+            Log.i(HomeWatcher.TAG, "home screen drawn at ${SystemClock.uptimeMillis()}")
+        }
+    }
+
+    /** home-takeover#AC-5: Back does nothing here, so it can never reveal Google TV's home screen. */
+    @Deprecated("Back is handled here for every Android version this app supports.")
+    override fun onBackPressed() {
+        // Deliberately empty.
     }
 
     override fun onDestroy() {
@@ -85,7 +124,7 @@ class HomeActivity : Activity() {
     private fun rebuild(selectFirst: Boolean) {
         val selected = grid.findFocus()?.tag as? String
         val oldIndex = adapter.indexOf(selected)
-        val apps = AppCatalog.visible(PackageSource(packageManager).read(), packageName)
+        val apps = AppCatalog.visible(source.read(), packageName)
         adapter.submit(apps)
         emptyMessage.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
         if (apps.isEmpty()) return
@@ -98,6 +137,29 @@ class HomeActivity : Activity() {
         }
         if (selectFirst) grid.scrollToPosition(0)
         grid.post { focusTile(target) }
+    }
+
+    private var reloadPending = false
+    private var reloadSelectsFirst = false
+
+    /** Read the apps again after the next frame; at most one pending, selecting first if any asked. */
+    private fun scheduleReload(selectFirst: Boolean) {
+        reloadSelectsFirst = reloadSelectsFirst || selectFirst
+        if (reloadPending) return
+        reloadPending = true
+        grid.post {
+            val first = reloadSelectsFirst
+            reloadPending = false
+            reloadSelectsFirst = false
+            rebuild(selectFirst = first)
+        }
+    }
+
+    /** The first app, at the top, from the list already shown. */
+    private fun selectFirstNow() {
+        if (adapter.itemCount == 0) return
+        grid.scrollToPosition(0)
+        focusTile(0)
     }
 
     private fun focusTile(position: Int) {
@@ -120,7 +182,10 @@ class HomeActivity : Activity() {
         )
     }
 
-    private companion object {
-        const val COLUMNS = 5
+    companion object {
+        private const val COLUMNS = 5
+
+        /** Set by HomeWatcher on an intent that stands for a Home press (home-takeover#AC-4). */
+        const val EXTRA_HOME = "quiet.launcher.HOME"
     }
 }

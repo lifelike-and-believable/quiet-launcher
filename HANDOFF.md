@@ -109,7 +109,19 @@ always restoring Google TV's home screen afterwards (record the accessibility se
 them back, uninstall, check with a screenshot, sleep the TV if it was asleep). Still ask before other
 settings, other apps, or reboots.
 
-Next: slice 2, taking over Home.
+Merged as #31 (squash; from slice 2 on, merge with a merge commit so each spec's tests-commit stays
+in `main`'s history).
+
+Slice 2, taking over Home, is on branch `slice-2-home-takeover`: `docs/specs/home-takeover.md`, two
+tests-first clusters (`2e159e3`, `e62af83`), the accessibility service in its own process with an
+instant cover overlay, Home resetting the screen, and Back doing nothing (27 tests pass). On the TV
+on 2026-11-09 (`docs/product/notes.md`, "Slice 2 on the TV"): two strays in the first rounds, both
+after Google's own screens, led to the separate process and the cover; the final build was clean in
+20 of 20 Home presses (AC-7 passes). A slow draw (1.5 s with Google's sign-in dialog up) led to
+AC-12 (artwork loaded once, the list drawn before the apps are read again): then 52 to 84 ms (AC-8).
+AC-10: the project lead did not notice Google TV's home screen after a restart; not confirmed from
+the logs (capture `adb logcat` from boot at the next restart). The spec is `implemented`; PR #32.
+Next: slice 3, the top row and search. Wireless debugging turns off on restart; the TV's ADB port is now 34447.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV

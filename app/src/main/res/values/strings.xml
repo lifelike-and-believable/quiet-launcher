@@ -3,4 +3,5 @@
     <string name="app_name">Quiet Launcher</string>
     <!-- docs/design/home-screen.md, States and errors: No apps -->
     <string name="no_apps">No apps to show. Apps installed on this TV appear here.</string>
+    <string name="service_name">Quiet Launcher home button</string>
 </resources>
