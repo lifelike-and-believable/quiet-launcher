@@ -17,8 +17,8 @@ file tracks where the project is; it is not a process artifact.
 | 5 | Epics | `docs/product/epics/{quiet-home,search,arranging,setup}.md` | Approved 2026-11-09 (#11) | #11 |
 | 6 | Stories | `docs/product/stories/{quiet-home,search,setup}/` (first release, 12) | Approved 2026-11-09 (#16) | #16 |
 | 7 | Design and UX, with mock-ups | `docs/design/home-screen.md`, `setup.md`, `decisions/home-takeover.md` | Approved 2026-11-09 (#29; Play Store and build source amended in #30) | #29, #30 |
-| 8 | User documentation | `docs/user/home-screen.md`, `setup.md` | `status: approved` in #30; approved when it merges | #30 |
-| 9 | Specs, tests first, implementation | | Not started | |
+| 8 | User documentation | `docs/user/home-screen.md`, `setup.md` | Approved 2026-11-09 (#30) | #30 |
+| 9 | Specs, tests first, implementation | `docs/specs/`, `app/`, `build.ps1` | Slice 1 (the app list) in #31; slices 2 to 4 not started | #31 |
 | 10 | Tutorials (`runner: manual` until there is an on-device runner) | `docs/tutorials/` | Not started | |
 | 11 | Release | | Not started | |
 
@@ -56,9 +56,14 @@ file tracks where the project is; it is not a process artifact.
 9. Done (2026-11-09): user documentation for the household and the set-up person, revised after a
    persona walkthrough, approved in #30. With it, the Play Store is shown as the last app, and the
    Quiet Launcher folder is built from the repository (`.\build.ps1`); nothing is published.
-10. Next: delivery (stage 9): a spec per area whose criteria cite the stories and these pages, tests
-    written first, then the Android app and the two PowerShell scripts. The first build's on-TV
-    tests must confirm the four `[to validate]` items (step 8).
+10. Delivery, in four slices, each a spec, a tests-first commit, and the implementation:
+    1. In #31: the project skeleton (Gradle, Kotlin, `build.ps1`, CI) and the app list
+       (`docs/specs/app-list.md`); checked on the TV.
+    2. Next: taking over Home (the accessibility service, Back doing nothing), with the four
+       `[to validate]` items and the 20-press screen recording (needs the project lead at the remote).
+    3. The top row and search (search box, keyboard, searching and failed states, voice search,
+       settings, clock, status line, TalkBack, movement).
+    4. The setup and undo scripts, tested against a fake ADB, then on the TV.
 
 ## Decisions so far
 
@@ -80,4 +85,5 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | If the product stops working, Google TV's home screen is the fallback; no self-detection or recovery in the first release | `docs/product/epics/setup.md` |
 | 2026-11-09 | Apps stay in install order until arranging; other home-screen apps (Projectivy) are left out | `docs/design/home-screen.md` |
 | 2026-11-09 | Play Store shown as the last app; the folder is built from the repository, not published | `docs/design/`, `docs/user/setup.md` |
+| 2026-11-09 | Gradle and Kotlin; standing go-ahead to install and remove test builds on the TV, restoring Google TV afterwards | `README.md`, `HANDOFF.md` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |
