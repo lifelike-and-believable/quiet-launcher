@@ -1,0 +1,32 @@
+# Builds the app and runs its unit tests (JUnit and Robolectric) on every pull request and on main.
+name: android
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: '17'
+          cache: gradle
+      - name: Unit tests
+        run: ./gradlew --no-daemon :app:testDebugUnitTest
+      - name: Build
+        run: ./gradlew --no-daemon :app:assembleRelease
+      - name: Test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: app/build/test-results/
