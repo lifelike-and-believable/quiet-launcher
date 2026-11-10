@@ -80,7 +80,7 @@ Play Store last.
 - 1920 by 1080, inside the TV safe area (96 px at the sides, 54 px at the top and bottom). Dark,
   plain background. Nothing on the screen moves or changes on its own, apart from the clock and the
   status line.
-- **Top row**, left to right: **Search for a show** (a search box, with a magnifier, 720 px wide),
+- **Top row**, left to right: **Search for a show** (a search box, with a magnifier, 680 px wide),
   **Voice search** (with a microphone), **Google TV** (with a TV), **Settings** (with a gear), and
   the clock. The clock cannot be
   selected. Each control has a visible edge (`#59646e` on the dark background, at least 3:1). The

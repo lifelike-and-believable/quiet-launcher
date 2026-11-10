@@ -406,10 +406,10 @@ class HomeActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
-            addView(searchBox, LinearLayout.LayoutParams(px(360f), px(44f)))
+            addView(searchBox, LinearLayout.LayoutParams(px(340f), px(44f)))
             addView(voiceButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginStart = px(12f) })
             addView(View(this@HomeActivity), LinearLayout.LayoutParams(0, 1, 1f))
-            addView(googleTvButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginEnd = px(12f) })
+            addView(googleTvButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginStart = px(12f); marginEnd = px(12f) })
             addView(settingsButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)))
             addView(clock, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = px(16f) })
         }

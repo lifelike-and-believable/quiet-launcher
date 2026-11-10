@@ -244,3 +244,12 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
 - The Settings app keeps its task: opening it again returns to wherever it was left, so the quiet
   home screen opens it with `FLAG_ACTIVITY_CLEAR_TASK`.
 
+## The Google TV button on the TV (2026-11-09, late evening)
+
+- Opening Google TV's home screen explicitly (`MAIN` + `HOME` to
+  `com.google.android.apps.tv.launcherx/.home.HomeActivity`) from the accessibility service works.
+- `ACTION_SCREEN_OFF` reaches the service's run-time receiver, and starting the quiet home screen
+  while the screen is off leaves it in front on waking.
+- The top row at 1080p fits **Search for a show** (680 px), **Voice search**, **Google TV**,
+  **Settings**, and the clock inside the safe area, with 24 px gaps.
+

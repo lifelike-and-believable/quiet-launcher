@@ -1,5 +1,5 @@
 ---
-status: draft
+status: implemented
 tests: [app/src/test]
 tests-commit: d5276c07819cac9398f663b9c80112f3ad4e7a2f
 ---
@@ -39,6 +39,16 @@ A test cites a criterion as `google-tv-button#AC-1` in its name or a comment.
 `MovementTest` (top-row-and-search#AC-10, whose spec is implemented and so no longer locked) is
 amended in this change: Right from **Voice search** now lands on **Google TV**, and Right from
 **Google TV** on **Settings**.
+
+## Results on the reference device (2026-11-09)
+
+AC-8: **Google TV** opened Google TV's home screen, and it stayed while moved around in; after sleep
+and wake the quiet home screen showed (the service logged "screen off: covering Google TV again");
+afterwards, Google TV's home screen opened directly was covered again. With the project lead at the
+remote: **Google TV**, about 10 s in Google TV's home screen, then Home brought the quiet home screen
+back, drawn 0.15 s after the press. Found on the TV: the top row was too full (**Voice search** and
+**Google TV** touched, and the clock ran past the safe area), so the search box is 340 dp (680 px)
+wide and the button has a 12 dp gap on each side; the design says 680 px.
 
 ## Scope
 
