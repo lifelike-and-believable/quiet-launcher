@@ -2,8 +2,8 @@
 id: epic-arranging
 status: approved
 derived-from:
-  - requirements-home#REQ-home-3: 8da6cf58fd1d
-  - requirements-home#REQ-home-4: 7a68e905e8fe
+  - requirements-home#REQ-home-3: 75def69f683e
+  - requirements-home#REQ-home-4: 1e148813bfdd
   - persona-setup-person#goals: 1b5715ea18d9
   - persona-viewer#frustrations: 8722d20eb95e
 ---
