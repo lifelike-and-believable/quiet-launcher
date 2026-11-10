@@ -47,8 +47,7 @@ From `cmd package query-activities` and `dumpsys package`:
 ## Becoming the home screen
 
 Google TV has no setting for choosing a home screen. Known routes: an accessibility service that
-intercepts Home (Projectivy's approach), or disabling `launcherx` over ADB. Whether
-`cmd package set-home-activity` works on this build is not yet tested.
+intercepts Home (Projectivy's approach), or disabling `launcherx` over ADB. `cmd package set-home-activity` does not work on this build: see the spike below.
 
 ## Spike: a typed query from another app (2026-11-09)
 
@@ -71,6 +70,91 @@ am start -a android.search.action.GLOBAL_SEARCH   -n com.google.android.katniss/
   and `KEYCODE_SLEEP` returned it to Google TV's home screen, asleep. A launcher only sends the
   query while someone is using the TV, so waking is not a concern for the product, but further
   tests should expect the TV to turn on.
-- Not tried: `android.intent.action.WEB_SEARCH`, whether a query naming several shows or a person
-  gives a results list, and `cmd package set-home-activity` (it changes the home screen, so it
-  needs the project lead's go-ahead).
+- Not tried: `android.intent.action.WEB_SEARCH`, and whether a query naming several shows or a
+  person gives a results list.
+
+## Spike: `set-home-activity` (2026-11-09)
+
+With the project lead's go-ahead, and Projectivy (override and accessibility service off) standing
+in for this product:
+
+- Before: the `android.app.role.HOME` role holder was `com.google.android.tungsten.setupwraith`
+  (not the Google TV home app), and Home resolved to
+  `com.google.android.apps.tv.launcherx/.home.HomeActivity`. Activities answering HOME: launcherx
+  `HomeActivity` and `VanillaModeHomeActivity` (filter priority 2), setupwraith `RecoveryActivity`
+  (priority 1), Projectivy (priority 0), and `com.android.tv.settings/.system.FallbackHome`
+  (priority -1000).
+- `cmd package set-home-activity com.spocky.projengmenu` printed `Success` and made Projectivy the
+  role holder, but Home still resolved to launcherx's `HomeActivity`, and pressing Home opened
+  Google TV. The priority-2 filter wins over the role holder on this build.
+- Restored with `cmd package set-home-activity com.google.android.tungsten.setupwraith`; Home opens
+  Google TV again.
+- So the role is not the way in.
+
+## Spike: disabling only Google TV's home screen (2026-11-09)
+
+`pm disable --user 0 com.google.android.apps.tv.launcherx/.home.HomeActivity` (and the same for
+`.home.VanillaModeHomeActivity`) failed with `SecurityException: Shell cannot change component
+state for ComponentInfo{...} to 2`. On Android 14 the shell can disable a whole system package but
+not one of its components, and disabling the whole of launcherx would break search. Nothing on the
+TV changed.
+
+That left one known route: an accessibility service that answers only Google TV's home screen.
+
+## Spike: an accessibility service that answers only Google TV's home screen (2026-11-09)
+
+It works. With the project lead's go-ahead, the test app in `spikes/home-takeover/` was installed
+and its accessibility service turned on over ADB (`enabled_accessibility_services` was `null` and
+`accessibility_enabled` `0` before). The service brings its own screen forward when a window-state
+event arrives from `com.google.android.apps.tv.launcherx` with class
+`com.google.android.apps.tv.launcherx.home.HomeActivity`, and ignores every other window.
+
+| Test | Result |
+|---|---|
+| Home from TV settings | The test screen, 0.4 s after Google TV's home screen appeared |
+| Search from the test screen (`GLOBAL_SEARCH`, `query=Severance`) | Google TV's page for the show (`.entity.EntityActivity`), with Apple TV; it stays open. About 6 s from the button press to the page (Google's time) |
+| Back from that page | The test screen |
+| Home from that page | The test screen, 0.15 s after Google TV's home screen appeared |
+| Sleep 5 s and wake | The last app (Settings); no home screen involved |
+
+Findings:
+
+- Google TV's home screen is drawn for a moment (0.15 to 0.4 s, measured from its window event to
+  ours) before the test screen covers it, so its promotion can flash on screen at each Home press.
+  A launcherx `coreservices.bootmode.DispatchActivity` window also appears on Home and on wake; it
+  is not the home screen and was ignored.
+- Catching the Home key itself (the service's `key` mode) could not be tried over ADB: keys injected
+  with `adb shell input keyevent` never reached the service's `onKeyEvent`. It was tried that
+  evening with the real remote; see the next section.
+- Not tried: surviving a restart, a long sleep (when Google TV may go to its home screen on wake),
+  and Google TV updates.
+
+Cleanup: `settings delete secure enabled_accessibility_services`,
+`settings put secure accessibility_enabled 0`, `adb uninstall quiet.launcher.spike`. Home opens
+Google TV again; the home role holder is still `com.google.android.tungsten.setupwraith`.
+
+Build tools for the spike, per user with no administrator rights: Microsoft OpenJDK 17 and the
+Android command-line tools (platform 34, build-tools 34.0.0) under `%LOCALAPPDATA%\AndroidBuild`.
+The JDK's MSI installer needs administrator approval, which was cancelled.
+
+## Spike: catching the Home key with the real remote (2026-11-09, evening)
+
+The same test app in `key` mode (it consumes `KEYCODE_HOME` and opens its own screen; it does not
+react to windows), with the project lead pressing the remote's buttons and the log read over ADB.
+
+- The real remote's keys reach the service's `onKeyEvent`: Home, Back, select, the direction pad,
+  and the YouTube and Netflix buttons (`KEYCODE_BUTTON_3` and `KEYCODE_BUTTON_4`). A Home press
+  usually arrives as down and up 0 to 7 ms apart; held presses arrive with the real gap.
+- 11 Home presses, from the Apple TV app, YouTube, Netflix, Google TV's page for a show, and the test
+  screen, including three held for 2 to 6.5 s. Every one opened the test screen, 0.03 to 0.7 s after
+  the press, and the project lead saw no Google TV home screen before it.
+- Once, on the first press (from the Apple TV app, held 0.22 s), Google TV's `home.HomeActivity`
+  came up 1.8 s after the test screen and stayed, because `key` mode does not react to windows.
+  Repeating the same steps from the Apple TV app, and short and held presses from other apps, did
+  not bring it back. Cause unknown.
+- Consuming Home also stops Google TV's own long-press Home action.
+- So catching the key avoids the flash. A product would also need the window check from the earlier
+  spike as a fallback, so that Google TV's home screen, if it comes up on its own as it did once, is
+  covered within about 0.4 s.
+
+Cleanup as before; Home opens Google TV again. The full log was kept outside the repository.

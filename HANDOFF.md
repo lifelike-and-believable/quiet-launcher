@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `d711e87` (PLAN.md and HANDOFF.md); branch `concept-answers` writes the project lead's answers into the concept |
+| State | `main` at `bb761b9` (concept approved); branch `requirements` (PR #4) approves the requirements |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -43,10 +43,23 @@ the app that has it. So the concept holds, with two limits now in its Feasibilit
 Google TV home app must stay installed and unblocked (the results page is its), and a vague query
 can get a Gemini chat reply instead. Details are in `docs/product/notes.md`.
 
-Later that day the project lead confirmed all 8 `[proposed]` claims as written. The concept now
-says `status: approved` in PR #3 (`tier:epic`), and is approved when the project lead merges #3.
-Nothing downstream should be written until then. Next is requirements (`PLAN.md`, step 4). Still untested: `WEB_SEARCH`, and `cmd package set-home-activity` (which changes the
-home screen, so ask first).
+Later that day the project lead confirmed every concept claim, and #3 merged: the concept is
+approved (`bb761b9`).
+
+Then the project lead answered the requirements questions, and branch `requirements` (PR #4,
+`tier:epic`) has the three areas (`docs/product/requirements/home.md`, `search.md`, `setup.md`),
+now `status: approved` with hashes recorded. They are approved when the project lead merges #4.
+
+Four spikes the same day settled how to take over Home (`docs/product/notes.md`): `set-home-activity`
+and disabling only Google TV's home screen do not work. An accessibility service does: catching the
+Home key (tested that evening with the project lead at the remote: 11 presses, no Google TV home
+screen seen) avoids a flash, and a check on Google TV's `home.HomeActivity` window covers it if it
+comes up on its own (it did once, 1.8 s after a Home press, not reproduced). Search results still
+open. The test app is in `spikes/home-takeover/` and was removed from the TV afterwards. REQ-home-2
+records the project lead's decision: Home never shows Google TV's home screen, and a stray one is
+covered within 0.5 s. Build tools are per user in `%LOCALAPPDATA%\AndroidBuild`.
+
+Next: personas (`PLAN.md`, step 5), then the check of each requirement against each persona.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
