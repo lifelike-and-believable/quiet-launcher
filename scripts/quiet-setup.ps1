@@ -362,6 +362,11 @@ if ($running) {
 }
 
 if ($running) {
+    # Google TV's home screen already in front opens no window when asked for again, so the
+    # service would have nothing to cover: show the TV's Settings first. (Keys sent over ADB do
+    # not reach the service; only the remote's do. docs/product/notes.md)
+    Tv shell am start -a android.settings.SETTINGS | Out-Null
+    Wait-Seconds 1.5
     $clock = [Diagnostics.Stopwatch]::StartNew()
     Tv shell am start -a android.intent.action.MAIN -c android.intent.category.HOME | Out-Null
     $covered = $false
