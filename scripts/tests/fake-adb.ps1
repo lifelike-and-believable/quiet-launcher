@@ -2,6 +2,8 @@
 # It keeps a pretend TV in the JSON file named by QUIET_FAKE_STATE and answers the ADB commands the
 # scripts use, the way the reference device did in the spikes. Every call is recorded in "calls".
 $ErrorActionPreference = 'Stop'
+# Like the real adb.exe, independent of the calling script's strict mode.
+Set-StrictMode -Off
 $statePath = $env:QUIET_FAKE_STATE
 $s = Get-Content -Raw $statePath | ConvertFrom-Json
 
@@ -16,7 +18,8 @@ function Bound {
     return ($null -ne $s.installed) -and ($eas -split ':' -contains $SERVICE) -and ((Get-Setting 'accessibility_enabled') -eq '1') -and $s.service_runs
 }
 
-$argv = @($args)
+# A real adb.exe receives text: make every argument a string, as PowerShell would for a program.
+$argv = @($args | ForEach-Object { "$_" })
 $s.calls += , ($argv -join ' ')
 if ($argv.Count -ge 2 -and $argv[0] -eq '-s') { $argv = $argv[2..($argv.Count - 1)] }
 $code = 0

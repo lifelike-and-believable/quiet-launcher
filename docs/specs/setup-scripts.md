@@ -1,7 +1,7 @@
 ---
 status: draft
 tests: [scripts/tests]
-# tests-commit: <sha of the commit that holds the failing tests, once written>
+tests-commit: 8837b1b69c4c13b21cd6c9e227404b62d06d2b5b
 ---
 
 # The setup and undo scripts
