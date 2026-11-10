@@ -1,9 +1,9 @@
 ---
 id: story-setup-undo
-status: draft
+status: approved
 derived-from:
-  - epic-setup#outcome:
-  - persona-setup-person#goals:
+  - epic-setup#outcome: fcfa341d2d11
+  - persona-setup-person#goals: 1b5715ea18d9
 ---
 
 # Undo it

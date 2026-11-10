@@ -1,10 +1,10 @@
 ---
 id: story-quiet-home-tv-settings
-status: draft
+status: approved
 derived-from:
-  - epic-quiet-home#outcome:
-  - persona-setup-person#goals:
-  - persona-setup-person#context-of-use:
+  - epic-quiet-home#outcome: ad1e8e9b386c
+  - persona-setup-person#goals: 1b5715ea18d9
+  - persona-setup-person#context-of-use: 93f08fded3f5
 ---
 
 # The TV's settings from the home screen

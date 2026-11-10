@@ -39,7 +39,10 @@ Google TV update or reset, and one written undo puts the TV back as it was.
 
 ## Stories
 
-- None written yet.
+- story-setup-recover
+- story-setup-restart
+- story-setup-set-up
+- story-setup-undo
 
 ## Release groups
 
@@ -62,3 +65,6 @@ Google TV update or reset, and one written undo puts the TV back as it was.
 
 - Setup by anyone other than the project lead, or from the TV alone (REQ-setup-1).
 - Root access, or publishing on the Play Store (concept, Non-goals).
+- Noticing or recovering by itself when the product stops working (for example an update turns
+  its accessibility service off): Google TV's home screen is the fallback, and the set-up person
+  re-runs setup (the project lead's decision, 2026-11-09).

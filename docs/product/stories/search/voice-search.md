@@ -1,9 +1,9 @@
 ---
 id: story-search-voice-search
-status: draft
+status: approved
 derived-from:
-  - epic-search#outcome:
-  - persona-viewer#skills-and-tools:
+  - epic-search#outcome: 8400b8626e3f
+  - persona-viewer#skills-and-tools: 401370018d77
 ---
 
 # Voice search

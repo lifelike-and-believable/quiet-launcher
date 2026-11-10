@@ -43,7 +43,11 @@ with the remote.
 
 ## Stories
 
-- None written yet.
+- story-quiet-home-apps
+- story-quiet-home-clock
+- story-quiet-home-home-key
+- story-quiet-home-new-and-removed-apps
+- story-quiet-home-tv-settings
 
 ## Release groups
 

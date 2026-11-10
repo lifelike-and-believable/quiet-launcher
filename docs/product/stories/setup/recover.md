@@ -1,10 +1,10 @@
 ---
 id: story-setup-recover
-status: draft
+status: approved
 derived-from:
-  - epic-setup#outcome:
-  - persona-setup-person#goals:
-  - persona-setup-person#context-of-use:
+  - epic-setup#outcome: fcfa341d2d11
+  - persona-setup-person#goals: 1b5715ea18d9
+  - persona-setup-person#context-of-use: 93f08fded3f5
 ---
 
 # Recover after an update or reset

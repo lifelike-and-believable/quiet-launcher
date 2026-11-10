@@ -1,9 +1,9 @@
 ---
 id: story-quiet-home-new-and-removed-apps
-status: draft
+status: approved
 derived-from:
-  - epic-quiet-home#outcome:
-  - persona-setup-person#goals:
+  - epic-quiet-home#outcome: ad1e8e9b386c
+  - persona-setup-person#goals: 1b5715ea18d9
 ---
 
 # New apps appear, removed apps disappear

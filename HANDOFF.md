@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `5fe728b` (concept, requirements, personas approved); branch `epics` in review |
+| State | `main` at `4c5ac56` (through epics approved); branch `stories-first-release` (#16) in review |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -69,7 +69,13 @@ and name).
 Then four epics on branch `epics`, `status: approved` with hashes recorded, approved when that PR
 merges: `epic-quiet-home`, `epic-search`, `epic-setup` (the first release; apps in install order)
 and `epic-arranging` (the second release: on the TV behind a guard, and from the PC; REQ-home-3 and
-4 moved to `Release: second`). Next: stories for the first-release epics (`PLAN.md`, step 7).
+4 moved to `Release: second`), merged as #11.
+
+Then 12 first-release stories (`docs/product/stories/`), revised after a `persona-walkthrough`
+pass, `status: approved` in PR #16 (`tier:story`); approved when it merges. The set-up persona's
+title became "Set-up person" so the process check matches "As the set-up person". The project lead
+accepted that if the product stops working, Google TV's home screen is the fallback. Next: design
+and UX for the first release (`PLAN.md`, step 8).
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV

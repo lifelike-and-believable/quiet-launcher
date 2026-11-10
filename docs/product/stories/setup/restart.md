@@ -1,10 +1,10 @@
 ---
 id: story-setup-restart
-status: draft
+status: approved
 derived-from:
-  - epic-setup#outcome:
-  - persona-setup-person#goals:
-  - persona-viewer#frustrations:
+  - epic-setup#outcome: fcfa341d2d11
+  - persona-setup-person#goals: 1b5715ea18d9
+  - persona-viewer#frustrations: 8722d20eb95e
 ---
 
 # It survives a restart

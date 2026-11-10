@@ -1,10 +1,10 @@
 ---
 id: story-quiet-home-home-key
-status: draft
+status: approved
 derived-from:
-  - epic-quiet-home#outcome:
-  - persona-viewer#goals:
-  - persona-viewer#frustrations:
+  - epic-quiet-home#outcome: ad1e8e9b386c
+  - persona-viewer#goals: 24b5a84b1f16
+  - persona-viewer#frustrations: 8722d20eb95e
 ---
 
 # Home brings up the quiet home screen

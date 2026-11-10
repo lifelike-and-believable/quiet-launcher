@@ -1,10 +1,10 @@
 ---
 id: story-search-type-and-search
-status: draft
+status: approved
 derived-from:
-  - epic-search#outcome:
-  - persona-viewer#goals:
-  - persona-viewer#frustrations:
+  - epic-search#outcome: 8400b8626e3f
+  - persona-viewer#goals: 24b5a84b1f16
+  - persona-viewer#frustrations: 8722d20eb95e
 ---
 
 # Type a title and see which app has it

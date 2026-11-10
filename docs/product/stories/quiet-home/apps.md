@@ -1,11 +1,11 @@
 ---
 id: story-quiet-home-apps
-status: draft
+status: approved
 derived-from:
-  - epic-quiet-home#outcome:
-  - persona-viewer#goals:
-  - persona-viewer#frustrations:
-  - persona-viewer#skills-and-tools:
+  - epic-quiet-home#outcome: ad1e8e9b386c
+  - persona-viewer#goals: 24b5a84b1f16
+  - persona-viewer#frustrations: 8722d20eb95e
+  - persona-viewer#skills-and-tools: 401370018d77
 ---
 
 # The household's apps, and nothing else

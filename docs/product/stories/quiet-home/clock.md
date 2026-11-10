@@ -1,9 +1,9 @@
 ---
 id: story-quiet-home-clock
-status: draft
+status: approved
 derived-from:
-  - epic-quiet-home#outcome:
-  - persona-viewer#goals:
+  - epic-quiet-home#outcome: ad1e8e9b386c
+  - persona-viewer#goals: 24b5a84b1f16
 ---
 
 # A clock

@@ -1,10 +1,10 @@
 ---
 id: story-setup-set-up
-status: draft
+status: approved
 derived-from:
-  - epic-setup#outcome:
-  - persona-setup-person#goals:
-  - persona-setup-person#skills-and-tools:
+  - epic-setup#outcome: fcfa341d2d11
+  - persona-setup-person#goals: 1b5715ea18d9
+  - persona-setup-person#skills-and-tools: 0ba05e70b88d
 ---
 
 # Set it up from the PC
