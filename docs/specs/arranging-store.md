@@ -1,6 +1,7 @@
 ---
-status: draft
+status: implemented
 tests: [app/src/test]
+tests-commit: e590862d455cfbee044f4b1cd5181479d35155c6
 ---
 
 # The arrangement: stored, and the list built from it
