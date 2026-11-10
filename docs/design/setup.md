@@ -26,7 +26,12 @@ Revised 2026-11-09 after a persona walkthrough, a UX review, and an accessibilit
 
 ## Flow
 
-**Before the first setup**, on the TV with the remote (the procedure lists the exact menu paths):
+**The Quiet Launcher folder** (the app's install file and the two scripts) is built from the
+repository on the set-up person's PC: `.\build.ps1` in a clone writes it to `out\QuietLauncher`.
+Nothing is published (the project lead's decision, 2026-11-09).
+
+**Before the first setup, and again after a reset** (a reset hides developer options and turns
+wireless debugging off), on the TV with the remote (the procedure lists the exact menu paths):
 turn on developer options (Settings, System, About, press **Android TV OS build** seven times),
 then **Wireless debugging** under Developer options.
 
@@ -112,8 +117,9 @@ nothing on the TV has changed unless it says so.
       Install it with: winget install Google.PlatformTools
       then open a new PowerShell window and run this again.
 
-[2/6] TV: PAIRING FAILED (wrong or expired code)
+[2/6] TV: PAIRING FAILED (wrong or expired code, or wrong address)
       On the TV, open Pair device with pairing code again; a new code appears.
+      Use the address shown under the code, not the one at the top of the screen.
       Pairing address shown on the TV: _          (asks up to 3 times, then stops)
 
 [2/6] TV: COULD NOT CONNECT
@@ -132,11 +138,26 @@ nothing on the TV has changed unless it says so.
       Run this again, or run quiet-undo.ps1 to remove it.
 
 [6/6] Checks
+      Google TV home app installed and enabled: NO
+      Google TV's home app is disabled or missing, so search results cannot open. Re-enable
+      Google TV in the TV's Settings, Apps, then run this again.
+
+[6/6] Checks
+      Quiet Launcher service running: NO
+      The service is turned on but Android has not started it. Restart the TV, then run this
+      again; if it still says NO, run quiet-undo.ps1 and open an issue with the log.
+
+[6/6] Checks
       Google TV's home screen covered when it opens: FAILED
       The service is on but did not cover Google TV's home screen. Run quiet-undo.ps1, then
       open an issue at github.com/lifelike-and-believable/quiet-launcher/issues and attach
       Documents\QuietLauncher\setup-<date>.log (it records the window the TV showed).
 ```
+
+If the remote search check is answered n, the script says
+**Check the TV's internet connection; if it is fine, run quiet-undo.ps1 and open an issue with the log.** (A search needs the internet;
+the quiet home screen does not.) If the Home check is answered n, it says **Run quiet-undo.ps1 and
+open an issue with the log.**
 
 A missing `-Apk`: **Give the app's install file with -Apk, for example: -Apk .\quiet-launcher.apk**.
 `Get-Help .\quiet-setup.ps1` shows a synopsis, the options, and examples, for both scripts.
@@ -164,8 +185,8 @@ Done in 41 s. The backup is kept as backup-<serial>-undone-<date>.json. Log: Doc
 ```
 
 Undo uses the same TV step as setup, with the same pairing prompt, errors, and `-Tv` and `-Pair`
-options. Without a backup (setup was never finished on this PC), step 2 says **No backup on this
-PC: turned off only Quiet Launcher's service and left any others as they were.** With the app
+options. Without a backup (setup was never finished on this PC), step 2 says
+**No backup on this PC: turned off only Quiet Launcher's service and left any others as they were.** With the app
 already removed, step 3 says **already removed**.
 
 ## Layout
@@ -200,8 +221,8 @@ already removed, step 3 says **already removed**.
   - Setup reads `enabled_accessibility_services` and `accessibility_enabled` and writes them, with
     the TV's serial number and the date, to the backup file, only if there is no backup for this
     TV on this PC. If this product's service is already in the list (setup run from a second PC,
-    say), it is removed from the recorded value, and the picture is skipped with **Picture
-    skipped: the quiet home screen is already on.**
+    say), it is removed from the recorded value, and the picture is skipped with
+    **Picture skipped: the quiet home screen is already on.**
   - The existing backup is kept on every later run, including after a reset, because it describes
     the household's settings before the product.
   - Undo writes the values back; a setting that was unset (as on the reference device, where both

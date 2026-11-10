@@ -3,7 +3,7 @@ id: design-home-screen
 status: approved
 derived-from:
   - story-quiet-home-home-key: 7adbfcde7ee1
-  - story-quiet-home-apps: de56391dc699
+  - story-quiet-home-apps: cef8c5e03e43
   - story-quiet-home-new-and-removed-apps: bbd39a3046ae
   - story-quiet-home-tv-settings: 3d83f1d1826f
   - story-quiet-home-clock: 398abb5f2f2e
@@ -54,7 +54,8 @@ Checked against Google TV on a Chromecast with Google TV (Android 14, Cast firmw
 keyboard is the TV's own (Gboard for TV); the mock-up only marks where it appears and that the box
 asks for a **Search** key. The tiles are placeholders that show each app's name in a colour; the
 real screen shows each app's own banner artwork (VLC shows the icon case). The apps are the
-reference device's 18, in a stand-in install order.
+reference device's, in its real install order (read from Android on 2026-11-09), with the
+Play Store last.
 
 | Screen or state | Mock-up | Notes |
 |---|---|---|
@@ -85,7 +86,8 @@ reference device's 18, in a stand-in install order.
 - **Apps**: a grid of five per row, each the app's banner (300 by 169) or, if it has no banner, its
   icon centred on a tile of the same size, with the app's full name underneath, on up to two lines
   and cut short with an ellipsis only beyond that. Order: install order, oldest first; apps whose
-  install times are identical to the second are in alphabetical order.
+  install times are identical to the second are in alphabetical order. The Play Store is always
+  last: its install time is the factory date, so install order would put it first.
 - **Which apps**: see How it works. Other home-screen apps (Projectivy Launcher on the reference
   device) are left out (the project lead's decision, 2026-11-09).
 - **Selection**: the selected item has a white outline with a black edge outside it (so it shows on
@@ -124,14 +126,14 @@ reference device's 18, in a stand-in install order.
   screen) and shows the typed text in a glowing box at the bottom, then fades the show's page in
   (checked on the reference device, 2026-11-09).
 - **Search did not open**: if Google's search has not opened after 10 seconds, the overlay goes, the
-  text is put back in the box, the box stays selected, and the status line says **Google's search
-  did not open. Press select to try again.**
+  text is put back in the box, the box stays selected, and the status line says
+  **Google's search did not open. Press select to try again.**
 - **Empty search**: pressing **Search** with nothing typed keeps the keyboard open and does nothing
   else.
 - **Chat reply**: shown by Google as it is. Back returns home, with the box selected and empty, ready
   to try different text.
-- **No internet connection**: the status line says **No internet connection. Search and voice search
-  need it; your apps still open.** Search and voice search still go to Google, which shows its own
+- **No internet connection**: the status line says
+  **No internet connection. Search and voice search need it; your apps still open.** Search and voice search still go to Google, which shows its own
   error. The line clears when the connection returns.
 - **No apps**: **No apps to show. Apps installed on this TV appear here.** with **Search for a show**
   selected.
@@ -147,13 +149,15 @@ reference device's 18, in a stand-in install order.
   - this app;
   - any app that is itself a home screen (has an activity for the `HOME` category), such as
     Projectivy Launcher;
-  - the four Google system apps that Google TV's own **Your apps** list leaves out: TV settings
-    (`com.android.tv.settings`, reached with **Settings** instead), the Play Store
-    (`com.android.vending`), Play Games (`com.google.android.play.games`), and Google TV
-    (`com.google.android.videos`).
+  - three of the four Google system apps that Google TV's own **Your apps** list leaves out: TV
+    settings (`com.android.tv.settings`, reached with **Settings** instead), Play Games
+    (`com.google.android.play.games`), and Google TV (`com.google.android.videos`). The fourth, the
+    Play Store (`com.android.vending`), is shown, last, so that new apps can be installed from the
+    TV (the project lead's decision, 2026-11-09).
 
-  Checked on the reference device on 2026-11-09: without the home-screen rule this gives the same
-  19 apps as Google TV's **Your apps**; with it, 18. Banner, icon, and name come from each app;
+  Checked on the reference device on 2026-11-09: without the home-screen rule and the Play Store,
+  this gives the same 19 apps as Google TV's **Your apps**; with both, 19 (18 apps and the Play
+  Store). Banner, icon, and name come from each app;
   install time comes from Android, so the order survives restarts without storing anything.
 - **New and removed apps**: the screen listens for Android's package added and removed broadcasts,
   and also rebuilds the list each time it is shown.
