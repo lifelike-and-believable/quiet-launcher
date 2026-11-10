@@ -1,11 +1,17 @@
 package quiet.launcher
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 
 /** Reads the TV's apps from Android's package data (docs/specs/app-list.md, AC-3). */
-class PackageSource(private val pm: PackageManager) {
+class PackageSource(
+    private val pm: PackageManager,
+    private val loadArtwork: (ActivityInfo) -> Drawable? = { activity ->
+        chooseArtwork(activity.loadBanner(pm)) { activity.loadIcon(pm) }
+    },
+) {
 
     fun read(): List<AppEntry> {
         val homePackages = pm.queryIntentActivities(intentFor(Intent.CATEGORY_HOME), 0)
@@ -19,7 +25,8 @@ class PackageSource(private val pm: PackageManager) {
                 label = resolved.loadLabel(pm).toString(),
                 firstInstallTime = firstInstallTime(activity.packageName),
                 hasHomeActivity = activity.packageName in homePackages,
-                artwork = chooseArtwork(activity.loadBanner(pm)) { activity.loadIcon(pm) },
+                // STUB (tests-first commit): loaded every time.
+                artwork = loadArtwork(activity),
             )
         }
     }

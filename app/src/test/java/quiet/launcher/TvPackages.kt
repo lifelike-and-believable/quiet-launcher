@@ -11,7 +11,7 @@ import org.robolectric.Shadows.shadowOf
 /** Test helper: fake TV apps in Robolectric's package manager. */
 object TvPackages {
 
-    fun install(pm: PackageManager, pkg: String, label: String, installed: Long, home: Boolean = false) {
+    fun install(pm: PackageManager, pkg: String, label: String, installed: Long, home: Boolean = false, updated: Long = installed) {
         val app = ApplicationInfo().apply {
             packageName = pkg
             nonLocalizedLabel = label
@@ -19,6 +19,7 @@ object TvPackages {
         val info = PackageInfo().apply {
             packageName = pkg
             firstInstallTime = installed
+            lastUpdateTime = updated
             applicationInfo = app
         }
         val shadow = shadowOf(pm)
