@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `b442222` (through stories approved); branch `design-first-release` (#29) in review |
+| State | `main` at `b03151e` (through design approved); branch `user-docs` (#30) in review |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -83,7 +83,17 @@ merges: `design-home-screen` (with mock-ups rendered from `docs/design/home-scre
 (Android's TV apps minus four Google system apps, and minus other home screens) and what Google
 shows while a search loads. A persona walkthrough, UX review, and accessibility review led to a
 revision. Four `[to validate]` items wait for the first build's on-TV tests (`PLAN.md`, step 8).
-Next: user documentation (`PLAN.md`, step 9).
+Merged as #29.
+
+Then the user documentation (`docs/user/home-screen.md`, `docs/user/setup.md`), revised after a
+persona walkthrough, `status: approved` in PR #30, approved when it merges. The project lead also
+decided there: the Play Store is shown as the last app (story, design, and mock-ups amended; the
+mock-ups use the reference device's real install order), and the Quiet Launcher folder is built
+from the repository with `.\build.ps1` into `out\QuietLauncher`; nothing is published.
+
+Next: delivery (`PLAN.md`, step 10): specs, tests first, then the Android app and the scripts. The
+build tools are per user in `%LOCALAPPDATA%\AndroidBuild` (JDK 17, Android SDK 34, no Gradle yet);
+`spikes/home-takeover/build.sh` shows a Gradle-free build.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV

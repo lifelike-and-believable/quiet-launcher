@@ -18,7 +18,8 @@ select, so that I get to what I watch straight away and a guest recognises the a
 ## Acceptance criteria
 
 - The quiet home screen shows the same apps as Google TV's own list of apps, in the order they were
-  installed.
+  installed, and the Play Store as the last app, so that new apps can be installed from the TV
+  (the project lead's decision, 2026-11-09).
 - Each app shows its own TV artwork (its banner, or its icon if it has no banner) and its name. An
   app's own artwork is not advertising.
 - Apart from the apps, there is nothing promoting content: no suggested shows, previews, featured or

@@ -16,8 +16,8 @@ file tracks where the project is; it is not a process artifact.
 | 4 | Personas | `docs/product/personas/viewer.md`, `setup-person.md` | Approved 2026-11-09 (#5, #6) | #5, #6 |
 | 5 | Epics | `docs/product/epics/{quiet-home,search,arranging,setup}.md` | Approved 2026-11-09 (#11) | #11 |
 | 6 | Stories | `docs/product/stories/{quiet-home,search,setup}/` (first release, 12) | Approved 2026-11-09 (#16) | #16 |
-| 7 | Design and UX, with mock-ups | `docs/design/home-screen.md`, `setup.md`, `decisions/home-takeover.md` | `status: approved` in #29; approved when it merges | #29 |
-| 8 | User documentation | `docs/user/` | Not started | |
+| 7 | Design and UX, with mock-ups | `docs/design/home-screen.md`, `setup.md`, `decisions/home-takeover.md` | Approved 2026-11-09 (#29; Play Store and build source amended in #30) | #29, #30 |
+| 8 | User documentation | `docs/user/home-screen.md`, `setup.md` | `status: approved` in #30; approved when it merges | #30 |
 | 9 | Specs, tests first, implementation | | Not started | |
 | 10 | Tutorials (`runner: manual` until there is an on-device runner) | `docs/tutorials/` | Not started | |
 | 11 | Release | | Not started | |
@@ -53,8 +53,12 @@ file tracks where the project is; it is not a process artifact.
    start-up before Google TV's home screen appears; Back from an app opened from the quiet home
    screen returns to it; the remote's voice button is unaffected; Google's search screen opens in
    about half a second.
-9. Next: user documentation (stage 8): the household's guide to the quiet home screen, and the set-up
-   person's setup, recover, and undo procedures, written from the designs.
+9. Done (2026-11-09): user documentation for the household and the set-up person, revised after a
+   persona walkthrough, approved in #30. With it, the Play Store is shown as the last app, and the
+   Quiet Launcher folder is built from the repository (`.\build.ps1`); nothing is published.
+10. Next: delivery (stage 9): a spec per area whose criteria cite the stories and these pages, tests
+    written first, then the Android app and the two PowerShell scripts. The first build's on-TV
+    tests must confirm the four `[to validate]` items (step 8).
 
 ## Decisions so far
 
@@ -75,4 +79,5 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | First release: home, search, setup; arranging and hiding in the second release, on the TV behind a guard and from the PC | `docs/product/epics/` |
 | 2026-11-09 | If the product stops working, Google TV's home screen is the fallback; no self-detection or recovery in the first release | `docs/product/epics/setup.md` |
 | 2026-11-09 | Apps stay in install order until arranging; other home-screen apps (Projectivy) are left out | `docs/design/home-screen.md` |
+| 2026-11-09 | Play Store shown as the last app; the folder is built from the repository, not published | `docs/design/`, `docs/user/setup.md` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |
