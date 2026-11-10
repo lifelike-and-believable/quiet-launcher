@@ -61,6 +61,7 @@ class HomeActivity : Activity() {
 
     /** One reader for the screen's lifetime, so artwork is loaded once (home-takeover#AC-12). */
     private val source by lazy { PackageSource(packageManager) }
+    private val arrangements by lazy { ArrangementStore(this) }
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -296,7 +297,8 @@ class HomeActivity : Activity() {
         val selected = grid.findFocus()?.tag as? String
         val focusElsewhere = !selectFirst && selected == null && window.decorView.findFocus() != null
         val oldIndex = adapter.indexOf(selected)
-        val apps = AppCatalog.visible(source.read(), packageName)
+        // arranging-store#AC-6: read each time, so a changed arrangement shows the next time.
+        val apps = AppCatalog.arranged(AppCatalog.visible(source.read(), packageName), arrangements.load()).shown
         adapter.submit(apps)
         emptyMessage.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
         if (apps.isEmpty()) {

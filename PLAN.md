@@ -70,6 +70,13 @@ file tracks where the project is; it is not a process artifact.
        the code in #36, checked on the TV with the project lead.
     5. The setup and undo scripts, tested against a fake ADB, then on the TV.
 
+11. Second release, arranging the apps (epic-arranging; stories, design, and user documentation
+    approved in #40, REQ-home-3 and 4 amended in #41), in four slices:
+    1. The stored arrangement and the list built from it (`docs/specs/arranging-store.md`).
+    2. Arrange mode on the TV: the hold, the question, Move, Hide, and Show.
+    3. The PC script (`quiet-arrange.ps1`), its receiver in the app, and its launcher.
+    4. Undo saving the arrangement.
+
 ## Decisions so far
 
 | Date | Decision | Where |
