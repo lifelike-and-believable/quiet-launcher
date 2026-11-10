@@ -44,6 +44,9 @@ class HomeActivityTest {
 
     private fun grid(a: HomeActivity) = a.findViewById<RecyclerView>(R.id.app_grid)
 
+    /** The selected tile's package (Robolectric's Activity.currentFocus does not track focus). */
+    private fun focused(a: HomeActivity) = a.window.decorView.findFocus()?.tag
+
     private fun tiles(a: HomeActivity): List<View> = grid(a).let { g -> (0 until g.childCount).map { g.getChildAt(it) } }
 
     private fun labels(a: HomeActivity) = tiles(a).map { it.findViewById<TextView>(R.id.app_label).text.toString() }
@@ -88,7 +91,7 @@ class HomeActivityTest {
     fun `AC-6 when the screen opens the first app is selected and the grid is at the top`() {
         val a = open().get()
 
-        assertEquals("com.google.android.youtube.tv", a.currentFocus?.tag)
+        assertEquals("com.google.android.youtube.tv", focused(a))
         assertEquals(0, grid(a).computeVerticalScrollOffset())
     }
 
@@ -124,15 +127,15 @@ class HomeActivityTest {
     fun `AC-7 a rebuild keeps the selection on the same app, or the next one if it was removed`() {
         val a = open().get()
         tiles(a)[1].requestFocus()
-        assertEquals("com.netflix.ninja", a.currentFocus?.tag)
+        assertEquals("com.netflix.ninja", focused(a))
 
         TvPackages.install(pm, "tv.plex", "Plex", installed = 300)
         broadcast(Intent.ACTION_PACKAGE_ADDED, "tv.plex")
-        assertEquals("com.netflix.ninja", a.currentFocus?.tag)
+        assertEquals("com.netflix.ninja", focused(a))
 
         TvPackages.remove(pm, "com.netflix.ninja")
         broadcast(Intent.ACTION_PACKAGE_REMOVED, "com.netflix.ninja")
-        assertEquals("tv.plex", a.currentFocus?.tag)
+        assertEquals("tv.plex", focused(a))
     }
 
     // app-list#AC-8

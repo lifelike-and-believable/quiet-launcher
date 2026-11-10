@@ -1,7 +1,9 @@
 ---
 status: draft
 tests: [app/src/test]
-# tests-commit: <sha of the commit that holds the failing tests, once written>
+tests-commit: 903a1824360138ad0310f0b33fe859e87078b108
+unlocks:
+  - app/src/test/java/quiet/launcher/HomeActivityTest.kt: the AC-6 and AC-7 selection tests read Activity.currentFocus, which Robolectric's shadow answers from its own field rather than the focused view (a probe showed requestFocus succeeding and decorView.findFocus() returning the tile while currentFocus was null); they now read the window's focused view. No assertion changed.
 ---
 
 # The app list
