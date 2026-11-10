@@ -27,6 +27,9 @@ class HomeWatcher : AccessibilityService() {
     /** True while the cover is up. Public for tests. */
     val isCovering: Boolean get() = cover != null
 
+    /** True while Google TV's home screen may show (google-tv-button). STUB (tests-first commit). */
+    val isAllowingGoogleTv: Boolean get() = true
+
     override fun onKeyEvent(event: KeyEvent): Boolean = handleKey(event)
 
     /** home-takeover#AC-1 and AC-2. Public for tests: true when the key is consumed. */
@@ -60,6 +63,15 @@ class HomeWatcher : AccessibilityService() {
     }
 
     override fun onInterrupt() {}
+
+    // STUB (tests-first commit): brings the quiet home screen forward whenever the screen turns off.
+    override fun onCreate() {
+        super.onCreate()
+        val receiver = object : android.content.BroadcastReceiver() {
+            override fun onReceive(context: android.content.Context, intent: Intent) = showQuietHome()
+        }
+        registerReceiver(receiver, android.content.IntentFilter(Intent.ACTION_SCREEN_OFF), android.content.Context.RECEIVER_NOT_EXPORTED)
+    }
 
     override fun onServiceConnected() {
         Log.i(TAG, "service connected")
@@ -117,6 +129,8 @@ class HomeWatcher : AccessibilityService() {
 
     companion object {
         const val TAG = "QuietLauncher"
+        /** The in-app request from the home screen's Google TV button (google-tv-button#AC-2). */
+        const val ACTION_OPEN_GOOGLE_TV = "quiet.launcher.OPEN_GOOGLE_TV"
         private const val LAUNCHERX = "com.google.android.apps.tv.launcherx"
         private val GOOGLE_TV_HOME_SCREENS = setOf(
             "$LAUNCHERX.home.HomeActivity",

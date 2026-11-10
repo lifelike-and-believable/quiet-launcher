@@ -40,7 +40,10 @@ class MovementTest {
         assertSame(r.searchBox, r.move(r.searchBox, View.FOCUS_LEFT))
         assertSame(r.settings, r.move(r.settings, View.FOCUS_RIGHT))
         assertSame(r.voice, r.move(r.searchBox, View.FOCUS_RIGHT))
-        assertSame(r.settings, r.move(r.voice, View.FOCUS_RIGHT))
+        // With the Google TV button (google-tv-button#AC-1) between Voice search and Settings.
+        val googleTv = r.view<View>(R.id.google_tv_button)
+        assertSame(googleTv, r.move(r.voice, View.FOCUS_RIGHT))
+        assertSame(r.settings, r.move(googleTv, View.FOCUS_RIGHT))
     }
 
     // top-row-and-search#AC-10

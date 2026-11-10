@@ -18,4 +18,5 @@
     <item name="search_overlay_title" type="id" />
     <item name="search_overlay_note" type="id" />
     <item name="search_spinner" type="id" />
+    <item name="google_tv_button" type="id" />
 </resources>

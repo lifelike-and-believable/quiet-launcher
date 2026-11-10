@@ -399,6 +399,9 @@ class HomeActivity : Activity() {
             addView(searchBox, LinearLayout.LayoutParams(px(450f), px(44f)))
             addView(voiceButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginStart = px(12f) })
             addView(View(this@HomeActivity), LinearLayout.LayoutParams(0, 1, 1f))
+            // STUB (tests-first commit): a Google TV button with the wrong label and no action.
+            addView(TextView(this@HomeActivity).apply { id = R.id.google_tv_button; text = "TV"; isFocusable = true },
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginEnd = px(12f) })
             addView(settingsButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)))
             addView(clock, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = px(16f) })
         }
