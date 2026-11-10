@@ -1,0 +1,142 @@
+<!doctype html>
+<!-- Mock-up source for docs/design/home-screen.md. Each state is selected by the URL hash
+     (mockup.html#default, #search-focus, ...) and rendered at 1920x1080 by render.sh.
+     App tiles are coloured placeholders with the app's name: the real screen shows each app's own
+     banner artwork. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quiet home mock-up</title>
+<style>
+  :root {
+    --bg: #101418; --surface: #1c2228; --text: #eef2f5; --muted: #a9b4bd;
+    --focus: #ffffff; --accent: #8ab4f8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: "Segoe UI", Roboto, sans-serif; position: relative; }
+  .safe { position: absolute; inset: 54px 96px; }
+  .top { display: flex; align-items: center; gap: 24px; height: 96px; }
+  .search { flex: 0 0 960px; height: 88px; border-radius: 44px; background: var(--surface);
+            display: flex; align-items: center; gap: 20px; padding: 0 36px; font-size: 34px; color: var(--muted);
+            border: 4px solid transparent; }
+  .search .glass { width: 40px; height: 40px; border: 5px solid var(--muted); border-radius: 50%; position: relative; flex: none; }
+  .search .glass::after { content: ""; position: absolute; width: 5px; height: 18px; background: var(--muted);
+                          right: -8px; bottom: -14px; transform: rotate(-45deg); }
+  .search.typed { color: var(--text); }
+  .caret { display: inline-block; width: 3px; height: 40px; background: var(--text); vertical-align: middle; margin-left: 2px; }
+  .btn { height: 88px; border-radius: 44px; background: var(--surface); display: flex; align-items: center; gap: 14px;
+         padding: 0 32px; font-size: 32px; border: 4px solid transparent; }
+  .btn .ic { font-size: 34px; }
+  .spacer { flex: 1; }
+  .clock { font-size: 48px; font-weight: 300; letter-spacing: 1px; }
+  .focused { border-color: var(--focus) !important; background: #2b343c; color: var(--text); transform: scale(1.04); }
+  .note { margin: 18px 0 0 36px; font-size: 28px; color: #ffd28a; }
+  .grid { margin-top: 56px; display: grid; grid-template-columns: repeat(5, 320px); column-gap: 26px; row-gap: 44px; }
+  .viewport { height: 860px; overflow: hidden; position: relative; padding: 0 24px; margin: 0 -24px; }
+  .tile { width: 320px; }
+  .banner { width: 320px; height: 180px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 40px; font-weight: 700; color: #fff; border: 5px solid transparent; text-shadow: 0 2px 6px rgba(0,0,0,.35);
+            text-align: center; padding: 0 16px; }
+  .banner.icon { background: var(--surface) !important; }
+  .banner.icon span { width: 110px; height: 110px; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .name { margin-top: 12px; font-size: 28px; color: var(--muted); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tile.focused { transform: none; background: none; }
+  .tile.focused .banner { border-color: var(--focus); transform: scale(1.08); box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+  .tile.focused .name { color: var(--text); font-weight: 600; }
+  .keyboard { position: absolute; left: 0; right: 0; bottom: 0; height: 420px; background: #2a2f35; border-top: 2px solid #3a4148;
+              display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 18px; color: var(--muted); font-size: 30px; }
+  .keys { display: grid; grid-template-columns: repeat(10, 110px); gap: 12px; }
+  .keys div { height: 70px; background: #3a4148; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text); font-size: 30px; }
+  .keys div.k-focus { outline: 4px solid var(--focus); }
+  .overlay { position: absolute; inset: 0; background: rgba(16,20,24,.86); display: flex; flex-direction: column;
+             align-items: center; justify-content: center; gap: 36px; font-size: 44px; }
+  .spinner { width: 96px; height: 96px; border-radius: 50%; border: 10px solid #3a4148; border-top-color: var(--accent); }
+  .overlay small { font-size: 30px; color: var(--muted); }
+  .empty { margin-top: 220px; text-align: center; font-size: 36px; color: var(--muted); line-height: 1.6; }
+  .scrollhint { position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+                background: linear-gradient(transparent, var(--bg)); }
+  .label { position: absolute; right: 24px; bottom: 16px; font-size: 20px; color: #5d6973; }
+</style>
+</head>
+<body>
+<div class="safe">
+  <div class="top">
+    <div class="search" id="search"><span class="glass"></span><span id="searchText">Search for a show</span></div>
+    <div class="btn" id="voice"><span class="ic">🎤</span>Voice</div>
+    <div class="spacer"></div>
+    <div class="btn" id="settings"><span class="ic">⚙</span>Settings</div>
+    <div class="clock" id="clock">8:25</div>
+  </div>
+  <div id="note"></div>
+  <div class="viewport" id="viewport"><div class="grid" id="grid"></div></div>
+</div>
+<div class="label" id="label"></div>
+<script>
+  const apps = [
+    ['YouTube', '#c4302b'], ['Netflix', '#b20710'], ['Prime Video', '#1a98ff'], ['Apple TV', '#3a3a3c'],
+    ['Disney+', '#113ccf'], ['Plex', '#282a2d'], ['Tubi', '#6c2bd9'], ['CBC Gem', '#d52b1e'],
+    ['CTV', '#4a4a4a'], ['Spotify', '#1db954'], ['MUBI', '#222'], ['VLC', '#f28c00', 'icon'],
+    ['TuneIn', '#14d8cc'], ['Criterion Channel', '#333'], ['Google Play Store', '#01875f', 'icon'],
+  ];
+  const state = (location.hash || '#default').slice(1);
+  const grid = document.getElementById('grid');
+  let list = apps.slice(0, 12);
+  if (state === 'many-apps') list = apps;
+  if (state === 'empty') list = [];
+  list.forEach(([name, colour, kind], i) => {
+    const t = document.createElement('div'); t.className = 'tile'; t.id = 'app' + i;
+    const b = document.createElement('div'); b.className = 'banner' + (kind === 'icon' ? ' icon' : '');
+    b.style.background = colour;
+    b.innerHTML = kind === 'icon' ? `<span style="background:${colour}">${name.split(' ').map(w => w[0]).join('').slice(0,2)}</span>` : name;
+    const n = document.createElement('div'); n.className = 'name'; n.textContent = name;
+    t.append(b, n); grid.append(t);
+  });
+  const focus = id => document.getElementById(id)?.classList.add('focused');
+  const labels = {
+    'default': 'Default: focus on the first app',
+    'search-focus': 'Search box selected',
+    'keyboard': 'Typing: the TV’s own on-screen keyboard',
+    'searching': 'Searching: after submit, until Google’s search screen opens',
+    'many-apps': 'Many apps: the grid scrolls by row',
+    'offline': 'No internet connection',
+    'empty': 'No apps (unlikely)',
+    'voice-focus': 'Voice selected',
+    'settings-focus': 'Settings selected',
+  };
+  document.getElementById('label').textContent = 'Mock-up — ' + (labels[state] || state);
+  if (state === 'default' || state === 'offline' || state === 'searching') focus('app0');
+  if (state === 'search-focus') focus('search');
+  if (state === 'voice-focus') focus('voice');
+  if (state === 'settings-focus') focus('settings');
+  if (state === 'many-apps') {
+    focus('app11');
+    document.getElementById('grid').style.transform = 'translateY(-273px)';
+    document.getElementById('viewport').insertAdjacentHTML('beforeend', '<div class="scrollhint"></div>');
+  }
+  if (state === 'keyboard') {
+    focus('search');
+    const s = document.getElementById('search'); s.classList.add('typed');
+    document.getElementById('searchText').innerHTML = 'Sever<span class="caret"></span>';
+    const keys = 'qwertyuiopasdfghjkl⌫zxcvbnm.␣→'.split('');
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="keyboard"><div>The TV’s own keyboard (Gboard for TV). Its look is Google’s, not ours.</div><div class="keys">' +
+      keys.map((k, i) => `<div class="${k === 'a' ? 'k-focus' : ''}">${k}</div>`).join('') + '</div></div>');
+  }
+  if (state === 'searching') {
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="overlay"><div class="spinner"></div><div>Searching for “Severance”…</div>' +
+      '<small>Google’s search will open in a moment</small></div>');
+  }
+  if (state === 'offline') {
+    document.getElementById('note').innerHTML =
+      '<div class="note">No internet connection. Search and voice need it; your apps still open.</div>';
+    document.getElementById('viewport').style.height = '780px';
+  }
+  if (state === 'empty') {
+    document.getElementById('viewport').innerHTML =
+      '<div class="empty">No apps to show.<br>Apps installed on this TV appear here.</div>';
+  }
+</script>
+</body>
+</html>
