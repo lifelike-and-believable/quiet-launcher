@@ -12,8 +12,8 @@ file tracks where the project is; it is not a process artifact.
 | 1 | Concept | `docs/product/concept.md` | Approved 2026-11-09 (#3 merged, `bb761b9`) | #3 |
 | – | Spike: search entry points | `docs/product/notes.md` | Done 2026-11-09: a typed query from another app opens Google TV's results | #3 |
 | 2 | Discovery (optional) | `docs/product/discovery/<topic>.md` | Probably skip | |
-| 3 | Requirements | `docs/product/requirements/{home,search,setup}.md` | `status: approved` in #4; approved when #4 merges | #4 |
-| 4 | Personas | `docs/product/personas/` (only the web-app `end-user` starter so far) | Not started | |
+| 3 | Requirements | `docs/product/requirements/{home,search,setup}.md` | Approved 2026-11-09 (#4 merged, `13f6a23`) | #4 |
+| 4 | Personas | `docs/product/personas/viewer.md`, `setup-person.md` | `status: approved` in the personas PR; approved when it merges | |
 | 5 | Epics | `docs/product/epics/` | Not started | |
 | 6 | Stories | `docs/product/stories/` | Not started | |
 | 7 | Design and UX, with mock-ups | `docs/design/` | Not started | |
@@ -25,7 +25,7 @@ file tracks where the project is; it is not a process artifact.
 ## Next steps
 
 1. Done (2026-11-09): the project lead answered the concept's open questions (see Decisions).
-2. Done (2026-11-09) for `GLOBAL_SEARCH`; `WEB_SEARCH` and `set-home-activity` untried. Spike: send
+2. Done (2026-11-09) for `GLOBAL_SEARCH`; `set-home-activity` tried later (step 4); `WEB_SEARCH` untried. Spike: send
    `android.search.action.GLOBAL_SEARCH` and `android.intent.action.WEB_SEARCH` with a
    `query` extra to `com.google.android.katniss`, and see whether Google's results open for the
    typed text. Also check whether `cmd package set-home-activity` works on this build. Record the
@@ -36,8 +36,13 @@ file tracks where the project is; it is not a process artifact.
    Four spikes on the TV settled how to take over Home (notes): `set-home-activity` and disabling
    only Google TV's home screens fail; an accessibility service that catches the Home key, with a
    check that covers Google TV's home screen if it comes up anyway, works and keeps search. The
-   files say `status: approved` in #4; merging #4 is the approval.
-5. Personas, then check each requirement against each persona.
+   files were approved when #4 merged.
+5. Done (2026-11-09): two personas from the project lead's answers, the household viewer (the other
+   adult and guests) and the set-up person (the project lead), approved as working assumptions
+   (`[to validate]`). The check of each requirement against each persona led to two amendments in
+   their own PR: only the set-up person arranges and hides apps, and each app shows its own artwork
+   and name.
+6. Next: epics.
 
 ## Decisions so far
 
@@ -53,4 +58,6 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | Every concept claim confirmed as written | `docs/product/concept.md` |
 | 2026-11-09 | Requirements answers: all apps shown, household arranges and hides them; one shared screen; search box on Home sends text to Google's results; chat replies accepted; voice button, settings, clock; set up and undone by the project lead from a PC; Home in 1 second; survives reboots | `docs/product/requirements/` |
 | 2026-11-09 | Pressing Home never shows Google TV's home screen; if it comes up on its own, it is covered within 0.5 s | `docs/product/requirements/home.md` (REQ-home-2) |
+| 2026-11-09 | Personas: household viewer and set-up person, as working assumptions | `docs/product/personas/` |
+| 2026-11-09 | Only the set-up person arranges and hides apps; apps show their own artwork and name | `docs/product/requirements/home.md` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |

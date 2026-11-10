@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `bb761b9` (concept approved); branch `requirements` (PR #4) approves the requirements |
+| State | `main` at `13f6a23` (concept and requirements approved); branches `personas` and `persona-amendments` in review |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -59,7 +59,15 @@ open. The test app is in `spikes/home-takeover/` and was removed from the TV aft
 records the project lead's decision: Home never shows Google TV's home screen, and a stray one is
 covered within 0.5 s. Build tools are per user in `%LOCALAPPDATA%\AndroidBuild`.
 
-Next: personas (`PLAN.md`, step 5), then the check of each requirement against each persona.
+#4 merged the same day (`13f6a23`): the requirements are approved.
+
+Then two personas from the project lead's answers about the household: `persona-viewer` (the other
+adult and guests: open a favourite app, type a title, operate a simple screen but not settings, ask
+the project lead for help) and `persona-setup-person` (the project lead at the PC). Both say
+`status: approved` as working assumptions, with `[to validate]` markers, in the personas PR. The
+check of each requirement against each persona found two amendments, which the project lead decided
+and which go in their own PR: only the set-up person arranges and hides apps (REQ-home-3, 4, 9), and
+each app shows its own TV artwork and name (new REQ-home-11). Next: epics.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
