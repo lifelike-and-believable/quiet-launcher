@@ -31,11 +31,12 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- STUB (tests-first commit): exported and unprotected. -->
+        <!-- docs/specs/home-takeover.md, AC-6: only Android can bind it. -->
         <service
             android:name=".HomeWatcher"
-            android:exported="true"
-            android:label="@string/service_name">
+            android:exported="false"
+            android:label="@string/service_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>

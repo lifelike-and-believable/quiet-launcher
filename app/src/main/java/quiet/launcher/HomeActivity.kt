@@ -9,6 +9,9 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
+import android.util.Log
+import android.view.Choreographer
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -18,13 +21,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-/** The quiet home screen: the grid of apps (docs/specs/app-list.md). */
+/** The quiet home screen (docs/specs/app-list.md, docs/specs/home-takeover.md). */
 class HomeActivity : Activity() {
 
     private lateinit var grid: RecyclerView
     private lateinit var emptyMessage: TextView
     private val adapter = AppAdapter(::open)
     private var firstShow = true
+    private var homePressed = false
 
     private val packageChanges = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) = rebuild(selectFirst = false)
@@ -69,17 +73,33 @@ class HomeActivity : Activity() {
         }
     }
 
-    // STUB (tests-first commit): resets the selection on every intent except a Home press.
+    /** home-takeover#AC-4: a Home press goes to the top with the first app selected. */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (!intent.getBooleanExtra(EXTRA_HOME, false)) rebuild(selectFirst = true)
+        setIntent(intent)
+        if (intent.getBooleanExtra(EXTRA_HOME, false)) {
+            homePressed = true
+            rebuild(selectFirst = true)
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        // app-list#AC-6: the first time, the first app; app-list#AC-7: afterwards, keep the selection.
-        rebuild(selectFirst = firstShow)
+        // app-list#AC-6: the first time, the first app; home-takeover#AC-4: after a Home press, the
+        // first app; app-list#AC-7: otherwise, keep the selection.
+        rebuild(selectFirst = firstShow || homePressed)
         firstShow = false
+        homePressed = false
+        // For measuring the Home budget on the TV (home-takeover#AC-8).
+        Choreographer.getInstance().postFrameCallback {
+            Log.i(HomeWatcher.TAG, "home screen drawn at ${SystemClock.uptimeMillis()}")
+        }
+    }
+
+    /** home-takeover#AC-5: Back does nothing here, so it can never reveal Google TV's home screen. */
+    @Deprecated("Back is handled here for every Android version this app supports.")
+    override fun onBackPressed() {
+        // Deliberately empty.
     }
 
     override fun onDestroy() {

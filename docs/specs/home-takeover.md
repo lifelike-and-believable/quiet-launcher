@@ -1,7 +1,7 @@
 ---
 status: draft
 tests: [app/src/test]
-# tests-commit: <sha of the commit that holds the failing tests, once written>
+tests-commit: 2e159e353d64b8e4106c270e7075d7d605fa93e3
 ---
 
 # Taking over Home
