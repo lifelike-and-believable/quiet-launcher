@@ -2,7 +2,7 @@
 id: docs-home-screen
 status: approved
 derived-from:
-  - design-home-screen: 6896cca3136d
+  - design-home-screen: 93e08f3b6109
   - story-quiet-home-home-key: 7adbfcde7ee1
   - story-quiet-home-apps: cef8c5e03e43
   - story-quiet-home-new-and-removed-apps: bbd39a3046ae
@@ -22,7 +22,8 @@ for example docs-home-screen#find-which-app-has-a-show. -->
 When you press Home on the remote, the TV shows the quiet home screen: your apps and nothing else.
 There are no suggested shows, banners, or ads.
 
-Along the top are **Search for a show**, **Voice search**, **Settings**, and the time. Below them
+Along the top are **Search for a show**, **Voice search**, **Google TV**, **Settings**, and the
+time. Below them
 are the TV's apps, each with its own picture and its name.
 
 At first your apps will be in different places from where they were on Google TV's home screen:
@@ -78,6 +79,18 @@ different words.
 You can also hold the voice button on the remote, as before; it works from anywhere.
 
 Press Back to return to the home screen, with **Voice search** selected.
+
+## Open Google TV's own home screen
+
+For things only Google TV's own home screen has, such as the watchlist, Google Play purchases, or
+live TV:
+
+1. Press Home.
+2. Move to **Google TV** (top right, next to **Settings**) and press select.
+
+Google TV's home screen opens, with its suggestions and banners, and stays while you use it. To
+come back to the quiet home screen, press Home. If the TV goes to sleep, it wakes to the quiet home
+screen.
 
 ## Open the TV's settings
 
