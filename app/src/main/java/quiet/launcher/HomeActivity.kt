@@ -69,6 +69,12 @@ class HomeActivity : Activity() {
         }
     }
 
+    // STUB (tests-first commit): resets the selection on every intent except a Home press.
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        if (!intent.getBooleanExtra(EXTRA_HOME, false)) rebuild(selectFirst = true)
+    }
+
     override fun onResume() {
         super.onResume()
         // app-list#AC-6: the first time, the first app; app-list#AC-7: afterwards, keep the selection.
@@ -120,7 +126,10 @@ class HomeActivity : Activity() {
         )
     }
 
-    private companion object {
-        const val COLUMNS = 5
+    companion object {
+        private const val COLUMNS = 5
+
+        /** Set by HomeWatcher on an intent that stands for a Home press (home-takeover#AC-4). */
+        const val EXTRA_HOME = "quiet.launcher.HOME"
     }
 }
