@@ -36,6 +36,9 @@ class HomeWatcher : AccessibilityService() {
         }
     }
 
+    /** True while the cover is up. Public for tests. STUB until implemented. */
+    val isCovering: Boolean get() = true
+
     override fun onInterrupt() {}
 
     override fun onServiceConnected() {
