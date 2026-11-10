@@ -17,25 +17,36 @@ class PackageSource(
         val homePackages = pm.queryIntentActivities(intentFor(Intent.CATEGORY_HOME), 0)
             .map { it.activityInfo.packageName }
             .toSet()
+        seen.clear()
         return pm.queryIntentActivities(intentFor(Intent.CATEGORY_LEANBACK_LAUNCHER), 0).map { resolved ->
             val activity = resolved.activityInfo
+            val times = installTimes(activity.packageName)
             AppEntry(
                 packageName = activity.packageName,
                 activityName = activity.name,
                 label = resolved.loadLabel(pm).toString(),
-                firstInstallTime = firstInstallTime(activity.packageName),
+                firstInstallTime = times.first,
                 hasHomeActivity = activity.packageName in homePackages,
-                // STUB (tests-first commit): loaded every time.
-                artwork = loadArtwork(activity),
-            )
-        }
+                artwork = artworkFor(activity, times.second),
+            ).also { seen += artworkKey(activity, times.second) }
+        }.also { artworkCache.keys.retainAll(seen) }
     }
 
-    private fun firstInstallTime(packageName: String): Long =
+    /** home-takeover#AC-12: loaded once per app, and again only when the app is updated. */
+    private val artworkCache = HashMap<String, Drawable?>()
+    private val seen = HashSet<String>()
+
+    private fun artworkKey(activity: ActivityInfo, updated: Long) = "${activity.packageName}/${activity.name}@$updated"
+
+    private fun artworkFor(activity: ActivityInfo, updated: Long): Drawable? =
+        artworkCache.getOrPut(artworkKey(activity, updated)) { loadArtwork(activity) }
+
+    /** First-install and last-update times. */
+    private fun installTimes(packageName: String): Pair<Long, Long> =
         try {
-            pm.getPackageInfo(packageName, 0).firstInstallTime
+            pm.getPackageInfo(packageName, 0).let { it.firstInstallTime to it.lastUpdateTime }
         } catch (e: PackageManager.NameNotFoundException) {
-            0L
+            0L to 0L
         }
 
     companion object {
