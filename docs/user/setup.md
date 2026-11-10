@@ -133,6 +133,10 @@ Undo works even if the quiet home screen is not working, or setup stopped half w
 already removed, step 3 says it is already removed. The script keeps the backup, renamed
 `backup-<serial>-undone-<date>.json`, so the next setup takes a fresh one.
 
+Undo also removes the arrangement of the apps (docs-arranging). If you have arranged them, run
+Arrange apps (`quiet-arrange.cmd`) first and keep the file it saves, so you can put the arrangement back after setting
+up again (docs-arranging#put-a-saved-arrangement-back).
+
 ## Options
 
 | Option | Use it when |

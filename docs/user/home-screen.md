@@ -2,7 +2,7 @@
 id: docs-home-screen
 status: approved
 derived-from:
-  - design-home-screen: d8cb642e14ca
+  - design-home-screen: 4ea20c86ce77
   - story-quiet-home-home-key: 7adbfcde7ee1
   - story-quiet-home-apps: cef8c5e03e43
   - story-quiet-home-new-and-removed-apps: bbd39a3046ae
@@ -27,8 +27,8 @@ time. Below them
 are the TV's apps, each with its own picture and its name.
 
 At first your apps will be in different places from where they were on Google TV's home screen:
-they are in the order they were installed on the TV, oldest first. The order cannot be changed yet;
-that comes in a later version.
+they are in the order they were installed on the TV, oldest first, until the person who set up the
+TV arranges them in your household's order (docs-arranging).
 
 ## Open an app
 
@@ -106,10 +106,13 @@ The time is at the top right. It follows the TV's own time settings, including w
 
 ## What stays the same, and what changes
 
-- The apps stay where they are. A newly installed app appears at the end (just before Google Play
-  Store); an app that is uninstalled disappears. Nobody else's button presses move them.
+- The apps stay where they are. A newly installed app appears at the end; an app that is
+  uninstalled disappears. Only the person who set up the TV can move or hide apps.
+- If you hold select on an app for a long time, the TV asks whether to arrange the apps. Press
+  select on **Cancel**, or press Back: nothing changes.
 - Some apps are not shown: the TV's own settings app (use **Settings** instead), Play Games, Google
-  TV, and other home-screen apps.
+  TV, other home-screen apps, and any apps the person who set up the TV has hidden. Hidden apps
+  still open from search and voice results.
 - The remote's YouTube and Netflix buttons, and its voice button, work as they always have.
 - Holding down Home does the same as pressing it. Google TV's own long-press Home menu is no longer
   available.
