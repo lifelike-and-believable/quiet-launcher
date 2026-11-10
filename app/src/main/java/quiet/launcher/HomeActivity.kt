@@ -245,6 +245,14 @@ class HomeActivity : Activity() {
         }
     }
 
+    /**
+     * google-tv-button#AC-2: the service opens it, so it knows not to cover it. The request stays in
+     * the app: it names this package, and the service's receiver is not exported.
+     */
+    private fun openGoogleTv() {
+        sendBroadcast(Intent(HomeWatcher.ACTION_OPEN_GOOGLE_TV).setPackage(packageName))
+    }
+
     private fun openSettings() {
         returnTo = R.id.settings_button
         // A fresh Settings task, at its top level, not wherever it was last left.
@@ -380,6 +388,8 @@ class HomeActivity : Activity() {
             }
         }
         voiceButton = button(R.id.voice_button, R.string.voice_search, R.drawable.ic_mic, dp) { voiceSearch() }
+        // google-tv-button#AC-1 and AC-2: asks the service to open Google TV's own home screen.
+        val googleTvButton = button(R.id.google_tv_button, R.string.google_tv, R.drawable.ic_tv, dp) { openGoogleTv() }
         settingsButton = button(R.id.settings_button, R.string.settings, R.drawable.ic_settings, dp) { openSettings() }
             .apply { nextFocusRightId = R.id.settings_button }
         val clock = TextClock(this).apply {
@@ -396,12 +406,10 @@ class HomeActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
-            addView(searchBox, LinearLayout.LayoutParams(px(450f), px(44f)))
+            addView(searchBox, LinearLayout.LayoutParams(px(360f), px(44f)))
             addView(voiceButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginStart = px(12f) })
             addView(View(this@HomeActivity), LinearLayout.LayoutParams(0, 1, 1f))
-            // STUB (tests-first commit): a Google TV button with the wrong label and no action.
-            addView(TextView(this@HomeActivity).apply { id = R.id.google_tv_button; text = "TV"; isFocusable = true },
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginEnd = px(12f) })
+            addView(googleTvButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginEnd = px(12f) })
             addView(settingsButton, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)))
             addView(clock, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = px(16f) })
         }

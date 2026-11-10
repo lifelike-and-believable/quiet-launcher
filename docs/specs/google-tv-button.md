@@ -1,7 +1,7 @@
 ---
 status: draft
 tests: [app/src/test]
-# tests-commit: <sha of the commit that holds the failing tests, once written>
+tests-commit: d5276c07819cac9398f663b9c80112f3ad4e7a2f
 ---
 
 # The Google TV button
