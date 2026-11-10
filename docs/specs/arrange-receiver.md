@@ -1,6 +1,7 @@
 ---
 status: draft
 tests: [app/src/test]
+tests-commit: 852b1f1b8cdf0b7e76597428e04e56d1ed0833ea
 ---
 
 # The arrangement from the PC: the app's receiver

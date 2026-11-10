@@ -101,6 +101,11 @@ class HomeActivity : Activity() {
         override fun onReceive(context: Context, intent: Intent) = rebuild(selectFirst = false)
     }
 
+    /** arrange-receiver#AC-6: an arrangement sent from the PC shows at once. */
+    private val arrangementChanges = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) = rebuild(selectFirst = false)
+    }
+
     private val connectivity = object : ConnectivityManager.NetworkCallback() {
         override fun onLost(network: Network) = runOnUiThread { setOffline(true) }
 
@@ -124,6 +129,8 @@ class HomeActivity : Activity() {
         } else {
             registerReceiver(packageChanges, filter)
         }
+
+        onArrangementChanged(arrangementChanges)
 
         // top-row-and-search#AC-9: the status line follows the connection.
         val cm = getSystemService(ConnectivityManager::class.java)
@@ -191,6 +198,7 @@ class HomeActivity : Activity() {
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
         unregisterReceiver(packageChanges)
+        unregisterReceiver(arrangementChanges)
         getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(connectivity)
         super.onDestroy()
     }
