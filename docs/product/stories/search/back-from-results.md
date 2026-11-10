@@ -4,6 +4,7 @@ status: draft
 derived-from:
   - epic-search#outcome:
   - persona-viewer#goals:
+  - persona-viewer#frustrations:
 ---
 
 # Back from the results returns home
@@ -15,5 +16,6 @@ search never leaves me stuck on Google's screens.
 
 ## Acceptance criteria
 
-- Pressing Back on Google's page for a show, or on its chat reply, returns to the quiet home screen.
+- Pressing Back on Google's page for a show, or on its chat reply, whether the search was typed or
+  spoken, returns to the quiet home screen.
 - The search box is empty when I return.

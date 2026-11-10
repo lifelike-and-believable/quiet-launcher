@@ -16,9 +16,12 @@ it, so that I do not open app after app to find it.
 
 ## Acceptance criteria
 
-- The quiet home screen has a search box, reached with the direction pad, that accepts input within
-  1 second of pressing Home.
-- Selecting it brings up the on-screen keyboard; typing a show's title and submitting it opens
-  Google's page for that show, naming the app to watch it in.
-- The text is searched exactly as typed.
-- If Google answers with a chat reply instead of a page, that reply is what appears.
+- The quiet home screen has a search box, reached with the direction pad, that can be selected and
+  typed into within 1 second of pressing Home.
+- Typing uses the on-screen keyboard and the remote alone. Submitting a show's title opens Google's
+  page for that show, which names where to watch it, including any of our apps that has it.
+- From the moment the search is submitted until Google's page appears, the screen shows that the
+  search is under way.
+- The text is searched exactly as typed. Submitting an empty box does nothing.
+- If Google answers with a chat reply instead of a page, that reply is what appears, and the viewer
+  can go back and search again with different text.

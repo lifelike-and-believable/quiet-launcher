@@ -5,6 +5,7 @@ derived-from:
   - epic-quiet-home#outcome:
   - persona-viewer#goals:
   - persona-viewer#frustrations:
+  - persona-viewer#skills-and-tools:
 ---
 
 # The household's apps, and nothing else
@@ -16,10 +17,12 @@ select, so that I get to what I watch straight away and a guest recognises the a
 
 ## Acceptance criteria
 
-- The quiet home screen shows every app installed on the TV that can be opened from a home screen,
-  in the order they were installed.
-- Each app shows its own TV artwork (its banner, or its icon if it has no banner) and its name.
-- There are no suggested shows, previews, featured or sponsored banners, rows of content,
-  advertising, or apps that are not installed.
-- Moving with the direction pad shows clearly which app is selected, and select opens it.
-- The screen looks the same whichever Google TV profile is active.
+- The quiet home screen shows the same apps as Google TV's own list of apps, in the order they were
+  installed.
+- Each app shows its own TV artwork (its banner, or its icon if it has no banner) and its name. An
+  app's own artwork is not advertising.
+- Apart from the apps, there is nothing promoting content: no suggested shows, previews, featured or
+  sponsored banners, rows of shows, or apps that are not installed.
+- Moving with the direction pad always shows which app is selected, and select opens it. Nothing on
+  the screen needs anything but the remote.
+- The screen is the same whichever Google TV profile is active.

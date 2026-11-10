@@ -15,5 +15,7 @@ every time.
 
 ## Acceptance criteria
 
-- The quiet home screen has a voice search item; selecting it starts Google's voice search.
-- The remote's own voice button works as it does today, from the quiet home screen and from apps.
+- The quiet home screen has a voice search item, with the usual microphone symbol; selecting it
+  starts Google's voice search.
+- The remote's own voice button starts Google's voice search, from the quiet home screen and from
+  apps, as it does on Google TV's home screen.

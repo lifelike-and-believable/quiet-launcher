@@ -4,6 +4,7 @@ status: draft
 derived-from:
   - epic-setup#outcome:
   - persona-setup-person#goals:
+  - persona-viewer#frustrations:
 ---
 
 # It survives a restart
@@ -15,6 +16,8 @@ loses power, so that I am not called over after a power cut.
 
 ## Acceptance criteria
 
-- After the TV is restarted, or unplugged and plugged back in, pressing Home shows the quiet home
-  screen, with no one doing anything at the PC.
-- The apps on it are the same as before.
+- After the TV is restarted, or unplugged and plugged back in, the first screen anyone sees once it
+  has started is the quiet home screen: Google TV's home screen, if it comes up at start-up, is
+  covered within half a second.
+- Nobody has to do anything at the PC or on the TV for this.
+- The same apps are there as before the restart.

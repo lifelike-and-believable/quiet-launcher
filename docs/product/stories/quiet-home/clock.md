@@ -15,5 +15,5 @@ the TV.
 
 ## Acceptance criteria
 
-- The quiet home screen shows the current time.
+- The quiet home screen shows the current time, readable from the couch.
 - It follows the TV's time zone and its 12- or 24-hour setting, and changes when they change.

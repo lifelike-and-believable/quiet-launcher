@@ -17,7 +17,7 @@ know.
 
 ## Acceptance criteria
 
-- If Google TV's home screen has come back after a system update or a reset, running the written
-  setup procedure again makes the quiet home screen the home screen again.
-- Running it on a TV where the product is already set up does no harm and changes nothing the
-  household would notice.
+- If Google TV's home screen has come back after a system update or a reset, following the written
+  setup procedure again, from the start, makes the quiet home screen the home screen again.
+- Running it on a TV where the product is already set up and working does no harm: the quiet home
+  screen keeps working throughout.

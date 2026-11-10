@@ -16,10 +16,16 @@ promoted shows never get in my way.
 
 ## Acceptance criteria
 
-- From any app, from Google's page for a show, or from the TV's settings, pressing Home shows the
-  quiet home screen, with the apps visible and selectable, within 1 second.
-- At no point while pressing Home, or holding it down, does Google TV's home screen appear, even for
-  a moment.
-- If Google TV's home screen comes up on its own, the quiet home screen covers it within half a
-  second.
+- From any app, from Google's pages (a show's page, a chat reply), or from the TV's settings,
+  pressing Home shows the quiet home screen (this product's home screen, as opposed to Google TV's
+  home screen with its rows and banners), with the apps visible and selectable, within 1 second of
+  the press.
+- Pressing Home never shows Google TV's home screen first, not even for a moment, as checked frame
+  by frame in a screen recording of 20 presses from different apps.
+- Holding Home down shows the quiet home screen too, and does nothing else: Google TV's own long-
+  press Home action is not available.
+- If Google TV's home screen comes up without Home being pressed (for example when an app closes, or
+  the TV wakes or starts), the quiet home screen covers it within half a second.
+- The remote's app buttons (YouTube, Netflix) and its voice button still work, from the quiet home
+  screen and from apps.
 - Pressing Home on the quiet home screen leaves it there.
