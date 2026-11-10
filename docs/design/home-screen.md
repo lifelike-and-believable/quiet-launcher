@@ -59,7 +59,7 @@ keyboard is the TV's own (Gboard for TV); the mock-up only marks where it appear
 | Settings selected | ![Settings selected](home-screen/settings-focus.png) | |
 | Many apps, scrolled | ![Many apps](home-screen/many-apps.png) | The grid scrolls a row at a time; the top row stays |
 | No internet connection | ![Offline](home-screen/offline.png) | |
-| No apps | ![No apps](home-screen/empty.png) | Unlikely; there is always at least the Play Store |
+| No apps | ![No apps](home-screen/empty.png) | Unlikely: only if every app but Google's own were removed |
 
 The tiles in the mock-ups are placeholders that show each app's name in a colour; the real screen
 shows each app's own banner artwork (VLC and the Play Store show the icon case).
@@ -89,9 +89,10 @@ shows each app's own banner artwork (VLC and the Play Store show the icon case).
 - **Searching**: from pressing the keyboard's search key until Google's search screen opens (about
   half a second in the spike), the screen dims and shows a spinner, **Searching for "<text>"…**, and
   **Google's search will open in a moment**. If Google's search has not opened after 10 seconds,
-  the message becomes **Google's search did not open. Press Back and try again.** [assumed] Once
-  Google's search screen is open, the wait until its page appears (about 4 more seconds in the
-  spike) is shown by Google's own screen; what it shows has not been checked.
+  the message becomes **Google's search did not open. Press Back and try again.** Once Google's
+  search screen is open, Google shows the wait itself until its page appears (about 4 more
+  seconds): it dims the screen behind (the quiet home screen) and shows the typed text in a glowing
+  box at the bottom, then fades the show's page in (checked on the reference device, 2026-11-09).
 - **Empty search**: pressing search with nothing typed does nothing.
 - **Chat reply**: shown by Google as it is. Back returns home, with the box selected and empty, ready
   to try different text.
@@ -105,8 +106,12 @@ shows each app's own banner artwork (VLC and the Play Store show the icon case).
 ## How it works
 
 - **Which apps, and their artwork**: the apps Android lists as openable from a TV home screen
-  (activities for `MAIN` with the `LEANBACK_LAUNCHER` category), which is the list Google TV's own
-  Apps screen shows [assumed], minus this app. Banner and name come from each app. Install time
+  (activities for `MAIN` with the `LEANBACK_LAUNCHER` category), minus this app and the four Google
+  system apps that Google TV's own **Your apps** list leaves out: TV settings
+  (`com.android.tv.settings`, reached with **Settings** instead), the Play Store
+  (`com.android.vending`), Play Games (`com.google.android.play.games`), and Google TV
+  (`com.google.android.videos`). Checked on the reference device on 2026-11-09: that gives the same
+  19 apps as Google TV's **Your apps**. Banner and name come from each app. Install time
   comes from Android, so the order survives restarts without storing anything.
 - **New and removed apps**: the screen listens for Android's package added and removed broadcasts,
   and also rebuilds the list each time it is shown.

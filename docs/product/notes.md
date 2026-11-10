@@ -158,3 +158,21 @@ react to windows), with the project lead pressing the remote's buttons and the l
   covered within about 0.4 s.
 
 Cleanup as before; Home opens Google TV again. The full log was kept outside the repository.
+
+## Google TV's app list and search wait (2026-11-09, evening)
+
+With the project lead's go-ahead, read-only looks at the reference device for the home-screen
+design:
+
+- Android's list of TV-launchable apps (`cmd package query-activities -a android.intent.action.MAIN
+  -c android.intent.category.LEANBACK_LAUNCHER`) has 23 entries. Google TV's Apps tab, **Your
+  apps**, shows 19: the same list without `com.android.tv.settings` (TV settings),
+  `com.android.vending` (Play Store), `com.google.android.play.games` (Play Games), and
+  `com.google.android.videos` (Google TV). It includes Projectivy Launcher and ExpressVPN. Its order
+  is the household's own (it has a **Reorder** item), not install order.
+- The Apps tab itself opens with large promoted tiles for apps that are not installed (ICI TOU.TV,
+  CBC Gem) above **Your apps**.
+- During a typed search (`GLOBAL_SEARCH`, `query=Severance`), Google dims the screen behind and
+  shows the query in a glowing box at the bottom for a few seconds, then the show's page fades in,
+  blurred at first. The page was in front about 2 to 3 seconds after the request.
+
