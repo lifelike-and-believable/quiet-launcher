@@ -16,4 +16,33 @@
     <string name="search_failed">Google\'s search did not open. Press select to try again.</string>
     <string name="offline">No internet connection. Search and voice search need it; your apps still open.</string>
     <string name="type_something">Type something to search</string>
+    <!-- Arranging (docs/design/arranging.md, Layout) -->
+    <string name="question_title">Arrange apps?</string>
+    <string name="question_text">You can change the order of the apps and hide the ones nobody uses. The changes are for everyone who uses this TV.</string>
+    <string name="question_cancel">Cancel</string>
+    <string name="question_arrange">Arrange apps</string>
+    <string name="arrange_title">Arranging apps</string>
+    <string name="arrange_instructions">Select an app to move or hide it. Press Back when you are done; changes are saved as you go.</string>
+    <string name="arrange_announcement">Arranging apps. Select an app to move or hide it. Press Back when you are done. %1$s.</string>
+    <plurals name="hidden_count">
+        <item quantity="one">%d hidden app, at the end</item>
+        <item quantity="other">%d hidden apps, at the end</item>
+    </plurals>
+    <string name="no_hidden_count">No hidden apps</string>
+    <string name="hidden_label">Hidden apps</string>
+    <string name="hidden_note">Not on the home screen. Select one to show it again.</string>
+    <string name="no_hidden">No hidden apps. To hide one, select it and choose Hide.</string>
+    <string name="hidden_badge">Hidden</string>
+    <string name="hidden_app">%1$s, hidden app</string>
+    <string name="menu_move">Move</string>
+    <string name="menu_hide">Hide</string>
+    <string name="menu_show">Show</string>
+    <string name="menu_cancel">Cancel</string>
+    <string name="moving">Moving %1$s. Use the arrows, then press select to put it here. Back puts it back.</string>
+    <string name="moving_step">%1$s, %2$d of %3$d</string>
+    <string name="placed">%1$s placed, %2$d of %3$d</string>
+    <string name="put_back">%1$s put back, %2$d of %3$d</string>
+    <string name="hid">%1$s hidden. It is in the Hidden apps row.</string>
+    <string name="showed">%1$s shown, at the end of the apps.</string>
+    <string name="keep_one">Keep at least one app on the home screen.</string>
 </resources>

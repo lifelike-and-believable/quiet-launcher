@@ -65,6 +65,12 @@ class ArrangeScreenTest {
 
     private fun tile(pkg: String): View = (0 until grid.childCount).map { grid.getChildAt(it) }.first { it.tag == pkg }
 
+    /** Where the direction pad moves the selection; Robolectric does not move it on a dispatched key. */
+    private fun move(direction: Int) {
+        focused?.focusSearch(direction)?.requestFocus()
+        idle()
+    }
+
     private fun select(pkg: String) {
         tile(pkg).requestFocus()
         idle()
@@ -107,11 +113,11 @@ class ArrangeScreenTest {
         assertTrue(shown(R.id.menu_move) && shown(R.id.menu_hide) && shown(R.id.menu_cancel))
         assertFalse(shown(R.id.menu_show))
         assertEquals(R.id.menu_move, focused?.id)
-        key(KeyEvent.KEYCODE_DPAD_UP)
+        move(View.FOCUS_UP)
         assertEquals(R.id.menu_move, focused?.id)
-        key(KeyEvent.KEYCODE_DPAD_DOWN)
-        key(KeyEvent.KEYCODE_DPAD_DOWN)
-        key(KeyEvent.KEYCODE_DPAD_DOWN)
+        move(View.FOCUS_DOWN)
+        move(View.FOCUS_DOWN)
+        move(View.FOCUS_DOWN)
         assertEquals(R.id.menu_cancel, focused?.id)
     }
 

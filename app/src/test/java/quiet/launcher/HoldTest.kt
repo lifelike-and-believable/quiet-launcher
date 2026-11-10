@@ -25,6 +25,12 @@ class HoldTest {
     private fun repeat(n: Int) {
         robot.activity.dispatchKeyEvent(KeyEvent(0, 0, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_CENTER, n)); robot.idle()
     }
+    /** Where the direction pad moves the selection; Robolectric does not move it on a dispatched key. */
+    private fun move(direction: Int) {
+        robot.focused?.focusSearch(direction)?.requestFocus()
+        robot.idle()
+    }
+
     private fun up() { robot.activity.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_CENTER)); robot.idle() }
 
     /** Holds select for [ms], with the key repeats a remote sends. */
@@ -92,13 +98,13 @@ class HoldTest {
     @Test
     fun `AC-3 left and right stay on the question's two buttons, and Arrange apps opens arrange mode`() {
         hold(5_000); up()
-        robot.key(KeyEvent.KEYCODE_DPAD_LEFT)
+        move(View.FOCUS_LEFT)
         assertEquals(R.id.question_cancel, robot.focused?.id)
-        robot.key(KeyEvent.KEYCODE_DPAD_RIGHT)
+        move(View.FOCUS_RIGHT)
         assertEquals(R.id.question_arrange, robot.focused?.id)
-        robot.key(KeyEvent.KEYCODE_DPAD_RIGHT)
+        move(View.FOCUS_RIGHT)
         assertEquals(R.id.question_arrange, robot.focused?.id)
-        robot.key(KeyEvent.KEYCODE_DPAD_UP)
+        move(View.FOCUS_UP)
         assertEquals(R.id.question_arrange, robot.focused?.id)
 
         robot.key(KeyEvent.KEYCODE_DPAD_CENTER)
@@ -116,7 +122,7 @@ class HoldTest {
         robot.tile(2).requestFocus()
         robot.idle()
         hold(5_000); up()
-        robot.key(KeyEvent.KEYCODE_DPAD_RIGHT)
+        move(View.FOCUS_RIGHT)
         robot.key(KeyEvent.KEYCODE_DPAD_CENTER)
         ArrangementStore(robot.context).save(Arrangement(order = listOf("app.n04"), hidden = listOf("app.n02")))
 
