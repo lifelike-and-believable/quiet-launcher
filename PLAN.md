@@ -78,6 +78,7 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-08 | rfr-process in solo mode; `atgoldberg` approves every stage | `docs/product/process.yml` |
 | 2026-11-08 | Borrow the `web-app` profile's templates; no profile fits an Android TV app | `AGENTS.md` |
 | 2026-11-08 | Pin the process workflow to rules-for-robots `rfr-v5.1.4` | `.github/workflows/rfr-process.yml` |
+| 2026-11-10 | Move to rules-for-robots `rfr-v5.7.1` (`rfr-core` 5.7.1, `rfr-process` 0.16.0); tier labels are now inferred from the paths a pull request changes | `.github/workflows/rfr-process.yml` |
 | 2026-11-09 | For the project lead's household only; the repository may be shared, but nothing is published | `docs/product/concept.md` |
 | 2026-11-09 | Typed search across all apps is the product's main value | `docs/product/concept.md` |
 | 2026-11-09 | The watchlist, Play purchases, and live TV need not stay reachable, for now | `docs/product/concept.md` |

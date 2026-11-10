@@ -13,9 +13,9 @@ on:
 
 jobs:
   process:
-    uses: lifelike-and-believable/rules-for-robots/.github/workflows/rfr-process.yml@rfr-v5.1.4
+    uses: lifelike-and-believable/rules-for-robots/.github/workflows/rfr-process.yml@rfr-v5.7.1
     with:
-      rules-ref: rfr-v5.1.4
+      rules-ref: rfr-v5.7.1
     permissions:
       contents: read
       pull-requests: read
