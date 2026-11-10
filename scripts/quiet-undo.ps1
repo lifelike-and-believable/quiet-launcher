@@ -70,8 +70,25 @@ function Wait-Seconds([double]$seconds) { if (-not $fast) { Start-Sleep -Millise
 
 function Find-Adb {
     if ($env:QUIET_ADB) { if (Test-Path $env:QUIET_ADB) { return $env:QUIET_ADB } else { return $null } }
-    $found = Get-Command adb -ErrorAction SilentlyContinue
+    # A program only: the Adb function below would come first and has no path.
+    $found = Get-Command adb -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($found) { return $found.Source }
+    # Installed after this window opened: look where winget and Android Studio put it, and in the
+    # PATH Windows has now (this window keeps the one it started with).
+    $dirs = @()
+    foreach ($scope in 'User', 'Machine') {
+        $p = [Environment]::GetEnvironmentVariable('Path', $scope)
+        if ($p) { $dirs += $p -split ';' | Where-Object { $_ } }
+    }
+    if ($env:LOCALAPPDATA) {
+        $dirs += @(Get-ChildItem (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages') -Directory -Filter 'Google.PlatformTools*' -ErrorAction SilentlyContinue |
+            ForEach-Object { Join-Path $_.FullName 'platform-tools' })
+        $dirs += Join-Path $env:LOCALAPPDATA 'Android\Sdk\platform-tools'
+    }
+    foreach ($d in $dirs) {
+        $exe = Join-Path ([Environment]::ExpandEnvironmentVariables($d)) 'adb.exe'
+        if (Test-Path $exe) { return $exe }
+    }
     return $null
 }
 
