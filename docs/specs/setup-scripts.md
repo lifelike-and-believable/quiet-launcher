@@ -2,6 +2,8 @@
 status: draft
 tests: [scripts/tests]
 tests-commit: 8837b1b69c4c13b21cd6c9e227404b62d06d2b5b
+unlocks:
+  - scripts/tests/test_scripts.py: AC-1 (ADB found or not) was only tested with QUIET_ADB set, so the project lead's first real run stopped at ADB NOT FOUND (the scripts' Adb function hid adb.exe); adds a run option that puts an adb program on PATH instead, and a test that both scripts find it; no existing test changes
 ---
 
 # The setup and undo scripts
