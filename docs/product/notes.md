@@ -190,6 +190,7 @@ the remote, under the standing go-ahead for test installs. Evidence: Android's a
 | 3 | same | 5 Netflix, then voice searches | once, about 2.3 s, after a voice search |
 | 4 | with the instant cover | 4 from Google's page after a voice search | never |
 | 5 | same | 5 Netflix, 4 with Google's sign-in dialog up | never |
+| 6 | same | 11 (4 YouTube, 4 Netflix with the sign-in dialog twice, 3 after a voice search) | never |
 
 - Both strays came after Google's own screens: Google's "sign in to Netflix with Google" dialog
   (`com.google.android.gms/.auth.api.credentials.assistedsignin.ui.AtvAssistedSignInActivity`) in
@@ -202,8 +203,13 @@ the remote, under the standing go-ahead for test installs. Evidence: Android's a
   plain overlay (`TYPE_ACCESSIBILITY_OVERLAY`) while the quiet home screen starts
   (home-takeover#AC-11). With Google TV's home screen opened directly, a recording showed no frame of
   it: quiet home screen, 0.9 s of plain cover, quiet home screen.
-- With the final build, every Home press reached the service (the service now logs every key), and
-  the quiet home screen was drawn 0.06 to 0.7 s after it (REQ-home-10: under 1 s).
+- With the final build, 20 of 20 Home presses (rounds 4 to 6) showed no Google TV home screen: Android
+  never started it, and no recorded frame was classified as it (home-takeover#AC-7).
+- With the final build, every Home press reached the service (the service now logs every key). The
+  quiet home screen was drawn 0.06 to 0.7 s after it, except once: 1.5 s after a Home press from
+  Netflix with Google's sign-in dialog up (round 6), over the 1-second budget (REQ-home-10,
+  home-takeover#AC-8). Likely cause: each time it is shown the screen re-reads every app and loads
+  all banners on its main thread, while the TV is short of memory.
 - The remote's Netflix (`KEYCODE_BUTTON_4`, 191) and YouTube (`KEYCODE_BUTTON_3`) buttons and its voice
   button pass through the service untouched; voice search opened Google's page for the show each
   time.
