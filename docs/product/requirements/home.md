@@ -3,7 +3,7 @@ id: requirements-home
 status: approved
 derived-from:
   - concept#vision: b94432cae6a3
-  - concept#non-goals: 54f57f35eb0d
+  - concept#non-goals: 2bae4f8d5c1f
 ---
 
 # Home screen requirements
@@ -29,7 +29,8 @@ promotes content: no suggested shows, previews, featured banners, rows of conten
 advertising, or apps that are not installed.
 
 Pressing Home never shows Google TV's home screen, even briefly, before this one. If Google TV
-brings its home screen up on its own, this home screen covers it within 0.5 seconds.
+brings its home screen up on its own, this home screen covers it within 0.5 seconds. The one
+exception is when someone asks for Google TV's home screen (REQ-home-12).
 
 ## REQ-home-3: The set-up person arranges the apps
 
@@ -96,6 +97,15 @@ Release: first
 
 Each app appears with the artwork it provides for TV home screens (its banner, or its icon if it has
 no banner) and its name, so someone who knows the app from elsewhere recognises it.
+
+## REQ-home-12: Google TV's own home screen, on request
+
+Release: first
+
+The home screen has a control that opens Google TV's own home screen, for what only it has (the
+watchlist, Google Play purchases, live TV channels). Anyone can use it. While Google TV's home
+screen is open this way, it is not covered. The next Home press, or the TV going to sleep, brings
+back this home screen, which covers Google TV's home screen again from then on (the project lead's decision, 2026-11-09).
 
 ## Constraints
 

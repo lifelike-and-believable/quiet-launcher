@@ -6,7 +6,7 @@ derived-from:
   - story-setup-restart: 1f1806140267
   - story-setup-recover: 734f151fb73e
   - story-setup-undo: 37a930b0c7c5
-  - decision-home-takeover: d5aa5ee157da
+  - decision-home-takeover: a21ed44ae315
   - persona-setup-person#goals: 1b5715ea18d9
   - persona-setup-person#skills-and-tools: 0ba05e70b88d
   - persona-setup-person#frustrations: 3e2f3fa89e9f

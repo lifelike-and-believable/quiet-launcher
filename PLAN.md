@@ -64,9 +64,11 @@ file tracks where the project is; it is not a process artifact.
        presses on the TV, 52 to 84 ms to draw. Three of the four `[to validate]` items confirmed
        (Back from an app, the voice button, restart as observed); the fourth (Google's search
        screen opening in about half a second) belongs to slice 3.
-    3. In #33: the top row and search (search box, searching and failed states, voice search,
-       Settings, clock, status line, TalkBack, movement); checked on the TV.
-    4. The setup and undo scripts, tested against a fake ADB, then on the TV.
+    3. Merged as #33: the top row and search (search box, searching and failed states, voice
+       search, Settings, clock, status line, TalkBack, movement); checked on the TV.
+    4. The **Google TV** button (the project lead's request, 2026-11-09): documents amended in their
+       own PR (#34) first, then a spec, tests first, and the code.
+    5. The setup and undo scripts, tested against a fake ADB, then on the TV.
 
 ## Decisions so far
 
@@ -89,4 +91,5 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | Apps stay in install order until arranging; other home-screen apps (Projectivy) are left out | `docs/design/home-screen.md` |
 | 2026-11-09 | Play Store shown as the last app; the folder is built from the repository, not published | `docs/design/`, `docs/user/setup.md` |
 | 2026-11-09 | Gradle and Kotlin; standing go-ahead to install and remove test builds on the TV, restoring Google TV afterwards | `README.md`, `HANDOFF.md` |
+| 2026-11-09 | A **Google TV** button in the top row opens Google TV's own home screen, for anyone, until the next Home press or sleep (concept non-goal changed, REQ-home-12) | `docs/product/`, `docs/design/`, `docs/user/` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |

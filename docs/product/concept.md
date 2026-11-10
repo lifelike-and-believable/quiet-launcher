@@ -54,8 +54,9 @@ it was.
   product is removed.
 - Showing advertising, or collecting usage data.
 - Publishing to the Play Store, or supporting households other than the project lead's.
-- Keeping Google TV's other features reachable from the new home screen (the watchlist, Google
-  Play purchases, live TV channels), for now.
+- Bringing Google TV's other features (the watchlist, Google Play purchases, live TV channels) into
+  the new home screen. They stay reachable through Google TV's own home screen, which a button on
+  the new home screen opens on request (the project lead's decision, 2026-11-09).
 
 ## Feasibility
 

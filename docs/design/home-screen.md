@@ -10,7 +10,8 @@ derived-from:
   - story-search-type-and-search: e7e72556b2ae
   - story-search-back-from-results: 47ec4dd4e43f
   - story-search-voice-search: a8131087ae80
-  - decision-home-takeover: d5aa5ee157da
+  - decision-home-takeover: a21ed44ae315
+  - story-quiet-home-google-tv: 6b9db241a10a
   - persona-viewer#goals: 24b5a84b1f16
   - persona-viewer#frustrations: 8722d20eb95e
   - persona-viewer#skills-and-tools: 401370018d77
@@ -47,6 +48,8 @@ accessibility review. -->
 5. **Voice search** starts Google's voice search; Back returns with **Voice search** selected. The
    remote's own voice button works as it always has. [to validate]
 6. **Settings** opens the TV's settings. Back or Home returns to the quiet home screen.
+7. **Google TV** opens Google TV's own home screen, for the watchlist, Play purchases, or live TV.
+   It stays until Home is pressed or the TV goes to sleep; then the quiet home screen is back.
 
 ## Mock-ups
 
@@ -66,6 +69,7 @@ Play Store last.
 | Search did not open | ![Search failed](home-screen/search-failed.png) | After 10 seconds; the text is kept |
 | Voice search selected | ![Voice selected](home-screen/voice-focus.png) | |
 | Settings selected | ![Settings selected](home-screen/settings-focus.png) | |
+| Google TV selected | ![Google TV selected](home-screen/googletv-focus.png) | Opens Google TV's own home screen |
 | Last row selected | ![Last row](home-screen/many-apps.png) | The grid has scrolled one row; the first row is hidden completely |
 | No internet connection | ![Offline](home-screen/offline.png) | The status line under the top row; nothing moves |
 | Largest system text size | ![Large text](home-screen/large-text.png) | Text grows; the grid scrolls sooner |
@@ -76,8 +80,9 @@ Play Store last.
 - 1920 by 1080, inside the TV safe area (96 px at the sides, 54 px at the top and bottom). Dark,
   plain background. Nothing on the screen moves or changes on its own, apart from the clock and the
   status line.
-- **Top row**, left to right: **Search for a show** (a search box, with a magnifier), **Voice
-  search** (with a microphone), **Settings** (with a gear), and the clock. The clock cannot be
+- **Top row**, left to right: **Search for a show** (a search box, with a magnifier, 720 px wide),
+  **Voice search** (with a microphone), **Google TV** (with a TV), **Settings** (with a gear), and
+  the clock. The clock cannot be
   selected. Each control has a visible edge (`#59646e` on the dark background, at least 3:1). The
   top row never scrolls.
 - **Status line**: a line of reserved space under the top row, empty unless there is something to
@@ -176,6 +181,11 @@ Play Store last.
   in the spike.
 - **Back from Google's search**: Google's screens sit on top of the quiet home screen, so Back
   returns to it (seen in the spike).
+- **Google TV**: the screen tells the accessibility service, inside the app, to leave Google TV's
+  home screen uncovered, then opens it (`MAIN` + `HOME` to `com.google.android.apps.tv.launcherx`).
+  The service covers again from the next Home key, or when the screen turns off (Android's
+  `ACTION_SCREEN_OFF`), so the quiet home screen is what shows on waking. Nothing is stored, so a
+  restart also starts covering again.
 - **Settings**: opens the TV's settings app (Android's main settings screen: network, display,
   accounts, and so on).
 - **Clock**: the system clock, which follows the TV's time zone and 12- or 24-hour setting. In
@@ -194,7 +204,8 @@ Play Store last.
 - With the TV's screen reader (TalkBack) on:
   - Each app tile reads the app's full name and "app", and its position ("row 2, column 3"). Each
     control reads its name and role: "Search for a show, edit box", "Voice search, button",
-    "Settings, button". The magnifier, microphone, and gear are decorative and not read.
+    "Google TV, button", "Settings, button". The magnifier, microphone, TV, and gear are decorative
+    and not read.
   - The clock reads the time when reached, and is not announced as it changes.
   - The searching overlay is announced when it appears ("Searching for Severance"); the status line
     is announced when it changes (politely for no internet connection, at once for a search that

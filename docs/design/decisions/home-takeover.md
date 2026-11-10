@@ -2,7 +2,7 @@
 id: decision-home-takeover
 status: approved
 derived-from:
-  - requirements-home#REQ-home-2: 5a569bef7afc
+  - requirements-home#REQ-home-2: 1de9a9580c82
   - epic-quiet-home#outcome: ad1e8e9b386c
   - epic-setup#outcome: fcfa341d2d11
   - persona-viewer#frustrations: 8722d20eb95e
@@ -58,6 +58,8 @@ voice button work as before. It is the only option that meets REQ-home-2 and kee
   is expected to return to it directly, as Back from Google's search did in the spike [to validate].
 - The quiet home screen must never close itself: Back on it does nothing (design-home-screen), or
   closing it would reveal Google TV's home screen.
+- Google TV's home screen can be opened on purpose with the **Google TV** button (REQ-home-12): the
+  service then leaves it uncovered until the next Home press or the screen turning off.
 - Other home-screen apps (Projectivy Launcher) are left off the quiet home screen, so the household
   cannot open a second launcher by accident.
 - If the service is turned off (by an update, say), Google TV's home screen is what the household

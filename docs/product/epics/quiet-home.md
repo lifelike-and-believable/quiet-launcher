@@ -3,7 +3,7 @@ id: epic-quiet-home
 status: approved
 derived-from:
   - requirements-home#REQ-home-1: 85ea81eef156
-  - requirements-home#REQ-home-2: 5a569bef7afc
+  - requirements-home#REQ-home-2: 1de9a9580c82
   - requirements-home#REQ-home-5: 7bee291a8d2a
   - requirements-home#REQ-home-6: 65404500f700
   - requirements-home#REQ-home-7: 77a504a39c5e
@@ -40,11 +40,14 @@ with the remote.
 - New and removed apps: a new app appears at the end, an uninstalled one disappears (REQ-home-5).
 - TV settings from the home screen (REQ-home-7).
 - A clock that follows the TV's time zone and 12- or 24-hour setting (REQ-home-8).
+- Google TV's own home screen on request, for the watchlist, Play purchases, and live TV, with Home
+  or sleep bringing the quiet home screen back (REQ-home-12; added 2026-11-09).
 
 ## Stories
 
 - story-quiet-home-apps
 - story-quiet-home-clock
+- story-quiet-home-google-tv
 - story-quiet-home-home-key
 - story-quiet-home-new-and-removed-apps
 - story-quiet-home-tv-settings
