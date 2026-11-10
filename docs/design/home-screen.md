@@ -30,8 +30,7 @@ accessibility review. -->
   app has a show, and their frustrations of buried apps, promotion, and having to call the project
   lead over. Every item has a visible name and the screen never changes on its own, so a guest
   needs no explanation. The apps are in install order, not the order Google TV shows today, so
-  they will be in new places at first; arranging comes in the second release (the project lead's
-  decision, 2026-11-09).
+  they will be in new places at first, until the set-up person arranges them (design-arranging).
 - persona-setup-person: **Settings** is in the top row, and new apps appear without their help.
 
 ## Flow
@@ -90,9 +89,11 @@ Play Store last.
   a message never moves the apps.
 - **Apps**: a grid of five per row, each the app's banner (300 by 169) or, if it has no banner, its
   icon centred on a tile of the same size, with the app's full name underneath, on up to two lines
-  and cut short with an ellipsis only beyond that. Order: install order, oldest first; apps whose
-  install times are identical to the second are in alphabetical order. The Play Store is always
-  last: its install time is the factory date, so install order would put it first.
+  and cut short with an ellipsis only beyond that. Order: until the set-up person arranges the apps
+  (design-arranging), install order, oldest first; apps whose install times are identical to the
+  second are in alphabetical order, and the Play Store is last (its install time is the factory
+  date, so install order would put it first). Once arranged, their order, with new apps at the end
+  and hidden apps left out.
 - **Which apps**: see How it works. Other home-screen apps (Projectivy Launcher on the reference
   device) are left out (the project lead's decision, 2026-11-09).
 - **Selection**: the selected item has a white outline with a thin black edge on each side (so it

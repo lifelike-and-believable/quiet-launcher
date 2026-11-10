@@ -36,7 +36,10 @@ and nobody else can change either, so the home screen stays the same from day to
 
 ## Stories
 
-- None written yet.
+- story-arranging-reorder
+- story-arranging-hide
+- story-arranging-guard
+- story-arranging-from-pc
 
 ## Release groups
 
