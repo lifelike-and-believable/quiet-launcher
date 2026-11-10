@@ -1,6 +1,8 @@
 package quiet.launcher
 
+import android.animation.ValueAnimator
 import android.graphics.Color
+import android.graphics.Outline
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
@@ -9,6 +11,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -46,6 +49,7 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
         private val art = ImageView(parent.context)
         private val label = TextView(parent.context)
         private var app: AppEntry? = null
+        private var pulse: Pulse? = null
 
         init {
             val dp = parent.resources.displayMetrics.density
@@ -59,6 +63,13 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
 
             art.id = R.id.app_art
             art.scaleType = ImageView.ScaleType.FIT_CENTER
+            // Rounded corners like the outline, so no corner of the artwork shows outside it.
+            art.outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setRoundRect(0, 0, view.width, view.height, CORNER_DP * dp)
+                }
+            }
+            art.clipToOutline = true
             art.background = tileBackground(dp, focused = false)
             root.addView(art, LinearLayout.LayoutParams((150 * dp).toInt(), (84.5f * dp).toInt()))
 
@@ -75,7 +86,15 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
             root.setOnClickListener { app?.let(onOpen) }
             root.setOnFocusChangeListener { _, hasFocus ->
                 // Drawn over the artwork, so a light banner cannot hide it.
-                art.foreground = if (hasFocus) focusRing(dp) else null
+                pulse?.cancel()
+                pulse = null
+                if (hasFocus) {
+                    val (ring, white) = focusRing(dp)
+                    art.foreground = ring
+                    if (animationsOn(root.context)) pulse = Pulse(white, art).also { it.start() }
+                } else {
+                    art.foreground = null
+                }
                 label.setTextColor(if (hasFocus) TEXT else MUTED)
                 label.typeface = if (hasFocus) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
                 art.animate().scaleX(if (hasFocus) 1.06f else 1f).scaleY(if (hasFocus) 1.06f else 1f).setDuration(120).start()
@@ -91,7 +110,7 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
         }
     }
 
-    private companion object {
+    companion object {
         val TEXT = Color.parseColor("#eef2f5")
         val MUTED = Color.parseColor("#a9b4bd")
 
@@ -105,7 +124,16 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
          * Selected (docs/design/home-screen.md, Layout): a white outline with a black edge outside
          * it, so it shows on light and dark artwork alike.
          */
-        fun focusRing(dp: Float): LayerDrawable {
+        const val CORNER_DP = 8f
+
+        /** "Remove animations" sets the animator duration scale to 0. */
+        fun animationsOn(context: android.content.Context): Boolean =
+            ValueAnimator.areAnimatorsEnabled() &&
+                android.provider.Settings.Global.getFloat(
+                    context.contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f,
+                ) != 0f
+
+        fun focusRing(dp: Float): Pair<LayerDrawable, GradientDrawable> {
             val black = GradientDrawable().apply {
                 cornerRadius = 8 * dp
                 setStroke((5 * dp).toInt(), Color.BLACK)
@@ -114,10 +142,54 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
                 cornerRadius = 6 * dp
                 setStroke((2.5f * dp).toInt(), Color.WHITE)
             }
-            return LayerDrawable(arrayOf(black, white)).apply {
+            val ring = LayerDrawable(arrayOf(black, white)).apply {
                 val inset = (2.5f * dp).toInt()
                 setLayerInset(1, inset, inset, inset, inset)
             }
+            return ring to white
         }
+    }
+}
+
+/**
+ * The selected tile's outline: the white part brightens and dims about once a second for about
+ * 5 seconds, then stays at full brightness (docs/design/home-screen.md, Selection; WCAG 2.2.2).
+ * Driven by the main thread's clock rather than an animator, so it is the same on the TV and in tests.
+ */
+class Pulse(private val white: GradientDrawable, private val view: View) {
+    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var startedAt = 0L
+
+    private val step = object : Runnable {
+        override fun run() {
+            val elapsed = android.os.SystemClock.uptimeMillis() - startedAt
+            if (elapsed >= DURATION_MS) {
+                white.alpha = 255
+            } else {
+                // 255 at the start of each second, 110 at its middle.
+                val phase = (elapsed % PERIOD_MS).toFloat() / PERIOD_MS
+                val depth = (1 - kotlin.math.cos(phase * 2 * Math.PI).toFloat()) / 2
+                white.alpha = (255 - depth * (255 - LOW)).toInt()
+                handler.postDelayed(this, FRAME_MS)
+            }
+            view.invalidate()
+        }
+    }
+
+    fun start() {
+        startedAt = android.os.SystemClock.uptimeMillis()
+        handler.post(step)
+    }
+
+    fun cancel() {
+        handler.removeCallbacks(step)
+        white.alpha = 255
+    }
+
+    private companion object {
+        const val DURATION_MS = 5_000L
+        const val PERIOD_MS = 1_000L
+        const val FRAME_MS = 40L
+        const val LOW = 110
     }
 }
