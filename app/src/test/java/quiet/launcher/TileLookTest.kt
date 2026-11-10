@@ -30,7 +30,8 @@ class TileLookTest {
 
     /** The white part of the selected tile's outline (the black edge stays as it is). */
     private fun HomeScreenRobot.outlineAlpha(position: Int): Int {
-        val ring = art(position).foreground as? LayerDrawable
+        // The outline is drawn on the frame around the artwork, so the artwork's clip does not cut it.
+        val ring = (art(position).parent as android.view.View).foreground as? LayerDrawable
         assertNotNull("the selected tile has an outline", ring)
         return ring!!.getDrawable(ring.numberOfLayers - 1).alpha
     }

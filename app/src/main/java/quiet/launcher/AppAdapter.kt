@@ -12,6 +12,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -47,6 +48,7 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
     inner class Tile(parent: ViewGroup) : RecyclerView.ViewHolder(LinearLayout(parent.context)) {
         private val root = itemView as LinearLayout
         private val art = ImageView(parent.context)
+        private val frame = FrameLayout(parent.context)
         private val label = TextView(parent.context)
         private var app: AppEntry? = null
         private var pulse: Pulse? = null
@@ -66,15 +68,19 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
 
             art.id = R.id.app_art
             art.scaleType = ImageView.ScaleType.FIT_CENTER
-            // Rounded corners like the outline, so no corner of the artwork shows outside it.
+            // Rounded corners like the outline, and 1 dp inside its outer edge, so the artwork's own
+            // smoothed edge sits under the outline's black and never shows outside it as a grey line.
             art.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
-                    outline.setRoundRect(0, 0, view.width, view.height, CORNER_DP * dp)
+                    val inset = dp.toInt().coerceAtLeast(1)
+                    outline.setRoundRect(inset, inset, view.width - inset, view.height - inset, CORNER_DP * dp - inset)
                 }
             }
             art.clipToOutline = true
             art.background = tileBackground(dp, focused = false)
-            root.addView(art, LinearLayout.LayoutParams((150 * dp).toInt(), (84.5f * dp).toInt()))
+            // The outline is drawn on this frame, over the artwork and not clipped with it.
+            frame.addView(art, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            root.addView(frame, LinearLayout.LayoutParams((150 * dp).toInt(), (84.5f * dp).toInt()))
 
             label.id = R.id.app_label
             label.maxLines = 2
@@ -93,14 +99,14 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
                 pulse = null
                 if (hasFocus) {
                     val (ring, white) = focusRing(dp)
-                    art.foreground = ring
-                    if (animationsOn(root.context)) pulse = Pulse(white, art).also { it.start() }
+                    frame.foreground = ring
+                    if (animationsOn(root.context)) pulse = Pulse(white, frame).also { it.start() }
                 } else {
-                    art.foreground = null
+                    frame.foreground = null
                 }
                 label.setTextColor(if (hasFocus) TEXT else MUTED)
                 label.typeface = if (hasFocus) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-                art.animate().scaleX(if (hasFocus) 1.06f else 1f).scaleY(if (hasFocus) 1.06f else 1f).setDuration(120).start()
+                frame.animate().scaleX(if (hasFocus) 1.06f else 1f).scaleY(if (hasFocus) 1.06f else 1f).setDuration(120).start()
             }
         }
 
