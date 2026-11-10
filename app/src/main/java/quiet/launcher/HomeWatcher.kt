@@ -1,9 +1,13 @@
 package quiet.launcher
 
 import android.accessibilityservice.AccessibilityService
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.PixelFormat
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -27,6 +31,27 @@ class HomeWatcher : AccessibilityService() {
     /** True while the cover is up. Public for tests. */
     val isCovering: Boolean get() = cover != null
 
+    /**
+     * True while Google TV's home screen may show, after the Google TV button and until the next Home
+     * press or the screen turning off (google-tv-button). Never stored, so a restart covers again.
+     */
+    var isAllowingGoogleTv: Boolean = false
+        private set
+
+    private val requests = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                ACTION_OPEN_GOOGLE_TV -> openGoogleTv()
+                Intent.ACTION_SCREEN_OFF -> if (isAllowingGoogleTv) {
+                    // google-tv-button#AC-6: wake to the quiet home screen.
+                    Log.i(TAG, "screen off: covering Google TV again")
+                    isAllowingGoogleTv = false
+                    showQuietHome()
+                }
+            }
+        }
+    }
+
     override fun onKeyEvent(event: KeyEvent): Boolean = handleKey(event)
 
     /** home-takeover#AC-1 and AC-2. Public for tests: true when the key is consumed. */
@@ -35,6 +60,7 @@ class HomeWatcher : AccessibilityService() {
         if (event.keyCode != KeyEvent.KEYCODE_HOME) return false
         if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
             Log.i(TAG, "home key at ${event.eventTime}")
+            isAllowingGoogleTv = false // google-tv-button#AC-5
             showQuietHome()
         }
         return true
@@ -46,6 +72,8 @@ class HomeWatcher : AccessibilityService() {
         val pkg = event.packageName?.toString()
         val window = event.className?.toString() ?: return
         when {
+            // google-tv-button#AC-4: asked for, so left alone.
+            pkg == LAUNCHERX && window in GOOGLE_TV_HOME_SCREENS && isAllowingGoogleTv -> Unit
             pkg == LAUNCHERX && window in GOOGLE_TV_HOME_SCREENS -> {
                 Log.i(TAG, "covering $window at ${event.eventTime}")
                 showCover()
@@ -61,11 +89,39 @@ class HomeWatcher : AccessibilityService() {
 
     override fun onInterrupt() {}
 
+    override fun onCreate() {
+        super.onCreate()
+        val filter = IntentFilter().apply {
+            addAction(ACTION_OPEN_GOOGLE_TV)
+            addAction(Intent.ACTION_SCREEN_OFF)
+        }
+        // Not exported: only this app (and the system, for the screen turning off) reaches it.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(requests, filter, Context.RECEIVER_NOT_EXPORTED)
+        } else {
+            registerReceiver(requests, filter)
+        }
+    }
+
+    /** google-tv-button#AC-3: stop covering first, then open Google TV's own home screen. */
+    private fun openGoogleTv() {
+        Log.i(TAG, "opening Google TV's home screen on request")
+        isAllowingGoogleTv = true
+        hideCover()
+        startActivity(
+            Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_HOME)
+                .setClassName(LAUNCHERX, "$LAUNCHERX.home.HomeActivity")
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        )
+    }
+
     override fun onServiceConnected() {
         Log.i(TAG, "service connected")
     }
 
     override fun onDestroy() {
+        unregisterReceiver(requests)
         hideCover()
         super.onDestroy()
     }
@@ -117,6 +173,8 @@ class HomeWatcher : AccessibilityService() {
 
     companion object {
         const val TAG = "QuietLauncher"
+        /** The in-app request from the home screen's Google TV button (google-tv-button#AC-2). */
+        const val ACTION_OPEN_GOOGLE_TV = "quiet.launcher.OPEN_GOOGLE_TV"
         private const val LAUNCHERX = "com.google.android.apps.tv.launcherx"
         private val GOOGLE_TV_HOME_SCREENS = setOf(
             "$LAUNCHERX.home.HomeActivity",

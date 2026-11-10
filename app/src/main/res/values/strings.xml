@@ -6,6 +6,7 @@
     <!-- docs/design/home-screen.md: the names, exactly as the design and docs/user/home-screen.md show them. -->
     <string name="search_hint">Search for a show</string>
     <string name="voice_search">Voice search</string>
+    <string name="google_tv">Google TV</string>
     <string name="settings">Settings</string>
 
     <!-- States and errors -->
