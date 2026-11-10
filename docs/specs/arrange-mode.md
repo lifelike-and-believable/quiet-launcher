@@ -1,6 +1,7 @@
 ---
 status: draft
 tests: [app/src/test]
+tests-commit: 4e1959b7f336d21c209d4f79b91047de1a4218e4
 unlocks:
   - app/src/test/java/quiet/launcher/ArrangeScreenTest.kt: Robolectric does not move focus when a direction key is dispatched to the activity (the window does that on a device; MovementTest uses focusSearch for the same reason), so AC-5's Up and Down inside the menu use focusSearch; no assertion changed
   - app/src/test/java/quiet/launcher/HoldTest.kt: as above, AC-3's Left, Right, and Up on the question, and AC-8's Right to Arrange apps, use focusSearch; no assertion changed
