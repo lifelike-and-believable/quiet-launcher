@@ -11,7 +11,7 @@ derived-from:
 <!-- docs/product/requirements/home.md. What the screen shown by the Home button must do. The
 project lead's answers of 2026-11-09 are written as decided; the project lead also accepted
 the agent's proposals for the rest. REQ-home-3, 4, 9, and 11 were amended on 2026-11-09 after the
-check against the personas. -->
+check against the personas, and REQ-home-3 and 4 moved to the second release. -->
 
 ## REQ-home-1: Home opens the quiet home screen
 
@@ -33,7 +33,7 @@ brings its home screen up on its own, this home screen covers it within 0.5 seco
 
 ## REQ-home-3: The set-up person arranges the apps
 
-Release: first
+Release: second
 
 Every installed app appears unless hidden (REQ-home-4). The set-up person can move an app to a
 different place in the list, and the order is kept after the TV restarts. Nobody else can change the
@@ -41,7 +41,7 @@ order, on purpose or by accident: a viewer pressing buttons on the remote never 
 
 ## REQ-home-4: Hiding apps
 
-Release: first
+Release: second
 
 The set-up person can hide an app from the home screen and show it again later; nobody else can
 hide or show apps. A hidden app stays installed and still opens in other ways (from search results

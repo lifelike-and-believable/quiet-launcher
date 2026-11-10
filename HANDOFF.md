@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `13f6a23` (concept and requirements approved); branches `personas` and `persona-amendments` in review |
+| State | `main` at `5fe728b` (concept, requirements, personas approved); branch `epics` in review |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -61,13 +61,15 @@ covered within 0.5 s. Build tools are per user in `%LOCALAPPDATA%\AndroidBuild`.
 
 #4 merged the same day (`13f6a23`): the requirements are approved.
 
-Then two personas from the project lead's answers about the household: `persona-viewer` (the other
-adult and guests: open a favourite app, type a title, operate a simple screen but not settings, ask
-the project lead for help) and `persona-setup-person` (the project lead at the PC). Both say
-`status: approved` as working assumptions, with `[to validate]` markers, in the personas PR. The
-check of each requirement against each persona found two amendments, which the project lead decided
-and which go in their own PR: only the set-up person arranges and hides apps (REQ-home-3, 4, 9), and
-each app shows its own TV artwork and name (new REQ-home-11). Next: epics.
+Then two personas (`persona-viewer`, `persona-setup-person`), approved as working assumptions with
+`[to validate]` markers, merged as #5; and #6 amended the home requirements after checking them
+against the personas (only the set-up person arranges and hides apps; apps show their own artwork
+and name).
+
+Then four epics on branch `epics`, `status: approved` with hashes recorded, approved when that PR
+merges: `epic-quiet-home`, `epic-search`, `epic-setup` (the first release; apps in install order)
+and `epic-arranging` (the second release: on the TV behind a guard, and from the PC; REQ-home-3 and
+4 moved to `Release: second`). Next: stories for the first-release epics (`PLAN.md`, step 7).
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV

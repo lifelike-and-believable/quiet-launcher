@@ -13,8 +13,8 @@ file tracks where the project is; it is not a process artifact.
 | – | Spike: search entry points | `docs/product/notes.md` | Done 2026-11-09: a typed query from another app opens Google TV's results | #3 |
 | 2 | Discovery (optional) | `docs/product/discovery/<topic>.md` | Probably skip | |
 | 3 | Requirements | `docs/product/requirements/{home,search,setup}.md` | Approved 2026-11-09 (#4 merged, `13f6a23`) | #4 |
-| 4 | Personas | `docs/product/personas/viewer.md`, `setup-person.md` | `status: approved` in the personas PR; approved when it merges | |
-| 5 | Epics | `docs/product/epics/` | Not started | |
+| 4 | Personas | `docs/product/personas/viewer.md`, `setup-person.md` | Approved 2026-11-09 (#5, #6) | #5, #6 |
+| 5 | Epics | `docs/product/epics/{quiet-home,search,arranging,setup}.md` | `status: approved` in the epics PR; approved when it merges | |
 | 6 | Stories | `docs/product/stories/` | Not started | |
 | 7 | Design and UX, with mock-ups | `docs/design/` | Not started | |
 | 8 | User documentation | `docs/user/` | Not started | |
@@ -42,7 +42,11 @@ file tracks where the project is; it is not a process artifact.
    (`[to validate]`). The check of each requirement against each persona led to two amendments in
    their own PR: only the set-up person arranges and hides apps, and each app shows its own artwork
    and name.
-6. Next: epics.
+6. Done (2026-11-09): four epics. First release: quiet-home, search, setup (apps in install
+   order). Second release: arranging (on the TV behind a guard, and from the PC); REQ-home-3 and 4
+   moved to `Release: second`.
+7. Next: stories for the first-release epics, starting with the release groups that must ship
+   together (Home opens this screen + the apps; type and search + back; set up + restart + undo).
 
 ## Decisions so far
 
@@ -60,4 +64,5 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | Pressing Home never shows Google TV's home screen; if it comes up on its own, it is covered within 0.5 s | `docs/product/requirements/home.md` (REQ-home-2) |
 | 2026-11-09 | Personas: household viewer and set-up person, as working assumptions | `docs/product/personas/` |
 | 2026-11-09 | Only the set-up person arranges and hides apps; apps show their own artwork and name | `docs/product/requirements/home.md` |
+| 2026-11-09 | First release: home, search, setup; arranging and hiding in the second release, on the TV behind a guard and from the PC | `docs/product/epics/` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |
