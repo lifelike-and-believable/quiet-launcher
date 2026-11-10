@@ -57,10 +57,14 @@ class Pc:
         s.update(changes)
         self.state_file.write_text(json.dumps(s))
 
-    def run(self, script, *args, answers=(), adb=None, shell=PWSH):
+    def run(self, script, *args, answers=(), adb=None, shell=PWSH, adb_on_path=False):
         env = dict(os.environ)
         env.update(QUIET_ADB=str(adb or FAKE_ADB), QUIET_FAKE_STATE=str(self.state_file),
                    QUIET_FOLDER=str(self.folder), QUIET_ANSWERS="|".join(answers), QUIET_FAST="1")
+        if adb_on_path:
+            # As a set-up person has it: no QUIET_ADB, and an adb program on PATH.
+            del env["QUIET_ADB"]
+            env["PATH"] = str(self.adb_program()) + os.pathsep + env.get("PATH", "")
         p = subprocess.run([shell, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script), *args],
                            capture_output=True, text=True, env=env, timeout=120)
         return p.returncode, p.stdout + p.stderr
@@ -70,6 +74,19 @@ class Pc:
 
     def undo(self, *extra, answers=("y", "y"), **kw):
         return self.run(UNDO, *extra, answers=answers, **kw)
+
+    def adb_program(self):
+        """A folder with an adb program (adb.cmd on Windows, an adb shell script elsewhere) that runs the fake."""
+        bin_dir = self.dir / "bin"
+        bin_dir.mkdir(exist_ok=True)
+        if os.name == "nt":
+            (bin_dir / "adb.cmd").write_text(
+                f'@"{shutil.which(PWSH) or PWSH}" -NoProfile -ExecutionPolicy Bypass -File "{FAKE_ADB}" %*\r\n')
+        else:
+            program = bin_dir / "adb"
+            program.write_text(f'#!/bin/sh\nexec "{shutil.which(PWSH) or PWSH}" -NoProfile -File "{FAKE_ADB}" "$@"\n')
+            program.chmod(0o755)
+        return bin_dir
 
     def backup(self):
         files = list(self.folder.glob("backup-*.json"))
@@ -90,6 +107,18 @@ class test_setup_errors(unittest.TestCase):
         self.assertIn("[1/6] ADB: NOT FOUND", out)
         self.assertIn("winget install Google.PlatformTools", out)
         self.assertEqual(pc.tv["calls"], [])
+
+    # setup-scripts#AC-1: ADB found on PATH, as a set-up person has it (both scripts have a
+    # function named Adb, which Get-Command would find first).
+    def test_it_finds_adb_on_the_path(self):
+        pc = Pc(self, tv())
+        code, out = pc.setup(adb_on_path=True)
+        self.assertNotIn("ADB: NOT FOUND", out)
+        self.assertIn("[1/6] ADB: found", out)
+        self.assertEqual(code, 0, out)
+        code, out = pc.undo(adb_on_path=True)
+        self.assertNotIn("ADB: NOT FOUND", out)
+        self.assertEqual(code, 0, out)
 
     # setup-scripts#AC-1
     def test_without_apk_it_says_how_to_give_it(self):
