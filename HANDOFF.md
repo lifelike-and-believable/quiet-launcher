@@ -121,7 +121,13 @@ after Google's own screens, led to the separate process and the cover; the final
 AC-12 (artwork loaded once, the list drawn before the apps are read again): then 52 to 84 ms (AC-8).
 AC-10: the project lead did not notice Google TV's home screen after a restart; not confirmed from
 the logs (capture `adb logcat` from boot at the next restart). The spec is `implemented`; PR #32.
-Next: slice 3, the top row and search. Wireless debugging turns off on restart; the TV's ADB port is now 34447.
+Merged as #32 (merge commit).
+
+Slice 3, the top row and search, is on branch `slice-3-top-row-and-search` (PR #33):
+`docs/specs/top-row-and-search.md` (`implemented`), tests first (`11dc742`, 20 failing), then the
+implementation; 49 tests pass; checked on the TV over ADB. Next: the project lead's feature request
+(a button that opens Google TV's own home screen, with Home still returning to the quiet one), then
+slice 4, the setup scripts. Wireless debugging turns off on restart; the TV's ADB port is now 34447.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV

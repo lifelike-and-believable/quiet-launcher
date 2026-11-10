@@ -230,3 +230,17 @@ the remote, under the standing go-ahead for test installs. Evidence: Android's a
   and Google TV's own settings are covered); the project lead got there with the voice button
   ("open settings"). Until slice 3 ships, a test build must not be left on the TV across a restart.
 
+## Slice 3 on the TV: the top row and search (2026-11-09, late evening)
+
+Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`, AC-13):
+
+- `adb shell input text` types into **Search for a show** through the TV's keyboard, and
+  `KEYCODE_ENTER` submits it.
+- The quiet home screen was paused by Google's search screen about 10 ms after **Search**; Google's
+  page for the show (`launcherx/.entity.EntityActivity`) came about 5 s later. In between, the quiet
+  home screen is briefly resumed again under Google's own dimmed overlay with the typed text.
+- Google's voice search is a window over the current screen, not an activity: the quiet home screen
+  stays the resumed activity underneath.
+- The Settings app keeps its task: opening it again returns to wherever it was left, so the quiet
+  home screen opens it with `FLAG_ACTIVITY_CLEAR_TASK`.
+
