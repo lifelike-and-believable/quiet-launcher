@@ -104,6 +104,8 @@ $script:serial = $null
 $script:adbExit = 0
 
 function Adb {
+    # adb writes warnings to stderr; Windows PowerShell 5.1 would stop on them here.
+    $ErrorActionPreference = 'Continue'
     $output = & $script:adb @args 2>&1 | ForEach-Object { "$_" }
     $script:adbExit = $LASTEXITCODE
     return (@($output) -join "`n").Trim()
@@ -249,6 +251,8 @@ $changed = $false
 # ---- 3. Backup ----
 
 $tvSerial = (Tv shell getprop ro.serialno).Trim()
+# A sleeping TV shows no home screen to picture or check.
+Tv shell input keyevent KEYCODE_WAKEUP | Out-Null
 $backupFile = Join-Path $folder "backup-$tvSerial.json"
 $hadBackup = Test-Path $backupFile
 if ($hadBackup) {

@@ -83,7 +83,7 @@ switch -Regex ($argv -join ' ') {
         # The reference device wrote this to stderr (Google TV's home was already running).
         $err = 'Warning: Activity not started, its current task has been brought to the front'
     }
-    '^shell input keyevent KEYCODE_WAKEUP$' { $s.awake = $true }
+    '^shell input keyevent KEYCODE_WAKEUP$' { $s | Add-Member -Force -NotePropertyName awake -NotePropertyValue $true }
     '^shell dumpsys activity activities$' {
         # A sleeping TV has no resumed activity.
         if ($s.awake -ne $false) { $out = "      topResumedActivity=ActivityRecord{a1 u0 $($s.top) t1}" }
