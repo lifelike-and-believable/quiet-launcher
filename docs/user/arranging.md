@@ -1,11 +1,11 @@
 ---
 id: docs-arranging
-status: draft
+status: approved
 derived-from:
-  - design-arranging: 8ddf3ffce6ae
+  - design-arranging: 604d06415dcc
   - story-arranging-reorder: 9b4b345c6750
   - story-arranging-hide: 840d019d7142
-  - story-arranging-guard: 3683dae6a4bf
+  - story-arranging-guard: f90253694a7a
   - story-arranging-from-pc: b9b68bf58f66
 ---
 

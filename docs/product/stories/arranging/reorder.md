@@ -1,6 +1,6 @@
 ---
 id: story-arranging-reorder
-status: draft
+status: approved
 derived-from:
   - epic-arranging#outcome: 32b124ae0684
   - persona-setup-person#goals: 1b5715ea18d9

@@ -1,10 +1,10 @@
 ---
 id: design-arranging
-status: draft
+status: approved
 derived-from:
   - story-arranging-reorder: 9b4b345c6750
   - story-arranging-hide: 840d019d7142
-  - story-arranging-guard: 3683dae6a4bf
+  - story-arranging-guard: f90253694a7a
   - story-arranging-from-pc: b9b68bf58f66
   - persona-setup-person#goals: 1b5715ea18d9
   - persona-viewer#frustrations: 8722d20eb95e
@@ -28,10 +28,8 @@ feature. Revised after a persona walkthrough the same day. -->
 - persona-viewer: nothing they do by accident moves or hides an app. The only way in is a 5-second
   hold followed by a question whose first answer is **Cancel**; if they go past it by mistake, Back
   leaves with nothing changed, and arrange mode closes by itself if someone walks away from it.
-  [open] REQ-home-3 and 4 say nobody but the set-up person can arrange the apps "on purpose or by
-  accident". This guard stops accidents; a guest who knows about the hold could still arrange the
-  apps on purpose. Either the requirements change to "by accident", or the guard needs something
-  only the set-up person knows (a code entered with the direction pad, say).
+  This guard stops accidents; someone who knows about the hold could still arrange the apps on
+  purpose, which the project lead accepted (REQ-home-3 and 4, amended 2026-11-10, #41).
 
 ## Flow
 

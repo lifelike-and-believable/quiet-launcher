@@ -1,6 +1,6 @@
 ---
 id: story-arranging-guard
-status: draft
+status: approved
 derived-from:
   - epic-arranging#outcome: 32b124ae0684
   - persona-viewer#frustrations: 8722d20eb95e
@@ -26,7 +26,5 @@ hunt for one or call the set-up person over because something moved.
   After 2 minutes with no button pressed, arrange mode closes by itself, so it is never left open
   for the next person.
 
-[open] REQ-home-3 and 4 say nobody but the set-up person can arrange the apps "on purpose or by
-accident". The hold and the question stop accidents; a guest who knows about the hold could still
-arrange the apps on purpose. Either the requirements change to "by accident", or the guard needs
-something only the set-up person knows.
+The hold and the question stop accidents; someone who knows about the hold could still arrange the
+apps on purpose, which the project lead accepted (REQ-home-3 and 4, amended 2026-11-10, #41).
