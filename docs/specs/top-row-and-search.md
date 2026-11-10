@@ -1,7 +1,7 @@
 ---
 status: draft
 tests: [app/src/test]
-# tests-commit: <sha of the commit that holds the failing tests, once written>
+tests-commit: 11dc7420668d8b4430d553deca738b24cf4464ff
 ---
 
 # The top row and search

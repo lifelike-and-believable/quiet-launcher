@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Quiet Launcher</string>
-    <!-- docs/design/home-screen.md, States and errors: No apps -->
-    <string name="no_apps">No apps to show. Apps installed on this TV appear here.</string>
     <string name="service_name">Quiet Launcher home button</string>
+
+    <!-- docs/design/home-screen.md: the names, exactly as the design and docs/user/home-screen.md show them. -->
+    <string name="search_hint">Search for a show</string>
+    <string name="voice_search">Voice search</string>
+    <string name="settings">Settings</string>
+
+    <!-- States and errors -->
+    <string name="no_apps">No apps to show. Apps installed on this TV appear here.</string>
+    <string name="searching_for">Searching for “%1$s”…</string>
+    <string name="search_opening">Google\'s search will open in a moment. Back cancels.</string>
+    <string name="search_failed">Google\'s search did not open. Press select to try again.</string>
+    <string name="offline">No internet connection. Search and voice search need it; your apps still open.</string>
+    <string name="type_something">Type something to search</string>
 </resources>
