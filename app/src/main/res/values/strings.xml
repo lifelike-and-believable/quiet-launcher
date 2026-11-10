@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quiet Launcher</string>
+    <!-- docs/design/home-screen.md, States and errors: No apps -->
+    <string name="no_apps">No apps to show. Apps installed on this TV appear here.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="app_grid" type="id" />
+    <item name="app_tile" type="id" />
+    <item name="app_art" type="id" />
+    <item name="app_label" type="id" />
+    <item name="empty_message" type="id" />
+</resources>

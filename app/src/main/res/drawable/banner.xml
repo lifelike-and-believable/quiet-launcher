@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This app's own TV banner (320 x 180 dp), shown wherever Android lists TV apps. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1c2228" />
+            <size android:width="320dp" android:height="180dp" />
+        </shape>
+    </item>
+</layer-list>

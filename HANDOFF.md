@@ -16,7 +16,7 @@ advertising) and keeps search. Read `docs/product/concept.md` (draft) for the in
 |---|---|
 | GitHub | `lifelike-and-believable/quiet-launcher`, public, default branch `main` |
 | Local | `C:\AI Projects\quiet-launcher` |
-| State | `main` at `b03151e` (through design approved); branch `user-docs` (#30) in review |
+| State | `main` at `8d4a69d` (all design stages approved); branch `slice-1-app-list` (#31) in review |
 | Process | rfr-process, solo mode, approver `atgoldberg`. Rules for agents are in `AGENTS.md`. |
 | Checks | `node ../rules-for-robots/checks/process-trace.mjs .` (rules-for-robots is checked out beside this repository at `C:\AI Projects\rules-for-robots`, tag `rfr-v5.1.4`) |
 
@@ -91,9 +91,25 @@ decided there: the Play Store is shown as the last app (story, design, and mock-
 mock-ups use the reference device's real install order), and the Quiet Launcher folder is built
 from the repository with `.\build.ps1` into `out\QuietLauncher`; nothing is published.
 
-Next: delivery (`PLAN.md`, step 10): specs, tests first, then the Android app and the scripts. The
-build tools are per user in `%LOCALAPPDATA%\AndroidBuild` (JDK 17, Android SDK 34, no Gradle yet);
-`spikes/home-takeover/build.sh` shows a Gradle-free build.
+Merged as #30.
+
+Delivery started (`PLAN.md`, step 10). Slice 1, the app list, is in PR #31: `docs/specs/app-list.md`
+(draft, for the project lead), a tests-first commit (`903a182`, 14 failing tests) and the
+implementation (14 passing), `build.ps1`, and `.github/workflows/android.yml` (unit tests and build
+in CI). Checked on the TV: 19 tiles with real banners in the real install order, Play Store last.
+
+Build: JDK 17, Android SDK 34, and Gradle 8.10.2 are per user in `%LOCALAPPDATA%\AndroidBuild`;
+`build.ps1` finds them. Tests: `.\gradlew.bat :app:testDebugUnitTest` (set `JAVA_HOME` and
+`ANDROID_HOME`, or run `build.ps1` once). Robolectric's `Activity.currentFocus` does not track focus:
+use `window.decorView.findFocus()` in tests.
+
+The project lead gave a standing go-ahead (2026-11-09) to install and remove test builds on the TV
+without asking, turning this product's own accessibility service on and off as part of a test, and
+always restoring Google TV's home screen afterwards (record the accessibility settings first, put
+them back, uninstall, check with a screenshot, sleep the TV if it was asleep). Still ask before other
+settings, other apps, or reboots.
+
+Next: slice 2, taking over Home.
 
 Sending a query wakes the TV, which may turn on the family-room TV over HDMI. Put it back with
 Back, Home, then `adb shell input keyevent KEYCODE_SLEEP`. With two ADB entries for the same TV
