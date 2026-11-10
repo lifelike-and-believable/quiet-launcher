@@ -95,8 +95,8 @@ Play Store last.
   last: its install time is the factory date, so install order would put it first.
 - **Which apps**: see How it works. Other home-screen apps (Projectivy Launcher on the reference
   device) are left out (the project lead's decision, 2026-11-09).
-- **Selection**: the selected item has a white outline with a black edge outside it (so it shows on
-  light and dark artwork alike), is slightly enlarged, and its name turns white and bold. Exactly
+- **Selection**: the selected item has a white outline with a thin black edge on each side (so it
+  shows on light and dark artwork alike), is slightly enlarged, and its name turns white and bold. Exactly
   one item is selected at all times. On an app, the white outline pulses gently (brightening and
   dimming about once a second, as Google TV's does) for about 5 seconds after the app is selected,
   then stays steady. Banners and icons have rounded corners, the same as the outline, so no corner

@@ -60,6 +60,9 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
             root.isFocusableInTouchMode = true
             root.layoutParams = RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             root.setPadding((6 * dp).toInt(), (6 * dp).toInt(), (6 * dp).toInt(), (12 * dp).toInt())
+            // The selected artwork grows by 6% into this padding: do not clip it there.
+            root.clipToPadding = false
+            root.clipChildren = false
 
             art.id = R.id.app_art
             art.scaleType = ImageView.ScaleType.FIT_CENTER
@@ -126,6 +129,15 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
          */
         const val CORNER_DP = 8f
 
+        /**
+         * A rounded stroke whose centre line is [insetDp] inside the artwork, with the radius that keeps
+         * it concentric with the artwork's corners.
+         */
+        private fun ring(dp: Float, insetDp: Float, strokeDp: Float, color: Int) = GradientDrawable().apply {
+            cornerRadius = (CORNER_DP - insetDp) * dp
+            setStroke((strokeDp * dp).toInt(), color)
+        }
+
         /** "Remove animations" sets the animator duration scale to 0. */
         fun animationsOn(context: android.content.Context): Boolean =
             ValueAnimator.areAnimatorsEnabled() &&
@@ -134,17 +146,18 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
                 ) != 0f
 
         fun focusRing(dp: Float): Pair<LayerDrawable, GradientDrawable> {
-            val black = GradientDrawable().apply {
-                cornerRadius = 8 * dp
-                setStroke((5 * dp).toInt(), Color.BLACK)
-            }
-            val white = GradientDrawable().apply {
-                cornerRadius = 6 * dp
-                setStroke((2.5f * dp).toInt(), Color.WHITE)
-            }
+            // Both rings are drawn inside the artwork's rounded edge (CORNER_DP) and share its corner
+            // centres: each ring's radius is the corner radius less its inset. Rings with their own
+            // centres drift apart at the corners and let the artwork show through there.
+            // Black from the edge to 5 dp in, with white from 1 to 3.5 dp: a white ring with a thin
+            // black edge on each side, which shows on dark backgrounds and light banners alike.
+            val black = ring(dp, insetDp = 2.5f, strokeDp = 5f, Color.BLACK)
+            val white = ring(dp, insetDp = 2.25f, strokeDp = 2.5f, Color.WHITE)
             val ring = LayerDrawable(arrayOf(black, white)).apply {
-                val inset = (2.5f * dp).toInt()
-                setLayerInset(1, inset, inset, inset, inset)
+                // A GradientDrawable draws its stroke inside its bounds, so a ring's bounds are inset
+                // by its centre line less half its stroke: black from the edge, white from 1 dp in.
+                setLayerInset(0, 0, 0, 0, 0)
+                dp.toInt().let { setLayerInset(1, it, it, it, it) }
             }
             return ring to white
         }
