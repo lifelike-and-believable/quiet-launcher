@@ -5,4 +5,17 @@
     <item name="app_art" type="id" />
     <item name="app_label" type="id" />
     <item name="empty_message" type="id" />
+    <item name="top_row" type="id" />
+    <item name="search_box" type="id" />
+    <item name="search_icon" type="id" />
+    <item name="voice_button" type="id" />
+    <item name="voice_icon" type="id" />
+    <item name="settings_button" type="id" />
+    <item name="settings_icon" type="id" />
+    <item name="clock" type="id" />
+    <item name="status_line" type="id" />
+    <item name="search_overlay" type="id" />
+    <item name="search_overlay_title" type="id" />
+    <item name="search_overlay_note" type="id" />
+    <item name="search_spinner" type="id" />
 </resources>

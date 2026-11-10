@@ -59,15 +59,15 @@ file tracks where the project is; it is not a process artifact.
 10. Delivery, in four slices, each a spec, a tests-first commit, and the implementation:
     1. Merged as #31: the project skeleton (Gradle, Kotlin, `build.ps1`, CI) and the app list
        (`docs/specs/app-list.md`); checked on the TV.
-    2. In #32: taking over Home (the accessibility service in its own process, an instant cover,
+    2. Merged as #32: taking over Home (the accessibility service in its own process, an instant cover,
        Back doing nothing, the list drawn before the apps are read again); 20 of 20 clean Home
        presses on the TV, 52 to 84 ms to draw. Three of the four `[to validate]` items confirmed
        (Back from an app, the voice button, restart as observed); the fourth (Google's search
        screen opening in about half a second) belongs to slice 3.
-    3. The top row and search (search box, keyboard, searching and failed states, voice search,
-       settings, clock, status line, TalkBack, movement).
+    3. Merged as #33: the top row and search (search box, searching and failed states, voice
+       search, Settings, clock, status line, TalkBack, movement); checked on the TV.
     4. The **Google TV** button (the project lead's request, 2026-11-09): documents amended in their
-       own PR first, then a spec, tests first, and the code.
+       own PR (#34) first, then a spec, tests first, and the code.
     5. The setup and undo scripts, tested against a fake ADB, then on the TV.
 
 ## Decisions so far
