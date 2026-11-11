@@ -333,8 +333,17 @@ function Send-File([string]$path, $read, [long]$version) {
         Say "[3/3] NOT SENT: the TV refused the list ($reason)."
         Stop-Setup
     }
-    $copy = Join-Path $folder ("arrangement-$tvSerial-" + (Get-Date).ToString('yyyy-MM-dd-HHmmss') + '.txt')
-    Copy-Item -LiteralPath $path -Destination $copy -Force
+    # AC-3: a file that already is a dated copy (put back, or given with -File) is the copy kept;
+    # copying it again could copy it onto itself, in the same second as its own name.
+    $full = [IO.Path]::GetFullPath($path)
+    $isCopy = ([IO.Path]::GetDirectoryName($full) -eq [IO.Path]::GetFullPath($folder).TrimEnd('\', '/')) -and
+        ([IO.Path]::GetFileName($full) -match ('^arrangement-' + [regex]::Escape($tvSerial) + '-\d{4}-\d{2}-\d{2}-\d{6}\.txt$'))
+    if ($isCopy) {
+        $copy = $full
+    } else {
+        $copy = Join-Path $folder ("arrangement-$tvSerial-" + (Get-Date).ToString('yyyy-MM-dd-HHmmss') + '.txt')
+        Copy-Item -LiteralPath $path -Destination $copy -Force
+    }
     $now = @((Get-Arrangement).json.apps)
     $shown = @($now | Where-Object { -not $_.hidden }).Count
     $hidden = @($now | Where-Object { $_.hidden }).Count
