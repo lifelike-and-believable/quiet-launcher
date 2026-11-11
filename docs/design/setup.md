@@ -16,7 +16,8 @@ derived-from:
 
 <!-- docs/design/setup.md. Setting the product up, recovering it, and undoing it, from the set-up
 person's Windows PC. The user documentation (the written procedures) is written from this.
-Revised 2026-11-09 after a persona walkthrough, a UX review, and an accessibility review. -->
+Revised 2026-11-09 after a persona walkthrough, a UX review, and an accessibility review.
+Amended 2026-11-10: setup and undo are started by double-clicking a launcher (docs/specs/setup-launchers.md). -->
 
 ## Personas
 
@@ -37,9 +38,11 @@ then **Wireless debugging** under Developer options.
 
 **Set up** (also used to recover after an update or reset):
 
-1. On the PC, in PowerShell, in the folder with the scripts and the app's install file:
+1. On the PC, in the Quiet Launcher folder, double-click **quiet-setup** (`quiet-setup.cmd`). It
+   runs the script with the app's install file beside it, without changing Windows' script policy,
+   and keeps its window open at the end until a key is pressed. Or, in PowerShell in that folder:
    `powershell -ExecutionPolicy Bypass -File .\quiet-setup.ps1 -Apk .\quiet-launcher.apk`. (This
-   form runs the script without changing Windows' script policy, and works on downloaded files.)
+   form also leaves Windows' script policy as it is, and works on downloaded files.)
 2. If the TV is not paired with this PC, the script says what to open on the TV (**Pair device with
    pairing code**) and asks for the pairing address and code.
 3. It saves a backup of the TV's accessibility settings and a picture of Google TV's home screen,
@@ -49,7 +52,8 @@ then **Wireless debugging** under Developer options.
 5. It asks the set-up person to do two checks with the remote, press Home and search for a named
    show, and to answer y or n for each; the answers go in the log.
 
-**Undo**: `powershell -ExecutionPolicy Bypass -File .\quiet-undo.ps1`. It connects to the TV the
+**Undo**: double-click **quiet-undo** (`quiet-undo.cmd`), which keeps its window open the same way,
+or run `powershell -ExecutionPolicy Bypass -File .\quiet-undo.ps1`. It connects to the TV the
 same way (pairing if needed), restores the saved accessibility settings, saves the arrangement of
 the apps to the PC if there is one and the app still answers (design-arranging), uninstalls the app, opens
 Google TV's home screen, runs its checks, and asks the set-up person to press Home and check
@@ -57,7 +61,8 @@ search, apps, and Settings with the remote.
 
 ## Mock-ups
 
-The interface is the scripts' output in PowerShell. Text in angle brackets varies. Results are
+The interface is the scripts' output in PowerShell, or, when started by double-clicking, in a
+window that ends with **Press any key to continue . . .** under the last line. Text in angle brackets varies. Results are
 words, separated from the step by a colon, so a screen reader reads them cleanly.
 
 **Set up, first time** (state: the TV is paired during the run):

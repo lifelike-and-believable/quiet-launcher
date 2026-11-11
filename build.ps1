@@ -26,7 +26,7 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 $out = Join-Path $root 'out\QuietLauncher'
 New-Item -ItemType Directory -Force $out | Out-Null
 Copy-Item (Join-Path $root 'app\build\outputs\apk\release\app-release.apk') (Join-Path $out 'quiet-launcher.apk') -Force
-foreach ($script in 'quiet-setup.ps1', 'quiet-undo.ps1') {
+foreach ($script in 'quiet-setup.ps1', 'quiet-setup.cmd', 'quiet-undo.ps1', 'quiet-undo.cmd') {
     $source = Join-Path $root "scripts\$script"
     if (Test-Path $source) { Copy-Item $source $out -Force }
 }

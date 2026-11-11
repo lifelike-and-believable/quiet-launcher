@@ -1,6 +1,7 @@
 ---
 status: draft
 tests: [scripts/tests]
+tests-commit: aa7dea6e4117171ae8369cf14579f7014ec6f879
 ---
 
 # Double-click launchers for setup and undo
