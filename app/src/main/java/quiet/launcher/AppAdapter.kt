@@ -26,6 +26,12 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
 
     private var apps: List<AppEntry> = emptyList()
 
+    /**
+     * Arrange mode's looks (docs/specs/arrange-mode.md): called after a tile is bound and after its
+     * selection changes, with the tile, its artwork's frame, the app, and whether it is selected.
+     */
+    var decorate: ((tile: View, frame: FrameLayout, app: AppEntry, focused: Boolean) -> Unit)? = null
+
     init {
         setHasStableIds(true)
     }
@@ -81,6 +87,19 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
             // The outline is drawn on this frame, over the artwork and not clipped with it.
             frame.addView(art, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             root.addView(frame, LinearLayout.LayoutParams((150 * dp).toInt(), (84.5f * dp).toInt()))
+            // Arrange mode marks hidden apps (design-arranging, Layout); never shown on the home screen.
+            frame.addView(TextView(parent.context).apply {
+                id = R.id.hidden_badge
+                setText(R.string.hidden_badge)
+                setTextColor(Color.WHITE)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f)
+                typeface = Typeface.DEFAULT_BOLD
+                background = GradientDrawable().apply { cornerRadius = 4 * dp; setColor(Color.parseColor("#CC000000")) }
+                setPadding((6 * dp).toInt(), (2 * dp).toInt(), (6 * dp).toInt(), (2 * dp).toInt())
+                visibility = View.GONE
+            }, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                leftMargin = (5 * dp).toInt(); topMargin = (5 * dp).toInt()
+            })
 
             label.id = R.id.app_label
             label.maxLines = 2
@@ -107,6 +126,7 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
                 label.setTextColor(if (hasFocus) TEXT else MUTED)
                 label.typeface = if (hasFocus) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
                 frame.animate().scaleX(if (hasFocus) 1.06f else 1f).scaleY(if (hasFocus) 1.06f else 1f).setDuration(120).start()
+                app?.let { decorate?.invoke(root, frame, it, hasFocus) }
             }
         }
 
@@ -116,6 +136,7 @@ class AppAdapter(private val onOpen: (AppEntry) -> Unit) : RecyclerView.Adapter<
             root.contentDescription = entry.label
             art.setImageDrawable(entry.artwork)
             label.text = entry.label
+            decorate?.invoke(root, frame, entry, root.hasFocus())
         }
     }
 
