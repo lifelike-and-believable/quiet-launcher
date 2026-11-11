@@ -212,6 +212,56 @@ function Has-Service([string]$list) {
     return ($list -split ':') -contains $SERVICE -or ($list -split ':') -contains 'quiet.launcher/quiet.launcher.HomeWatcher'
 }
 
+# ---- The arrangement (docs/specs/undo-arrangement.md; the same file as quiet-arrange.ps1) ----
+
+$RECEIVER = 'quiet.launcher/.ArrangeReceiver'
+
+# Asks the receiver; returns the result code (0 if there is no receiver) and the answer's JSON.
+function Receiver([string[]]$extra) {
+    $out = Tv shell am broadcast -n $RECEIVER @extra
+    if ($out -match 'result=(-?\d+), data="([^"]*)"') {
+        $json = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($Matches[2])) | ConvertFrom-Json
+        return @{ code = [int]$Matches[1]; json = $json }
+    }
+    if ($out -match 'result=(-?\d+)') { return @{ code = [int]$Matches[1]; json = $null } }
+    return @{ code = 0; json = $null }
+}
+
+function Get-Arrangement { return (Receiver @('-a', 'quiet.launcher.action.GET_ARRANGEMENT')) }
+
+# ---- The arrangement file (design-arranging, Mock-ups) ----
+
+$HEADER = @(
+    '# Quiet Launcher: the order of the apps on the home screen, one per line.',
+    '# Move lines to change the order. Apps below "Hidden:" are not on the home screen.',
+    "# Save the file, then press Enter in the script's window. Lines starting with # are ignored."
+)
+
+# Each app's line in the file: its name, with its package in brackets when another app has that name.
+function Line-For($app, $apps) {
+    $same = @($apps | Where-Object { $_.name.Trim().ToLower() -eq $app.name.Trim().ToLower() })
+    if ($same.Count -gt 1) { return "$($app.name) ($($app.package))" }
+    return $app.name
+}
+
+function Write-ArrangementFile([string]$path, $apps) {
+    $lines = @($HEADER)
+    $lines += @($apps | Where-Object { -not $_.hidden } | ForEach-Object { Line-For $_ $apps })
+    $lines += @('', 'Hidden:')
+    $lines += @($apps | Where-Object { $_.hidden } | ForEach-Object { Line-For $_ $apps })
+    Set-Content -LiteralPath $path -Value $lines -Encoding UTF8
+}
+
+# undo-arrangement#AC-1 to AC-3: the TV's arrangement to a dated file, if the apps were ever arranged
+# and the app answers; returns its path, or null.
+function Save-Arrangement {
+    $answer = Get-Arrangement
+    if ($answer.code -ne 1 -or -not $answer.json -or -not $answer.json.arranged) { return $null }
+    $path = Join-Path $folder ("arrangement-$tvSerial-" + (Get-Date).ToString('yyyy-MM-dd-HHmmss') + '.txt')
+    Write-ArrangementFile $path @($answer.json.apps)
+    return $path
+}
+
 # ---- 1. TV ----
 
 Say 'Quiet Launcher undo'
@@ -258,6 +308,8 @@ Tv shell pm path quiet.launcher | Out-Null
 if ($script:adbExit -ne 0) {
     Say '[3/4] Remove: already removed'
 } else {
+    # Before the app goes, and its arrangement with it.
+    $savedArrangement = Save-Arrangement
     $result = Tv uninstall quiet.launcher
     if ($script:adbExit -ne 0 -or $result -notmatch '(?m)^Success') {
         Say "[3/4] Remove: FAILED: $result"
@@ -265,6 +317,7 @@ if ($script:adbExit -ne 0) {
         Stop-Setup
     }
     Say '[3/4] Remove: uninstalled quiet-launcher'
+    if ($savedArrangement) { Say "      Arrangement of the apps: saved to $savedArrangement" }
 }
 
 # ---- 4. Checks ----

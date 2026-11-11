@@ -74,10 +74,17 @@ file tracks where the project is; it is not a process artifact.
 
 11. Second release, arranging the apps (epic-arranging; stories, design, and user documentation
     approved in #40, REQ-home-3 and 4 amended in #41), in four slices:
-    1. The stored arrangement and the list built from it (`docs/specs/arranging-store.md`).
-    2. Arrange mode on the TV: the hold, the question, Move, Hide, and Show.
-    3. The PC script (`quiet-arrange.ps1`), its receiver in the app, and its launcher.
-    4. Undo saving the arrangement.
+    1. Merged as #46: the stored arrangement and the list built from it
+       (`docs/specs/arranging-store.md`).
+    2. Merged as #47: arrange mode on the TV (`docs/specs/arrange-mode.md`); the 5-second hold with
+       the remote (AC-10) waits for the project lead.
+    3. The PC: the app's receiver merged as #49 (`docs/specs/arrange-receiver.md`, checked on the TV
+       over ADB); `quiet-arrange.ps1` and its launcher in #50 (`docs/specs/arrange-script.md`; real
+       Notepad with the project lead, AC-12).
+    4. In #51: undo saves the arrangement (`docs/specs/undo-arrangement.md`; with the project lead,
+       AC-5).
+    The project lead tests these on the TV and reports bugs (2026-11-10). Setup and undo (#38) were
+    merged before their on-TV run (AC-12), at the project lead's instruction.
 
 ## Decisions so far
 

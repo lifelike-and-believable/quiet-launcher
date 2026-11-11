@@ -23,7 +23,7 @@ function Bound {
 function B64([string]$text) { [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text)) }
 function Unb64([string]$text) { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($text)) }
 function Arranged {
-    $apps = @($s.apps)
+    $apps = @($s.apps | Where-Object { $_ })
     $a = $s.arrangement
     $order = if ($a) { @($a.order) } else { @() }
     $hidden = if ($a) { @($a.hidden) } else { @() }
