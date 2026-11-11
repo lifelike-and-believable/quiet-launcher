@@ -39,6 +39,17 @@
             android:name=".ArrangeActivity"
             android:exported="false"
             android:theme="@android:style/Theme.DeviceDefault.NoActionBar" />
+        <!-- docs/specs/arrange-receiver.md, AC-1: the PC's arrangement script, over ADB. Exported,
+             but only a holder of DUMP can send to it: ADB's shell has it; apps cannot be given it. -->
+        <receiver
+            android:name=".ArrangeReceiver"
+            android:exported="true"
+            android:permission="android.permission.DUMP">
+            <intent-filter>
+                <action android:name="quiet.launcher.action.GET_ARRANGEMENT" />
+                <action android:name="quiet.launcher.action.SET_ARRANGEMENT" />
+            </intent-filter>
+        </receiver>
         <!-- docs/specs/home-takeover.md, AC-6: only Android can bind it. Its own process, so the
              home screen loading on the main thread can never delay its answer to a Home key
              (Android acts on the release itself if the answer is late; seen on the TV). -->

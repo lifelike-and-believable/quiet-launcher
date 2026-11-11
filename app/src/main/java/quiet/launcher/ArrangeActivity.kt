@@ -39,6 +39,11 @@ class ArrangeActivity : Activity() {
     private val handler = Handler(Looper.getMainLooper())
     private val timeout = Runnable { leave() }
 
+    /** arrange-receiver#AC-6: the PC sent an arrangement, so this one is out of date. */
+    private val changedFromPc = object : android.content.BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: android.content.Intent) = finish()
+    }
+
     private lateinit var grid: RecyclerView
     private lateinit var count: TextView
     private lateinit var statusLine: TextView
@@ -57,9 +62,11 @@ class ArrangeActivity : Activity() {
         refresh(select = intent.getStringExtra(EXTRA_SELECT) ?: session.shown.firstOrNull()?.packageName)
         announce(getString(R.string.arrange_announcement, countText()))
         restartTimeout()
+        onArrangementChanged(changedFromPc)
     }
 
     override fun onDestroy() {
+        unregisterReceiver(changedFromPc)
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
