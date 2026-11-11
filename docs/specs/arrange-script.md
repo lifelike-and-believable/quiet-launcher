@@ -1,6 +1,7 @@
 ---
 status: draft
 tests: [scripts/tests]
+tests-commit: f31b3421331658c096b944544a0067d6b2ed39f8
 ---
 
 # The arrangement from the PC: the script
