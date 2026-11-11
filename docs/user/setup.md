@@ -2,7 +2,7 @@
 id: docs-setup
 status: approved
 derived-from:
-  - design-setup: 42f29dde6285
+  - design-setup: 9c53a9c2d0a7
   - story-setup-set-up: 6a69bd06742a
   - story-setup-restart: 1f1806140267
   - story-setup-recover: 734f151fb73e
@@ -23,8 +23,9 @@ household needs to do anything. Setup takes under 15 minutes; undo takes under 1
 - A Windows PC on the same network as the TV, with ADB (platform-tools 30 or newer, for wireless
   pairing). If you do not have it: `winget install Google.PlatformTools`, then open a new
   PowerShell window.
-- The Quiet Launcher folder: the app's install file, `quiet-launcher.apk`, and the two scripts,
-  `quiet-setup.ps1` and `quiet-undo.ps1`. Build it from the repository: in a clone of
+- The Quiet Launcher folder: the app's install file, `quiet-launcher.apk`, and the scripts that
+  set up and remove the quiet home screen: **quiet-setup** and **quiet-undo**, each a `.cmd` file
+  to double-click and the `.ps1` script it runs. Build it from the repository: in a clone of
   github.com/lifelike-and-believable/quiet-launcher, run `.\build.ps1`, which writes the folder to
   `out\QuietLauncher`. The repository's README lists the build tools it needs. Nothing is
   published; this is the only way to get it.
@@ -43,8 +44,10 @@ Leave the TV on. You pair it with the PC during setup.
 
 ## Set it up
 
-1. On the PC, open PowerShell in the Quiet Launcher folder (`out\QuietLauncher`).
-2. Run:
+1. On the PC, open the Quiet Launcher folder (`out\QuietLauncher`).
+2. Double-click **quiet-setup** (`quiet-setup.cmd`). A window opens and the script runs in it. At
+   the end the window says **Press any key to continue . . .**; it closes when you press a key. Or,
+   if you prefer, open PowerShell in the folder and run:
 
    ```
    powershell -ExecutionPolicy Bypass -File .\quiet-setup.ps1 -Apk .\quiet-launcher.apk
@@ -111,8 +114,9 @@ product out of the backup and says **Picture skipped: the quiet home screen is a
 
 ## Remove it
 
-1. On the PC, open PowerShell in the Quiet Launcher folder.
-2. Run:
+1. On the PC, open the Quiet Launcher folder.
+2. Double-click **quiet-undo** (`quiet-undo.cmd`). Its window stays open at the end until you press
+   a key, as setup's does. Or open PowerShell in the folder and run:
 
    ```
    powershell -ExecutionPolicy Bypass -File .\quiet-undo.ps1
