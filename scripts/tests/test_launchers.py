@@ -68,15 +68,14 @@ class test_launchers(unittest.TestCase):
 
     # setup-launchers#AC-3: options are passed on.
     def test_options_are_passed_on(self):
-        pc = Pc(self, tv())
+        # -Tv reaches the script: it tries that address only, and cannot connect to it.
+        pc = Pc(self, tv(reachable=False, devices=[]))
         folder = self.folder(pc)
-        # An option the script does not have reaches it, and it refuses it.
-        code, out = self.launch(pc, folder / "quiet-setup.cmd", "-NoSuchOption")
-        self.assertNotEqual(code, 0, out)
-        self.assertIn("NoSuchOption", out)
-        code, out = self.launch(pc, folder / "quiet-undo.cmd", "-NoSuchOption")
-        self.assertNotEqual(code, 0, out)
-        self.assertIn("NoSuchOption", out)
+        for launcher, step in (("quiet-setup.cmd", "[2/6]"), ("quiet-undo.cmd", "[1/4]")):
+            code, out = self.launch(pc, folder / launcher, "-Tv", "10.0.0.99:5555")
+            self.assertNotEqual(code, 0, out)
+            self.assertIn(f"{step} TV: COULD NOT CONNECT", out)
+            self.assertTrue(any("10.0.0.99:5555" in c for c in pc.tv["calls"]), out)
 
     # setup-launchers#AC-4
     def test_build_copies_the_launchers(self):
