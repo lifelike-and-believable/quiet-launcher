@@ -382,6 +382,13 @@ class ArrangeActivity : Activity() {
             frame.animate().cancel()
             frame.scaleX = 1.1f
             frame.scaleY = 1.1f
+        } else if (frame.foreground is DashedRing) {
+            // Put down or back (AC-6): no longer lifted. A selected tile gets the selection's look
+            // again, ring and size, from the adapter's own focus handling.
+            frame.foreground = null
+            frame.scaleX = 1f
+            frame.scaleY = 1f
+            if (focused) tile.onFocusChangeListener?.onFocusChange(tile, true)
         } else if (!focused) {
             frame.foreground = null
         }
