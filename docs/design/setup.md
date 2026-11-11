@@ -26,7 +26,7 @@ Revised 2026-11-09 after a persona walkthrough, a UX review, and an accessibilit
 
 ## Flow
 
-**The Quiet Launcher folder** (the app's install file and the two scripts) is built from the
+**The Quiet Launcher folder** (the app's install file and the scripts) is built from the
 repository on the set-up person's PC: `.\build.ps1` in a clone writes it to `out\QuietLauncher`.
 Nothing is published (the project lead's decision, 2026-11-09).
 
@@ -50,7 +50,8 @@ then **Wireless debugging** under Developer options.
    show, and to answer y or n for each; the answers go in the log.
 
 **Undo**: `powershell -ExecutionPolicy Bypass -File .\quiet-undo.ps1`. It connects to the TV the
-same way (pairing if needed), restores the saved accessibility settings, uninstalls the app, opens
+same way (pairing if needed), restores the saved accessibility settings, saves the arrangement of
+the apps to the PC if there is one and the app still answers (design-arranging), uninstalls the app, opens
 Google TV's home screen, runs its checks, and asks the set-up person to press Home and check
 search, apps, and Settings with the remote.
 
@@ -171,6 +172,7 @@ Quiet Launcher undo
 [1/4] TV: connected to 10.0.0.202:39423
 [2/4] Accessibility settings: restored from backup-<serial>.json
 [3/4] Remove: uninstalled quiet-launcher
+      Arrangement of the apps: saved to Documents\QuietLauncher\arrangement-<serial>-<date>.txt
 [4/4] Checks
       Android's home screen is Google TV's: yes
       Google TV home app installed and enabled: yes
@@ -191,7 +193,8 @@ already removed, step 3 says **already removed**.
 
 ## Layout
 
-- Two scripts, `quiet-setup.ps1` and `quiet-undo.ps1`, shipped beside the app's install file. They
+- Two scripts, `quiet-setup.ps1` and `quiet-undo.ps1`, shipped beside the app's install file (with
+  a third, `quiet-arrange.ps1`, for arranging the apps: design-arranging). They
   run in Windows PowerShell 5.1 or PowerShell 7 and need only ADB.
 - Steps are numbered, each on one line as "step: result"; anything that needs the set-up person is
   indented under the step. Failures are in capitals (FAILED, NOT FOUND) so they stand out without

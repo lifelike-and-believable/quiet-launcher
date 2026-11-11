@@ -19,4 +19,21 @@
     <item name="search_overlay_note" type="id" />
     <item name="search_spinner" type="id" />
     <item name="google_tv_button" type="id" />
+    <item name="arrange_question" type="id" />
+    <item name="question_title" type="id" />
+    <item name="question_text" type="id" />
+    <item name="question_cancel" type="id" />
+    <item name="question_arrange" type="id" />
+    <item name="arrange_grid" type="id" />
+    <item name="arrange_title" type="id" />
+    <item name="arrange_instructions" type="id" />
+    <item name="arrange_count" type="id" />
+    <item name="hidden_label" type="id" />
+    <item name="no_hidden" type="id" />
+    <item name="hidden_badge" type="id" />
+    <item name="arrange_menu" type="id" />
+    <item name="menu_move" type="id" />
+    <item name="menu_hide" type="id" />
+    <item name="menu_show" type="id" />
+    <item name="menu_cancel" type="id" />
 </resources>

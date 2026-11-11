@@ -61,6 +61,7 @@ class HomeActivity : Activity() {
 
     /** One reader for the screen's lifetime, so artwork is loaded once (home-takeover#AC-12). */
     private val source by lazy { PackageSource(packageManager) }
+    private val arrangements by lazy { ArrangementStore(this) }
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -75,7 +76,33 @@ class HomeActivity : Activity() {
 
     private val searchTimeout = Runnable { searchDidNotOpen() }
 
+    // ---- Holding select (arrange-mode#AC-1 to AC-3) ----
+
+    /** The app select is being held on, timed from its first key-down. */
+    private var holdPackage: String? = null
+
+    /** True once the question has been shown for this hold, so its key-up opens nothing. */
+    private var holdAsked = false
+
+    private val holdTimer = Runnable {
+        holdAsked = true
+        holdPackage?.let { showQuestion(it) }
+    }
+
+    private lateinit var question: View
+
+    /** The app the question was asked about. */
+    private var questionFor: String? = null
+
+    /** Set when arrange mode is opened, so the home screen comes back at the top (arrange-mode#AC-8). */
+    private var arranging = false
+
     private val packageChanges = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) = rebuild(selectFirst = false)
+    }
+
+    /** arrange-receiver#AC-6: an arrangement sent from the PC shows at once. */
+    private val arrangementChanges = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) = rebuild(selectFirst = false)
     }
 
@@ -102,6 +129,8 @@ class HomeActivity : Activity() {
         } else {
             registerReceiver(packageChanges, filter)
         }
+
+        onArrangementChanged(arrangementChanges)
 
         // top-row-and-search#AC-9: the status line follows the connection.
         val cm = getSystemService(ConnectivityManager::class.java)
@@ -132,6 +161,11 @@ class HomeActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        // arrange-mode#AC-8: back from arrange mode, the new arrangement from the top.
+        if (arranging) {
+            arranging = false
+            homePressed = true
+        }
         if (firstShow) {
             // app-list#AC-6: nothing to show yet, so read the apps now and select the first.
             rebuild(selectFirst = true)
@@ -164,12 +198,20 @@ class HomeActivity : Activity() {
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
         unregisterReceiver(packageChanges)
+        unregisterReceiver(arrangementChanges)
         getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(connectivity)
         super.onDestroy()
     }
 
     /** top-row-and-search#AC-3: while searching, only Back (to cancel) and Home act. */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (question.visibility == View.VISIBLE && event.keyCode == KeyEvent.KEYCODE_BACK) {
+            if (event.action == KeyEvent.ACTION_UP) closeQuestion()
+            return true
+        }
+        if (!searching && (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if (handleSelect(event)) return true
+        }
         if (searching) {
             return when (event.keyCode) {
                 KeyEvent.KEYCODE_BACK -> {
@@ -190,6 +232,56 @@ class HomeActivity : Activity() {
     @Deprecated("Back is handled here for every Android version this app supports.")
     override fun onBackPressed() {
         if (searchBox.hasFocus()) selectFirstNow()
+    }
+
+    /**
+     * arrange-mode#AC-1 and AC-2: select held on an app for 5 seconds asks before arranging; let go
+     * sooner, the app opens on release as before. Returns true when the event is used up here.
+     */
+    private fun handleSelect(event: KeyEvent): Boolean {
+        when (event.action) {
+            KeyEvent.ACTION_DOWN -> {
+                if (event.repeatCount > 0) return holdPackage != null || holdAsked
+                handler.removeCallbacks(holdTimer)
+                holdAsked = false
+                holdPackage = if (question.visibility == View.VISIBLE) null else grid.findFocus()?.tag as? String
+                if (holdPackage != null) handler.postDelayed(holdTimer, HOLD_MS)
+            }
+            KeyEvent.ACTION_UP -> {
+                handler.removeCallbacks(holdTimer)
+                val asked = holdAsked
+                holdAsked = false
+                holdPackage = null
+                if (asked) {
+                    // The question is up: this release opens nothing.
+                    grid.findFocus()?.isPressed = false
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun showQuestion(pkg: String) {
+        questionFor = pkg
+        question.visibility = View.VISIBLE
+        findViewById<View>(R.id.question_cancel).requestFocus()
+    }
+
+    /** arrange-mode#AC-3: Cancel or Back; the app that was held is selected again. */
+    private fun closeQuestion() {
+        question.visibility = View.GONE
+        val pkg = questionFor
+        questionFor = null
+        focusTile(adapter.indexOf(pkg).coerceAtLeast(0))
+    }
+
+    private fun openArrangeMode() {
+        val pkg = questionFor ?: return
+        question.visibility = View.GONE
+        questionFor = null
+        arranging = true
+        startActivity(Intent(this, ArrangeActivity::class.java).putExtra(ArrangeActivity.EXTRA_SELECT, pkg))
     }
 
     // ---- Search (top-row-and-search#AC-2 to AC-6) ----
@@ -296,7 +388,8 @@ class HomeActivity : Activity() {
         val selected = grid.findFocus()?.tag as? String
         val focusElsewhere = !selectFirst && selected == null && window.decorView.findFocus() != null
         val oldIndex = adapter.indexOf(selected)
-        val apps = AppCatalog.visible(source.read(), packageName)
+        // arranging-store#AC-6: read each time, so a changed arrangement shows the next time.
+        val apps = AppCatalog.arranged(AppCatalog.visible(source.read(), packageName), arrangements.load()).shown
         adapter.submit(apps)
         emptyMessage.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
         if (apps.isEmpty()) {
@@ -481,10 +574,67 @@ class HomeActivity : Activity() {
             }, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER))
         }
 
+        question = buildQuestion(dp)
+
         return FrameLayout(this).apply {
             setBackgroundColor(BACKGROUND)
             addView(column, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
             addView(this@HomeActivity.overlay, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            addView(question, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        }
+    }
+
+    /** arrange-mode#AC-2 (design-arranging, Layout): the question, over the dimmed home screen. */
+    private fun buildQuestion(dp: Float): View {
+        fun px(v: Float) = (v * dp).toInt()
+        val cancel = button(R.id.question_cancel, R.string.question_cancel, 0, dp) { closeQuestion() }.apply {
+            setPadding(px(22f), 0, px(22f), 0)
+            nextFocusLeftId = R.id.question_cancel
+            nextFocusRightId = R.id.question_arrange
+            nextFocusUpId = R.id.question_cancel
+            nextFocusDownId = R.id.question_cancel
+        }
+        val arrange = button(R.id.question_arrange, R.string.question_arrange, 0, dp) { openArrangeMode() }.apply {
+            setPadding(px(22f), 0, px(22f), 0)
+            nextFocusLeftId = R.id.question_cancel
+            nextFocusRightId = R.id.question_arrange
+            nextFocusUpId = R.id.question_arrange
+            nextFocusDownId = R.id.question_arrange
+        }
+        val panel = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(px(32f), px(28f), px(32f), px(28f))
+            background = GradientDrawable().apply {
+                cornerRadius = 14 * dp
+                setColor(Color.parseColor("#1f262d"))
+                setStroke(dp.toInt().coerceAtLeast(1), Color.parseColor("#59646e"))
+            }
+            addView(TextView(this@HomeActivity).apply {
+                id = R.id.question_title
+                setText(R.string.question_title)
+                setTextColor(TEXT)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+            })
+            addView(TextView(this@HomeActivity).apply {
+                id = R.id.question_text
+                setText(R.string.question_text)
+                setTextColor(MUTED)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                setLineSpacing(0f, 1.3f)
+                setPadding(0, px(10f), 0, px(20f))
+            })
+            addView(LinearLayout(this@HomeActivity).apply {
+                orientation = LinearLayout.HORIZONTAL
+                addView(cancel, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)))
+                addView(arrange, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(44f)).apply { marginStart = px(14f) })
+            })
+        }
+        return FrameLayout(this).apply {
+            id = R.id.arrange_question
+            setBackgroundColor(Color.parseColor("#DB101418"))
+            isClickable = true
+            visibility = View.GONE
+            addView(panel, FrameLayout.LayoutParams(px(490f), ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER))
         }
     }
 
@@ -522,6 +672,9 @@ class HomeActivity : Activity() {
         private const val COLUMNS = 5
         private const val KATNISS = "com.google.android.katniss"
         private const val SEARCH_TIMEOUT_MS = 10_000L
+
+        /** arrange-mode#AC-2: how long select is held on an app before the question. */
+        private const val HOLD_MS = 5_000L
         private val BACKGROUND = Color.parseColor("#101418")
         private val TEXT = Color.parseColor("#eef2f5")
         private val MUTED = Color.parseColor("#a9b4bd")

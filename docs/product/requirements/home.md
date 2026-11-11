@@ -37,15 +37,17 @@ exception is when someone asks for Google TV's home screen (REQ-home-12).
 Release: second
 
 Every installed app appears unless hidden (REQ-home-4). The set-up person can move an app to a
-different place in the list, and the order is kept after the TV restarts. Nobody else can change the
-order, on purpose or by accident: a viewer pressing buttons on the remote never moves an app.
+different place in the list, and the order is kept after the TV restarts. Nobody can change the
+order by accident: arranging starts only with a step a viewer would not take without meaning to, so
+a viewer pressing buttons on the remote never moves an app. (The project lead's decision,
+2026-11-10: someone who knows the step could arrange the apps on purpose, and that is accepted.)
 
 ## REQ-home-4: Hiding apps
 
 Release: second
 
-The set-up person can hide an app from the home screen and show it again later; nobody else can
-hide or show apps. A hidden app stays installed and still opens in other ways (from search results
+The set-up person can hide an app from the home screen and show it again later; nobody can hide or
+show an app by accident (the same step as REQ-home-3). A hidden app stays installed and still opens in other ways (from search results
 or voice). The set-up person can always see which apps are hidden and bring any of them back.
 
 ## REQ-home-5: New and removed apps

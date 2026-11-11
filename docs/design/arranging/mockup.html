@@ -1,0 +1,187 @@
+<!doctype html>
+<!-- Mock-up source for docs/design/arranging.md. Each state is selected by the URL hash
+     (mockup.html#confirm, #arrange, ...) and rendered at 1920x1080 by render.sh. The look is the
+     home screen's (docs/design/home-screen/mockup.html). App tiles are coloured placeholders with
+     the app's name; the real screen shows each app's own banner artwork. Placeholder colours are
+     not part of the design and were not contrast-checked. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Arranging mock-up</title>
+<style>
+  :root {
+    --bg: #101418; --surface: #1c2228; --edge: #59646e; --text: #eef2f5; --muted: #a9b4bd;
+    --focus: #ffffff; --ring: #000000; --accent: #8ab4f8; --note: #ffd28a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: "Segoe UI", Roboto, sans-serif; position: relative; }
+  .safe { position: absolute; inset: 54px 96px; }
+  .top { display: flex; align-items: center; gap: 24px; min-height: 96px; }
+  .pill { min-height: 88px; border-radius: 44px; background: var(--surface); border: 2px solid var(--edge);
+          display: flex; align-items: center; gap: 16px; padding: 0 32px; font-size: 32px; }
+  .search { flex: 0 0 680px; color: var(--muted); }
+  .spacer { flex: 1; }
+  .clock { font-size: 48px; font-weight: 300; letter-spacing: 1px; }
+  .focused { outline: 5px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 11px var(--ring);
+             background: #2b343c; color: var(--text); border-color: transparent; transform: scale(1.04); }
+  .head { min-height: 96px; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
+  .headrow { display: flex; align-items: baseline; justify-content: space-between; }
+  .count { font-size: 30px; color: var(--text); }
+  body.arranging .viewport { padding-top: 34px; clip-path: inset(12px -40px 0 -40px); }
+  .head h1 { margin: 0; font-size: 44px; font-weight: 600; }
+  .head p { margin: 0; font-size: 30px; color: var(--muted); }
+  .status { height: 56px; display: flex; align-items: center; padding-left: 36px; font-size: 28px; color: var(--note); }
+  .viewport { height: 812px; overflow: hidden; position: relative; padding: 16px 24px 0; margin: 0 -24px; }
+  .grid { display: grid; grid-template-columns: repeat(5, 300px); column-gap: 57px; row-gap: 30px; }
+  .tile { width: 300px; position: relative; }
+  .banner { width: 300px; height: 169px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 38px; font-weight: 700; color: #fff; text-align: center; padding: 0 16px; }
+  .banner.icon { background: var(--surface) !important; }
+  .banner.icon span { width: 110px; height: 110px; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .name { margin-top: 10px; font-size: 28px; color: var(--muted); text-align: center;
+          line-height: 1.2; max-height: calc(2 * 1.2em); overflow: hidden; }
+  .tile.focused { outline: none; box-shadow: none; background: none; transform: none; }
+  .tile.focused .banner { outline: 5px solid var(--focus); outline-offset: 3px; box-shadow: 0 0 0 12px var(--ring); transform: scale(1.06); }
+  .tile.focused .name { color: var(--text); font-weight: 600; }
+  .tile.moving .banner { outline: 6px dashed var(--accent); outline-offset: 3px; box-shadow: 0 0 0 12px var(--ring), 0 18px 40px rgba(0,0,0,.7); transform: scale(1.1) translateY(-10px); }
+  .tile.moving .name { color: var(--text); font-weight: 600; }
+  .arrow { position: absolute; font-size: 44px; color: var(--accent); font-weight: 700; }
+  .rowlabel { margin: 34px 0 14px; font-size: 30px; color: var(--muted); display: flex; gap: 16px; align-items: baseline; }
+  .rowlabel b { color: var(--text); font-weight: 600; }
+  .hidden .banner { filter: grayscale(.8) brightness(.45); }
+  .badge { position: absolute; top: 10px; left: 10px; background: #000c; color: var(--text); font-size: 22px; font-weight: 600;
+           border-radius: 8px; padding: 4px 12px; }
+  .nohidden { font-size: 28px; color: var(--muted); padding: 10px 0 0 4px; }
+  .menu { position: absolute; width: 300px; background: #262d34; border: 2px solid var(--edge); border-radius: 18px;
+          padding: 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 16px 40px #000a; z-index: 3; }
+  .menu div { font-size: 30px; padding: 14px 22px; border-radius: 12px; }
+  .menu div.sel { background: var(--focus); color: #0b0f13; font-weight: 600; }
+  .dim { position: absolute; inset: 0; background: rgba(16,20,24,.86); z-index: 4; display: flex; align-items: center; justify-content: center; }
+  .dialog { width: 980px; background: #1f262d; border: 2px solid var(--edge); border-radius: 28px; padding: 56px 64px; }
+  .dialog h2 { margin: 0 0 20px; font-size: 48px; font-weight: 600; }
+  .dialog p { margin: 0 0 40px; font-size: 32px; color: var(--muted); line-height: 1.45; }
+  .buttons { display: flex; gap: 28px; }
+  .buttons .pill { padding: 0 44px; }
+  .label { position: absolute; right: 24px; bottom: 12px; font-size: 20px; color: #8a96a0; z-index: 5; }
+  svg.mic { width: 30px; height: 40px; } svg.gear { width: 36px; height: 36px; } svg.glass { width: 40px; height: 40px; }
+</style>
+</head>
+<body>
+<div class="safe">
+  <div class="top" id="top">
+    <div class="pill search">
+      <svg class="glass" viewBox="0 0 40 40" aria-hidden="true"><circle cx="17" cy="17" r="12" fill="none" stroke="currentColor" stroke-width="5"/><line x1="26" y1="26" x2="37" y2="37" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>
+      Search for a show
+    </div>
+    <div class="pill">
+      <svg class="mic" viewBox="0 0 30 40" aria-hidden="true"><rect x="8" y="2" width="14" height="22" rx="7" fill="currentColor"/><path d="M3 18a12 12 0 0 0 24 0" fill="none" stroke="currentColor" stroke-width="3"/><line x1="15" y1="30" x2="15" y2="38" stroke="currentColor" stroke-width="3"/></svg>
+      Voice search
+    </div>
+    <div class="spacer"></div>
+    <div class="pill"><svg class="gear" viewBox="0 0 36 36" aria-hidden="true"><rect x="3" y="7" width="30" height="19" rx="3" fill="none" stroke="currentColor" stroke-width="3.5"/><line x1="12" y1="31" x2="24" y2="31" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg>Google TV</div>
+    <div class="pill"><svg class="gear" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="6" fill="none" stroke="currentColor" stroke-width="4"/><g stroke="currentColor" stroke-width="4" stroke-linecap="round"><line x1="18" y1="2" x2="18" y2="8"/><line x1="18" y1="28" x2="18" y2="34"/><line x1="2" y1="18" x2="8" y2="18"/><line x1="28" y1="18" x2="34" y2="18"/></g></svg>Settings</div>
+    <div class="clock">8:25</div>
+  </div>
+  <div class="status" id="status"></div>
+  <div class="viewport" id="viewport">
+    <div class="grid" id="grid"></div>
+    <div id="hiddenArea"></div>
+  </div>
+</div>
+<div class="label" id="label"></div>
+<script>
+  // The reference device's apps (2026-11-09), as a set-up person might arrange them: two hidden.
+  const all = {
+    'YouTube': '#c4302b', 'Netflix': '#b20710', 'Disney+': '#113ccf', 'Spotify': '#127a3a', 'Apple TV': '#3a3a3c',
+    'Criterion Channel': '#333', 'Vimeo': '#0a7fb5', 'CBC News': '#c8102e', 'CTV': '#4a4a4a', 'STACKTV': '#2a2a2a',
+    'VLC': '#c56f00', 'TuneIn Radio': '#0e6f6a', 'MUBI': '#222', 'Prime Video': '#1a73e8', 'ExpressVPN': '#b3262d',
+    'Tubi': '#6c2bd9', 'Plex': '#282a2d', 'myfilmfriend': '#0b6fb8', 'Google Play Store': '#01875f',
+  };
+  const icons = ['VLC', 'Google Play Store'];
+  const state = (location.hash || '#arrange').slice(1);
+  let shown = ['YouTube', 'Netflix', 'Disney+', 'Prime Video', 'CBC News', 'CTV', 'Apple TV', 'Criterion Channel',
+               'MUBI', 'Spotify', 'Plex', 'Vimeo', 'STACKTV', 'TuneIn Radio', 'VLC', 'myfilmfriend', 'Google Play Store'];
+  let hidden = ['ExpressVPN', 'Tubi'];
+  if (state === 'no-hidden') { shown = shown.concat(hidden); hidden = []; }
+  if (state === 'after-hide') { shown.splice(shown.indexOf('Plex') - 1, 0); }
+  if (state === 'last-app') { hidden = shown.slice(1).concat(hidden); shown = shown.slice(0, 1); }
+  if (state === 'moving') { shown.splice(shown.indexOf('Prime Video'), 1); shown.splice(1, 0, 'Prime Video'); }
+
+  const tile = (name, id, extra = '') => {
+    const t = document.createElement('div'); t.className = 'tile ' + extra; t.id = id;
+    const kind = icons.includes(name) ? 'icon' : '';
+    const b = document.createElement('div'); b.className = 'banner ' + kind; b.style.background = all[name];
+    b.innerHTML = kind ? `<span style="background:${all[name]}">${name.length <= 3 ? name : name.split(' ').map(w => w[0]).join('')}</span>` : name;
+    const n = document.createElement('div'); n.className = 'name'; n.textContent = name;
+    t.append(b, n); return t;
+  };
+  const grid = document.getElementById('grid');
+  shown.forEach((name, i) => grid.append(tile(name, 'app' + i)));
+
+  const arranging = state !== 'confirm';
+  if (arranging) {
+    document.body.classList.add('arranging');
+    const count = hidden.length ? `${hidden.length} hidden app${hidden.length > 1 ? 's' : ''}, at the end` : 'No hidden apps';
+    document.getElementById('top').outerHTML =
+      `<div class="head"><div class="headrow"><h1>Arranging apps</h1><span class="count">${count}</span></div><p>Select an app to move or hide it. Press Back when you are done; changes are saved as you go.</p></div>`;
+    const area = document.getElementById('hiddenArea');
+    area.insertAdjacentHTML('beforeend', `<div class="rowlabel"><b>Hidden apps</b><span>${hidden.length ? 'Not on the home screen. Select one to show it again.' : ''}</span></div>`);
+    if (hidden.length) {
+      const row = document.createElement('div'); row.className = 'grid';
+      hidden.forEach((name, i) => { const t = tile(name, 'hid' + i, 'hidden'); t.insertAdjacentHTML('beforeend', '<div class="badge">Hidden</div>'); row.append(t); });
+      area.append(row);
+    } else {
+      area.insertAdjacentHTML('beforeend', '<div class="nohidden">No hidden apps. To hide one, select it and choose Hide.</div>');
+    }
+  }
+
+  const focus = id => document.getElementById(id)?.classList.add('focused');
+  const status = t => document.getElementById('status').textContent = t;
+  const menuAt = (id, items) => {
+    const el = document.getElementById(id); const r = el.getBoundingClientRect();
+    const m = document.createElement('div'); m.className = 'menu';
+    m.innerHTML = items.map((x, i) => `<div class="${i === 0 ? 'sel' : ''}">${x}</div>`).join('');
+    m.style.left = (r.left + 340) + 'px'; m.style.top = (r.top - 4) + 'px';
+    document.body.append(m);
+  };
+  const labels = {
+    'confirm': 'After holding select on an app for 5 seconds: the TV asks first',
+    'arrange': 'Arrange mode: the first app selected; hidden apps in their own row',
+    'menu': 'Select on an app in arrange mode: Move or Hide',
+    'moving': 'Moving Prime Video: the arrows move it, select puts it down',
+    'hidden-menu': 'Select on a hidden app: Show',
+    'no-hidden': 'Arrange mode with no hidden apps, scrolled to the end',
+    'after-hide': 'After Hide on Tubi: it is in the Hidden apps row; the next app is selected',
+    'last-app': 'The last app on the home screen: no Hide',
+  };
+  document.getElementById('label').textContent = 'Mock-up — ' + (labels[state] || state);
+
+  if (state === 'confirm') {
+    focus('app3');
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="dim"><div class="dialog"><h2>Arrange apps?</h2>' +
+      '<p>You can change the order of the apps and hide the ones nobody uses. The changes are for everyone who uses this TV.</p>' +
+      '<div class="buttons"><div class="pill focused">Cancel</div><div class="pill">Arrange apps</div></div></div></div>');
+  }
+  if (state === 'arrange') focus('app3');
+  const scroll = px => ['grid', 'hiddenArea'].forEach(id => document.getElementById(id).style.transform = `translateY(${px}px)`);
+  if (state === 'no-hidden') { scroll(-486); focus('app15'); }
+  if (state === 'after-hide') {
+    scroll(-486); focus('app' + shown.indexOf('Plex'));
+    status('Tubi hidden. It is in the Hidden apps row.');
+  }
+  if (state === 'last-app') { focus('app0'); menuAt('app0', ['Move', 'Cancel']); status('Keep at least one app on the home screen.'); }
+  if (state === 'menu') { focus('app3'); menuAt('app3', ['Move', 'Hide', 'Cancel']); }
+  if (state === 'moving') {
+    const t = document.getElementById('app1'); t.classList.add('moving');
+    t.insertAdjacentHTML('beforeend',
+      '<div class="arrow" style="left:-46px;top:52px">‹</div><div class="arrow" style="right:-46px;top:52px">›</div>');
+    status('Moving Prime Video. Use the arrows, then press select to put it here. Back puts it back.');
+  }
+  if (state === 'hidden-menu') {
+    scroll(-486); focus('hid1'); menuAt('hid1', ['Show', 'Cancel']);
+  }
+</script>
+</body>
+</html>

@@ -26,4 +26,21 @@ object AppCatalog {
                     .thenBy { it.firstInstallTime }
                     .thenBy { it.label.lowercase() },
             )
+
+    /**
+     * arranging-store#AC-1 to AC-4: the arrangement applied to the list [visible] gives. Listed apps
+     * first, in the arrangement's order; the rest after, in their usual order; hidden ones apart.
+     */
+    fun arranged(apps: List<AppEntry>, arrangement: Arrangement?): Arranged {
+        if (arrangement == null) return Arranged(apps, emptyList())
+        val byPackage = apps.associateBy { it.packageName }
+        val hiddenSet = arrangement.hidden.toSet()
+        val hidden = arrangement.hidden.distinct().mapNotNull { byPackage[it] }
+        val listed = arrangement.order.distinct().filter { it !in hiddenSet }.mapNotNull { byPackage[it] }
+        val listedSet = arrangement.order.toSet()
+        val rest = apps.filter { it.packageName !in listedSet && it.packageName !in hiddenSet }
+        val shown = listed + rest
+        // AC-4: never an empty home screen while apps are installed.
+        return if (shown.isEmpty() && hidden.isNotEmpty()) Arranged(hidden, emptyList()) else Arranged(shown, hidden)
+    }
 }
