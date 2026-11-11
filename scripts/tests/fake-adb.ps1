@@ -18,6 +18,28 @@ function Bound {
     return ($null -ne $s.installed) -and ($eas -split ':' -contains $SERVICE) -and ((Get-Setting 'accessibility_enabled') -eq '1') -and $s.service_runs
 }
 
+# The app's arrangement receiver (docs/specs/arrange-receiver.md), from "apps" (each name and package,
+# in the home screen's usual order) and "arrangement" (version, order, hidden; null if never arranged).
+function B64([string]$text) { [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($text)) }
+function Unb64([string]$text) { [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($text)) }
+function Arranged {
+    $apps = @($s.apps | Where-Object { $_ })
+    $a = $s.arrangement
+    $order = if ($a) { @($a.order) } else { @() }
+    $hidden = if ($a) { @($a.hidden) } else { @() }
+    $byPkg = @{}; foreach ($app in $apps) { $byPkg[$app.package] = $app }
+    $shown = @($order | Where-Object { $byPkg.ContainsKey($_) -and $hidden -notcontains $_ } | ForEach-Object { $byPkg[$_] })
+    $shown += @($apps | Where-Object { $order -notcontains $_.package -and $hidden -notcontains $_.package })
+    $hid = @($hidden | Where-Object { $byPkg.ContainsKey($_) } | ForEach-Object { $byPkg[$_] })
+    $list = @($shown | ForEach-Object { [ordered]@{ name = $_.name; package = $_.package; hidden = $false } }) +
+            @($hid | ForEach-Object { [ordered]@{ name = $_.name; package = $_.package; hidden = $true } })
+    return [ordered]@{ version = $(if ($a) { [long]$a.version } else { 0 }); arranged = [bool]$a; apps = $list }
+}
+function Answer([int]$result, $json) {
+    return @('Broadcasting: Intent { flg=0x400000 cmp=quiet.launcher/.ArrangeReceiver }',
+             "Broadcast completed: result=$result, data=""$(B64 ($json | ConvertTo-Json -Depth 5 -Compress))""")
+}
+
 # A real adb.exe receives text: make every argument a string, as PowerShell would for a program.
 $argv = @($args | ForEach-Object { "$_" })
 $s.calls += , ($argv -join ' ')
@@ -88,6 +110,20 @@ switch -Regex ($argv -join ' ') {
     '^shell am start -a android\.settings\.SETTINGS$' {
         $s.top = 'com.android.tv.settings/.MainSettings'
         $out = 'Starting: Intent { act=android.settings.SETTINGS }'
+    }
+    '^shell am broadcast -n quiet\.launcher/\.ArrangeReceiver -a quiet\.launcher\.action\.GET_ARRANGEMENT$' {
+        if ($null -eq $s.installed) { $out = 'Broadcasting: Intent { }', 'Broadcast completed: result=0' }
+        else { $out = Answer 1 (Arranged) }
+    }
+    '^shell am broadcast -n quiet\.launcher/\.ArrangeReceiver -a quiet\.launcher\.action\.SET_ARRANGEMENT --es arrangement (\S+) --el version (\d+)( --ez replace true)?$' {
+        if ($null -eq $s.installed) { $out = 'Broadcasting: Intent { }', 'Broadcast completed: result=0'; break }
+        $sent = Unb64 $Matches[1] | ConvertFrom-Json
+        $replace = [bool]$Matches[3]
+        $current = if ($s.arrangement) { [long]$s.arrangement.version } else { 0 }
+        $s | Add-Member -Force -NotePropertyName last_sent -NotePropertyValue ([pscustomobject]@{ order = @($sent.order); hidden = @($sent.hidden); version = [long]$Matches[2]; replace = $replace })
+        if ($current -ne [long]$Matches[2] -and -not $replace) { $out = Answer 2 ([ordered]@{ version = $current }); break }
+        $s | Add-Member -Force -NotePropertyName arrangement -NotePropertyValue ([pscustomobject]@{ version = $current + 1; order = @($sent.order); hidden = @($sent.hidden) })
+        $out = Answer 1 ([ordered]@{ version = $current + 1 })
     }
     '^shell input keyevent KEYCODE_WAKEUP$' { $s | Add-Member -Force -NotePropertyName awake -NotePropertyValue $true }
     '^shell dumpsys activity activities$' {
