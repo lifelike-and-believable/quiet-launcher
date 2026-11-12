@@ -197,7 +197,7 @@ class ArrangeActivity : Activity() {
     private fun step(direction: ArrangeSession.Direction) {
         val pkg = session.moving ?: return
         session.step(direction)
-        refresh(select = pkg)
+        refresh(select = pkg, slide = true)
         announce(place(R.string.moving_step, pkg))
     }
 
@@ -214,7 +214,7 @@ class ArrangeActivity : Activity() {
         val pkg = session.moving ?: return
         session.putBack()
         status("")
-        refresh(select = pkg)
+        refresh(select = pkg, slide = true)
         announce(place(R.string.put_back, pkg))
     }
 
@@ -241,12 +241,19 @@ class ArrangeActivity : Activity() {
         window.decorView.announceForAccessibility(text)
     }
 
-    private fun refresh(select: String?) {
+    /**
+     * AC-6 and AC-7: the apps slide to their new places only while an app is being moved ([slide]);
+     * anything else (Hide, Show, putting an app down) draws them in place.
+     */
+    private fun refresh(select: String?, slide: Boolean = false) {
+        grid.itemAnimator = if (slide) slideAnimator else null
         items.set(session.shown, session.hidden)
         count.text = countText()
         grid.adapter?.notifyDataSetChanged()
         focus(select)
     }
+
+    private val slideAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
 
     private fun focus(pkg: String?) {
         val position = items.positionOf(pkg ?: return)
@@ -306,6 +313,7 @@ class ArrangeActivity : Activity() {
             id = R.id.arrange_grid
             layoutManager = ArrangeGridLayoutManager(this@ArrangeActivity, items)
             adapter = ArrangeAdapter(items, tiles)
+            itemAnimator = null
             clipToPadding = false
             clipChildren = false
             setPadding(0, px(14f), 0, 0)
