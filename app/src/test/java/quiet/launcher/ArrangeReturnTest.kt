@@ -32,10 +32,10 @@ class ArrangeReturnTest {
             val tile = robot.grid.findViewHolderForAdapterPosition(it)?.itemView
             tile == null || (tile.translationX == 0f && tile.translationY == 0f)
         })
-        assertEquals("app.n05", robot.focused?.tag)
     }
 
-    // arrange-mode#AC-8: Back from arrange mode.
+    // arrange-mode#AC-8: Back from arrange mode. (The selection after it is HoldTest's, which comes
+    // back through the hold; this one only stops and starts the screen.)
     @Test
     fun `AC-8 back from arrange mode the new order is there before the first frame and nothing slides`() {
         robot.controller.pause().stop()
@@ -63,5 +63,6 @@ class ArrangeReturnTest {
         assertEquals(0, adapter.indexOf("app.n05"))
         assertEquals(-1, adapter.indexOf("app.n03"))
         assertNoSlide()
+        assertEquals("app.n05", robot.focused?.tag)
     }
 }
