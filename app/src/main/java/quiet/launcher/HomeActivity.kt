@@ -154,6 +154,7 @@ class HomeActivity : Activity() {
             searchBox.setText("")
             hideKeyboard()
             updateStatus()
+            showArrangementNow()
             selectFirstNow()
             scheduleReload(selectFirst = true)
         }
@@ -172,6 +173,7 @@ class HomeActivity : Activity() {
         } else {
             // home-takeover#AC-12: draw what is there first, then read the apps again (app-list#AC-7),
             // keeping the selection, or the first app after a Home press (home-takeover#AC-4).
+            showArrangementNow()
             if (homePressed) selectFirstNow()
             scheduleReload(selectFirst = homePressed)
         }
@@ -389,7 +391,10 @@ class HomeActivity : Activity() {
         val focusElsewhere = !selectFirst && selected == null && window.decorView.findFocus() != null
         val oldIndex = adapter.indexOf(selected)
         // arranging-store#AC-6: read each time, so a changed arrangement shows the next time.
-        val apps = AppCatalog.arranged(AppCatalog.visible(source.read(), packageName), arrangements.load()).shown
+        val arrangement = arrangements.load()
+        listed = AppCatalog.visible(source.read(), packageName)
+        shownVersion = arrangement?.version
+        val apps = AppCatalog.arranged(listed, arrangement).shown
         adapter.submit(apps)
         emptyMessage.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
         if (apps.isEmpty()) {
@@ -407,6 +412,24 @@ class HomeActivity : Activity() {
         }
         if (selectFirst) grid.scrollToPosition(0)
         grid.post { focusTile(target) }
+    }
+
+    /** The apps last read, and the version of the arrangement the grid shows (null for none). */
+    private var listed: List<AppEntry> = emptyList()
+    private var shownVersion: Long? = null
+
+    /**
+     * arrange-mode#AC-8: a changed arrangement goes on the list already shown before the screen is
+     * drawn, so the old order never shows; the apps are read again afterwards as before (AC-12).
+     * Only the small arrangement file is read here, not the installed apps.
+     */
+    private fun showArrangementNow() {
+        val arrangement = arrangements.load()
+        if (arrangement?.version == shownVersion || listed.isEmpty()) return
+        shownVersion = arrangement?.version
+        val apps = AppCatalog.arranged(listed, arrangement).shown
+        adapter.submit(apps)
+        emptyMessage.visibility = if (apps.isEmpty()) View.VISIBLE else View.GONE
     }
 
     private var reloadPending = false
@@ -518,6 +541,8 @@ class HomeActivity : Activity() {
             id = R.id.app_grid
             layoutManager = EdgeStopGridLayoutManager(this@HomeActivity, COLUMNS)
             adapter = this@HomeActivity.adapter
+            // arrange-mode#AC-8: a new order or a new app is drawn in place; tiles never slide.
+            itemAnimator = null
             clipToPadding = false
             clipChildren = false
         }
