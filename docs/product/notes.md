@@ -275,5 +275,8 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
   bar before the page fills the screen again. The project lead called it a nit. The spike now also
   opens each service in its own full-screen window with no tab strip, to see whether switching
   windows avoids it.
-- Not yet tried: Alt+Shift+J (back to the last service), choosing a service that is already open,
-  the shortcut while a site's own player is full screen, and a search for a show.
+- YouTube behaved the same as the other five (second run).
+- Choosing a service that was already open switched to its tab, and Alt+Shift+J went back to the
+  last service from the launcher, both keeping the window full screen (third run).
+- Not yet tried: the shortcut while a site's own player is full screen, a search for a show, and
+  the window-per-service mode.
