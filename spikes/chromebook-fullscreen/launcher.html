@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Quiet Launcher spike</title>
+<style>
+  :root { --bg: #101418; --surface: #1c2228; --edge: #59646e; --text: #eef2f5; --muted: #a9b4bd; --accent: #8ab4f8; --note: #ffd28a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
+  .top { display: flex; gap: 16px; align-items: center; }
+  form { flex: 1; display: flex; }
+  input[type=search] { flex: 1; min-height: 56px; border-radius: 28px; background: var(--surface); border: 2px solid var(--edge);
+    color: var(--text); font-size: 20px; padding: 0 24px; }
+  button { font: inherit; color: var(--text); background: var(--surface); border: 2px solid var(--edge); border-radius: 28px; min-height: 56px; padding: 0 24px; cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin: 32px 0; }
+  .tile { aspect-ratio: 16 / 9; border-radius: 12px; border: none; font-size: 22px; font-weight: 600; }
+  .tile:hover, .tile:focus-visible { transform: scale(1.04); }
+  .spike { border-top: 2px solid var(--surface); padding-top: 20px; color: var(--muted); }
+  .spike h2 { color: var(--note); font-size: 18px; margin: 0 0 8px; }
+  .spike ol { margin: 0 0 12px; padding-left: 20px; line-height: 1.5; }
+  .spike label { display: block; margin: 8px 0; }
+  pre { background: var(--surface); color: var(--text); padding: 12px; border-radius: 8px; max-height: 260px; overflow: auto; white-space: pre-wrap; font-size: 14px; }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; }
+  kbd { background: var(--surface); border: 1px solid var(--edge); border-radius: 4px; padding: 1px 6px; color: var(--text); }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <form id="search"><input type="search" id="query" placeholder="Search for a show" aria-label="Search for a show"></form>
+  </div>
+  <div class="tiles" id="tiles"></div>
+
+  <section class="spike" aria-label="Spike">
+    <h2>Spike: try these, then copy the results</h2>
+    <ol>
+      <li>Go full screen (below, or the full-screen key). Open a service, start a video.</li>
+      <li>Press <kbd id="home-key">Alt+Shift+H</kbd>: does the launcher come back, still full screen?</li>
+      <li>Press <kbd id="last-key">Alt+Shift+J</kbd>, or choose the same service again: does it come back where you left it?</li>
+      <li>Put the video in the site's own full screen (its player button, or <kbd>f</kbd>), then press <kbd>Alt+Shift+H</kbd> again.</li>
+      <li>Repeat with two or three of your services, and try a search for a show.</li>
+    </ol>
+    <label><input type="checkbox" id="auto"> Go full screen whenever the launcher opens</label>
+    <div class="row">
+      <button id="full">Full screen now</button>
+      <button id="copy">Copy results</button>
+      <button id="clear">Clear results</button>
+    </div>
+    <pre id="log" aria-live="polite"></pre>
+  </section>
+</main>
+<script src="services.js"></script>
+<script src="launcher.js"></script>
+</body>
+</html>
