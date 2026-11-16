@@ -271,5 +271,9 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
   Chromebook did not.)
 - Alt+Shift+H reached the extension from inside each of those five services, and switching back to
   the launcher kept the window full screen every time.
+- Each switch, by the shortcut or by choosing a service, briefly shows Chrome's tabs and address
+  bar before the page fills the screen again. The project lead called it a nit. The spike now also
+  opens each service in its own full-screen window with no tab strip, to see whether switching
+  windows avoids it.
 - Not yet tried: Alt+Shift+J (back to the last service), choosing a service that is already open,
   the shortcut while a site's own player is full screen, and a search for a show.

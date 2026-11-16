@@ -10,6 +10,10 @@ back into view):
    new tab?
 3. Does any service's player take the key combination before Chrome sees it?
 4. Does Google's search show where a named show streams?
+5. In full screen, ChromeOS briefly shows the tabs and address bar when the shortcut switches tabs
+   or a service opens (first run, 2026-11-16). Does giving each service its own full-screen window,
+   with no tab strip, avoid that? The launcher page has a switch between the two modes, and each
+   log line says which mode it came from.
 
 Results go in `docs/product/notes.md`.
 
