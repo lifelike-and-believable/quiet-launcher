@@ -2,7 +2,7 @@
 id: persona-setup-person
 status: approved
 derived-from:
-  - concept#audience: 7b7c7d391b70
+  - concept#audience: 1222f66cbc65
 ---
 
 # Set-up person

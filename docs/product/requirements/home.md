@@ -2,7 +2,7 @@
 id: requirements-home
 status: approved
 derived-from:
-  - concept#vision: 3b8f50efc359
+  - concept#vision: 9a3eea9321fb
   - concept#non-goals: 5cb679e1139b
 ---
 

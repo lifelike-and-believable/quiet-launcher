@@ -2,10 +2,10 @@
 id: requirements-setup
 status: approved
 derived-from:
-  - concept#audience: 7b7c7d391b70
-  - concept#vision: 3b8f50efc359
+  - concept#audience: 1222f66cbc65
+  - concept#vision: 9a3eea9321fb
   - concept#non-goals: 5cb679e1139b
-  - concept#feasibility: e3e23889f1a7
+  - concept#feasibility: d044aa77ee28
 ---
 
 # Setup requirements
