@@ -10,8 +10,7 @@ conversation that started the project (2026-11-08); the project lead confirmed e
 claim on 2026-11-09. On 2026-11-16 the project lead asked for a matching dashboard on the
 household's Chromebook, as a Chrome extension with search, arranging, and media controls, built
 in this project; the same day they said what it is for (one place for every streaming service, in
-the quiet home screen's familiar interface). The claims still marked [proposed] await the project
-lead's confirmation. -->
+the quiet home screen's familiar interface), and confirmed every claim as written. -->
 
 ## Problem
 
@@ -65,14 +64,14 @@ returns Chrome to exactly how it was.
 - Building its own catalogue of what streams where, as long as Google's search or each app's own
   search can be reached instead.
 - Phones, tablets, or TVs that do not run Google TV or Android TV, and computers other than the
-  household's Chromebook [proposed].
+  household's Chromebook.
 - Controlling one device from the other: the Chromebook does not control the TV, and the TV does
-  not control the Chromebook [proposed].
+  not control the Chromebook.
 - Changes that need root access, or that leave the TV without a working home screen if the
   product is removed.
 - Showing advertising, or collecting usage data.
 - Publishing to the Play Store or the Chrome Web Store, or supporting households other than the
-  project lead's. The extension is loaded from the repository [proposed].
+  project lead's. The extension is loaded from the repository.
 - Bringing Google TV's other features (the watchlist, Google Play purchases, live TV channels) into
   the new home screen. They stay reachable through Google TV's own home screen, which a button on
   the new home screen opens on request (the project lead's decision, 2026-11-09).
