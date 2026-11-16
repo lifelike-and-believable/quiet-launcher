@@ -110,3 +110,4 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-09 | Gradle and Kotlin; standing go-ahead to install and remove test builds on the TV, restoring Google TV afterwards | `README.md`, `HANDOFF.md` |
 | 2026-11-09 | A **Google TV** button in the top row opens Google TV's own home screen, for anyone, until the next Home press or sleep (concept non-goal changed, REQ-home-12) | `docs/product/`, `docs/design/`, `docs/user/` |
 | 2026-11-09 | Take over Home without disabling or blocking the Google TV home app, because its results page is what search shows | `docs/product/concept.md` (Feasibility) |
+| 2026-11-16 | Add the household's Chromebook: a Chrome extension with the services, search, and arranging, inside this project (concept amended in #57; every claim confirmed by the project lead; media controls dropped, as ChromeOS has its own) | `docs/product/concept.md` |

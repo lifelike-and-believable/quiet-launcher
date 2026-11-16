@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Quiet Launcher spike (Chromebook full screen)",
+  "version": "0.1",
+  "description": "Throwaway spike: switching between a launcher and streaming services in full screen.",
+  "permissions": ["tabs", "storage"],
+  "background": { "service_worker": "background.js" },
+  "chrome_url_overrides": { "newtab": "launcher.html" },
+  "action": { "default_title": "Back to the launcher" },
+  "commands": {
+    "go-home": {
+      "suggested_key": { "default": "Alt+Shift+H", "chromeos": "Alt+Shift+H" },
+      "description": "Back to the launcher (the TV's Home button)"
+    },
+    "go-last": {
+      "suggested_key": { "default": "Alt+Shift+J", "chromeos": "Alt+Shift+J" },
+      "description": "Back to the last service"
+    }
+  }
+}
