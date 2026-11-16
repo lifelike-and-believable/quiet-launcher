@@ -9,7 +9,8 @@ back into view):
 2. Does the window stay full screen when the shortcut switches tabs, and when a service opens in a
    new tab?
 3. Does any service's player take the key combination before Chrome sees it?
-4. Does Google's search show where a named show streams?
+4. Does Google's search show where a named show streams? A plain search did not (2026-11-16), so
+   the launcher offers three to compare: Google, Google with "where to watch" added, and JustWatch.
 5. In full screen, ChromeOS briefly shows the tabs and address bar when the shortcut switches tabs
    or a service opens (first run, 2026-11-16). Does giving each service its own full-screen window,
    with no tab strip, avoid that? The launcher page has a switch between the two modes, and each

@@ -11,7 +11,7 @@ for (const s of SERVICES) {
 document.getElementById('search').addEventListener('submit', e => {
   e.preventDefault();
   const text = document.getElementById('query').value.trim();
-  if (text) chrome.runtime.sendMessage({ type: 'search', text });
+  if (text) chrome.runtime.sendMessage({ type: 'search', text, engine: document.getElementById('engine').value });
 });
 
 async function fullScreen(why) {

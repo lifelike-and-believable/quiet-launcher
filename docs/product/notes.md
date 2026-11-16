@@ -279,5 +279,9 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
 - Choosing a service that was already open switched to its tab, and Alt+Shift+J went back to the
   last service from the launcher, both keeping the window full screen (third run).
 - A search from the launcher ("Carrie") opened Google's results in a new tab, still full screen.
-- Not yet known: whether Google's results showed where the show streams, the shortcut while a
-  site's own player is full screen, and the window-per-service mode.
+  The results were ordinary web results, not a list of streaming services: the concept's
+  Feasibility claim that Google's web search shows where a show streams did not hold for this
+  query. The spike now offers three searches to compare: Google, Google with "where to watch"
+  added, and JustWatch's Canadian search.
+- Not yet known: which of those three shows where a show streams, the shortcut while a site's own
+  player is full screen, and the window-per-service mode.

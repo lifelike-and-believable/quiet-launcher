@@ -114,8 +114,15 @@ async function openService(name) {
   await chrome.storage.local.set({ lastTab: tab.id });
 }
 
-async function search(text) {
-  await openPage('https://www.google.com/search?q=' + encodeURIComponent(text), `Searched Google for "${text}"`);
+const ENGINES = {
+  'google': ['Google', t => 'https://www.google.com/search?q=' + encodeURIComponent(t)],
+  'google-watch': ['Google, "where to watch"', t => 'https://www.google.com/search?q=' + encodeURIComponent(t + ' where to watch')],
+  'justwatch': ['JustWatch', t => 'https://www.justwatch.com/ca/search?q=' + encodeURIComponent(t)],
+};
+
+async function search(text, engine = 'google') {
+  const [name, url] = ENGINES[engine] || ENGINES.google;
+  await openPage(url(text), `Searched ${name} for "${text}"`);
 }
 
 chrome.commands.onCommand.addListener(command => {
@@ -127,7 +134,7 @@ chrome.action.onClicked.addListener(() => goHome('Toolbar button'));
 
 chrome.runtime.onMessage.addListener(message => {
   if (message.type === 'open') openService(message.name);
-  if (message.type === 'search') search(message.text);
+  if (message.type === 'search') search(message.text, message.engine);
   if (message.type === 'log') log(message.text);
 });
 

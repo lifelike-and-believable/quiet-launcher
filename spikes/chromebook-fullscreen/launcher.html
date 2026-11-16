@@ -10,6 +10,7 @@
   main { max-width: 1400px; margin: 0 auto; padding: 32px 40px; }
   .top { display: flex; gap: 16px; align-items: center; }
   form { flex: 1; display: flex; }
+  select { font: inherit; color: var(--text); background: var(--surface); border: 2px solid var(--edge); border-radius: 28px; min-height: 56px; padding: 0 16px; }
   input[type=search] { flex: 1; min-height: 56px; border-radius: 28px; background: var(--surface); border: 2px solid var(--edge);
     color: var(--text); font-size: 20px; padding: 0 24px; }
   button { font: inherit; color: var(--text); background: var(--surface); border: 2px solid var(--edge); border-radius: 28px; min-height: 56px; padding: 0 24px; cursor: pointer; }
@@ -30,6 +31,11 @@
 <main>
   <div class="top">
     <form id="search"><input type="search" id="query" placeholder="Search for a show" aria-label="Search for a show"></form>
+    <select id="engine" aria-label="Search with">
+      <option value="google">Google</option>
+      <option value="google-watch">Google, "where to watch"</option>
+      <option value="justwatch">JustWatch (Canada)</option>
+    </select>
   </div>
   <div class="tiles" id="tiles"></div>
 
@@ -41,6 +47,7 @@
       <li>Press <kbd id="last-key">Alt+Shift+J</kbd>, or choose the same service again: does it come back where you left it?</li>
       <li>Put the video in the site's own full screen (its player button, or <kbd>f</kbd>), then press <kbd>Alt+Shift+H</kbd> again.</li>
       <li>Repeat with two or three of your services, and try a search for a show.</li>
+      <li>Search for the same show with each choice next to the search box: which one shows where it streams?</li>
       <li>Switch to <b>A full-screen window each</b> below, close the services' tabs, and do steps 1 to 4 again: do the tabs and address bar still flash?</li>
     </ol>
     <fieldset style="border:none;padding:0;margin:8px 0">
