@@ -278,5 +278,6 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
 - YouTube behaved the same as the other five (second run).
 - Choosing a service that was already open switched to its tab, and Alt+Shift+J went back to the
   last service from the launcher, both keeping the window full screen (third run).
-- Not yet tried: the shortcut while a site's own player is full screen, a search for a show, and
-  the window-per-service mode.
+- A search from the launcher ("Carrie") opened Google's results in a new tab, still full screen.
+- Not yet known: whether Google's results showed where the show streams, the shortcut while a
+  site's own player is full screen, and the window-per-service mode.
