@@ -11,7 +11,8 @@ claim on 2026-11-09. On 2026-11-16 the project lead asked for a matching dashboa
 household's Chromebook, as a Chrome extension with search, arranging, and media controls, built
 in this project; the same day they said what it is for (one place for every streaming service, in
 the quiet home screen's familiar interface), and confirmed every claim as written. Later that day
-they dropped the media controls, which ChromeOS already provides. -->
+they dropped the media controls, which ChromeOS already provides, and said it runs full screen,
+switching between the page and the services without the browser coming back into view. -->
 
 ## Problem
 
@@ -54,8 +55,10 @@ it was.
 
 On the household's Chromebook, a Chrome extension is the one place to reach every streaming service
 the household uses, in the interface the household already knows from the TV. Its page shows those
-services and nothing else, under the same names and in the same look as the TV's home screen; the services can be put in order and hidden, as on the TV. Its search
-box takes the name of a show and finds which service has it. Removing the extension
+services and nothing else, under the same names and in the same look as the TV's home screen; the
+services can be put in order and hidden, as on the TV. Its search box takes the name of a show and
+finds which service has it. It runs full screen, like the TV: the page and the services switch back
+and forth without the browser's tabs and toolbar coming back into view. Removing the extension
 returns Chrome to exactly how it was.
 
 ## Non-goals
