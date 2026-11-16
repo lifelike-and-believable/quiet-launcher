@@ -2,8 +2,8 @@
 id: requirements-home
 status: approved
 derived-from:
-  - concept#vision: 9a3eea9321fb
-  - concept#non-goals: 480568812ad6
+  - concept#vision: 954984c00650
+  - concept#non-goals: d3a92178012a
 ---
 
 # Home screen requirements

@@ -10,7 +10,8 @@ conversation that started the project (2026-11-08); the project lead confirmed e
 claim on 2026-11-09. On 2026-11-16 the project lead asked for a matching dashboard on the
 household's Chromebook, as a Chrome extension with search, arranging, and media controls, built
 in this project; the same day they said what it is for (one place for every streaming service, in
-the quiet home screen's familiar interface), and confirmed every claim as written. -->
+the quiet home screen's familiar interface), and confirmed every claim as written. Later that day
+they dropped the media controls, which ChromeOS already provides. -->
 
 ## Problem
 
@@ -54,8 +55,7 @@ it was.
 On the household's Chromebook, a Chrome extension is the one place to reach every streaming service
 the household uses, in the interface the household already knows from the TV. Its page shows those
 services and nothing else, under the same names and in the same look as the TV's home screen; the services can be put in order and hidden, as on the TV. Its search
-box takes the name of a show and finds which service has it. While something plays in any tab, the
-page shows what it is, with play and pause, and a way to go to that tab. Removing the extension
+box takes the name of a show and finds which service has it. Removing the extension
 returns Chrome to exactly how it was.
 
 ## Non-goals
@@ -67,6 +67,8 @@ returns Chrome to exactly how it was.
   household's Chromebook.
 - Controlling one device from the other: the Chromebook does not control the TV, and the TV does
   not control the Chromebook.
+- Controlling what plays in Chrome's tabs. ChromeOS's own media controls, in the shelf and Quick
+  Settings, already do that (the project lead's decision, 2026-11-16).
 - Changes that need root access, or that leave the TV without a working home screen if the
   product is removed.
 - Showing advertising, or collecting usage data.
@@ -87,9 +89,7 @@ name to Google's search opened Google TV's page for that show, with the app that
 - Google's assistant decides what the text means: a vague query can get a chat reply instead of
   results.
 
-On the Chromebook, a Chrome extension can replace the new tab page, list the tabs that are playing
-sound, and switch to one. Pausing and playing a tab's video needs the extension to run a small
-script in that tab, which Chrome allows only for sites the household grants it. For
+On the Chromebook, a Chrome extension can replace the new tab page; a plain web page cannot. For
 search, Google's web search shows which services stream a named show in many cases [to validate];
 the extension sends the text there, as the TV sends it to Google's search, rather than keeping a
 catalogue of its own.

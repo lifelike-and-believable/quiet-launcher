@@ -3,9 +3,9 @@ id: requirements-setup
 status: approved
 derived-from:
   - concept#audience: 1222f66cbc65
-  - concept#vision: 9a3eea9321fb
-  - concept#non-goals: 480568812ad6
-  - concept#feasibility: d044aa77ee28
+  - concept#vision: 954984c00650
+  - concept#non-goals: d3a92178012a
+  - concept#feasibility: 8469a7c45ea9
 ---
 
 # Setup requirements
