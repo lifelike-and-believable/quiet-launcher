@@ -283,5 +283,9 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
   Feasibility claim that Google's web search shows where a show streams did not hold for this
   query. The spike now offers three searches to compare: Google, Google with "where to watch"
   added, and JustWatch's Canadian search.
-- Not yet known: which of those three shows where a show streams, the shortcut while a site's own
-  player is full screen, and the window-per-service mode.
+- With each service in its own full-screen window (no tab strip), switching showed no flash: no
+  tabs or address bar appeared. Alt+Shift+H brought the launcher's window back.
+- In either mode, a video keeps playing in its window or tab after Alt+Shift+H brings the launcher
+  forward. On the TV, Home leaves the app, which usually pauses it.
+- Not yet known: which of the three searches shows where a show streams, and whether Alt+Shift+H
+  works while a site's own player is full screen.
