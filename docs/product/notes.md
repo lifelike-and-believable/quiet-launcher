@@ -253,3 +253,23 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
 - The top row at 1080p fits **Search for a show** (680 px), **Voice search**, **Google TV**,
   **Settings**, and the clock inside the safe area, with 24 px gaps.
 
+
+## The Chromebook
+
+- The project lead's Chromebook runs ChromeOS with Chrome 150 (`CrOS x86_64 14541.0.0`). One
+  person uses it.
+
+## Spike: the Chromebook launcher in full screen (2026-11-16)
+
+`spikes/chromebook-fullscreen/`, run by the project lead on the Chromebook:
+
+- An extension's keyboard shortcuts were free to take: Alt+Shift+H and Alt+Shift+J were assigned
+  as suggested, with nothing else on the Chromebook using them.
+- The launcher, as Chrome's new tab page, put its window in full screen when it opened.
+- Opening a service in a new tab kept the window full screen, for Netflix, Prime Video, MUBI, Tubi,
+  and Plex. (Headless Chromium in the agent's container had dropped full screen here; the
+  Chromebook did not.)
+- Alt+Shift+H reached the extension from inside each of those five services, and switching back to
+  the launcher kept the window full screen every time.
+- Not yet tried: Alt+Shift+J (back to the last service), choosing a service that is already open,
+  the shortcut while a site's own player is full screen, and a search for a show.
