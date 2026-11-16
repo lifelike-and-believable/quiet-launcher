@@ -7,7 +7,9 @@ status: approved
 
 <!-- docs/product/concept.md. The root artifact: it links to nothing. A first draft from the
 conversation that started the project (2026-11-08); the project lead confirmed every
-claim on 2026-11-09. -->
+claim on 2026-11-09. On 2026-11-16 the project lead asked for a matching dashboard on the
+household's Chromebook, as a Chrome extension with search, arranging, and media controls; the
+claims marked [proposed] come from that request and await the project lead's confirmation. -->
 
 ## Problem
 
@@ -25,13 +27,19 @@ Google offers two ways out, and each costs something people use:
 So today a household chooses between a quiet home screen and being able to type the name of a show
 and find which app has it.
 
+The household also watches on a Chromebook, where the same services are websites in Chrome. There,
+each service's front page is promotion of its own, finding which service has a show means
+searching each site in turn, and a show playing in another tab is paused by finding that tab
+first [proposed].
+
 ## Audience
 
 People who share a Google TV at home and want it to feel like their own device: they know which
 apps they use, they find the promotion distracting, and they still want to find a show without
 opening each app in turn.
 
-The product is for one household: the project lead's own, on a Chromecast with Google TV. The
+The product is for one household: the project lead's own, on a Chromecast with Google TV and on
+the household's Chromebook [proposed]. The
 repository is public and others may use it, but it is not published or supported for other
 households, so its setup can ask for things a published app could not (ADB from a computer,
 accessibility permissions).
@@ -44,16 +52,27 @@ app has it, across all the household's apps. Typed search across apps is the rea
 rather than use an existing replacement home screen. Turning it off returns the TV to exactly how
 it was.
 
+On the household's Chromebook, a Chrome extension gives the same quiet start [proposed]. Its page
+shows the household's streaming services and nothing else, under the same names and in the same
+look as the TV's home screen; the services can be put in order and hidden, as on the TV. Its search
+box takes the name of a show and finds which service has it. While something plays in any tab, the
+page shows what it is, with play and pause, and a way to go to that tab. Removing the extension
+returns Chrome to exactly how it was.
+
 ## Non-goals
 
 - Recommending what to watch. The product never adds content the household did not ask for.
 - Building its own catalogue of what streams where, as long as Google's search or each app's own
   search can be reached instead.
-- Phones, tablets, or TVs that do not run Google TV or Android TV.
+- Phones, tablets, or TVs that do not run Google TV or Android TV, and computers other than the
+  household's Chromebook [proposed].
+- Controlling one device from the other: the Chromebook does not control the TV, and the TV does
+  not control the Chromebook [proposed].
 - Changes that need root access, or that leave the TV without a working home screen if the
   product is removed.
 - Showing advertising, or collecting usage data.
-- Publishing to the Play Store, or supporting households other than the project lead's.
+- Publishing to the Play Store or the Chrome Web Store, or supporting households other than the
+  project lead's. The extension is loaded from the repository [proposed].
 - Bringing Google TV's other features (the watchlist, Google Play purchases, live TV channels) into
   the new home screen. They stay reachable through Google TV's own home screen, which a button on
   the new home screen opens on request (the project lead's decision, 2026-11-09).
@@ -68,3 +87,10 @@ name to Google's search opened Google TV's page for that show, with the app that
   button while leaving that app installed and working, rather than disabling or blocking it.
 - Google's assistant decides what the text means: a vague query can get a chat reply instead of
   results.
+
+On the Chromebook, a Chrome extension can replace the new tab page, list the tabs that are playing
+sound, and switch to one. Pausing and playing a tab's video needs the extension to run a small
+script in that tab, which Chrome allows only for sites the household grants it [proposed]. For
+search, Google's web search shows which services stream a named show in many cases [to validate];
+the extension sends the text there, as the TV sends it to Google's search, rather than keeping a
+catalogue of its own.
