@@ -15,6 +15,9 @@ back into view):
    or a service opens (first run, 2026-11-16). Does giving each service its own full-screen window,
    with no tab strip, avoid that? The launcher page has a switch between the two modes, and each
    log line says which mode it came from.
+6. Does pausing the video when the launcher comes back work on each service, and does it stay
+   paused? The log says how many videos it paused and whether any started again within 2 seconds.
+   This needs the streaming sites as permissions, which Chrome lists when the extension loads.
 
 Results go in `docs/product/notes.md`.
 

@@ -77,6 +77,32 @@ async function openPage(url, why) {
   return tab;
 }
 
+// Pause every video in a tab, in every frame, and check two seconds later that it stayed paused
+// (some players start again on their own).
+async function pauseVideos(tab, name) {
+  try {
+    const paused = await chrome.scripting.executeScript({
+      target: { tabId: tab.id, allFrames: true },
+      func: () => {
+        let playing = 0;
+        for (const v of document.querySelectorAll('video')) if (!v.paused) { v.pause(); playing++; }
+        return playing;
+      },
+    });
+    const count = paused.reduce((n, r) => n + (r.result || 0), 0);
+    if (!count) return log(`Pause: nothing was playing on ${name}`);
+    await wait(2000);
+    const after = await chrome.scripting.executeScript({
+      target: { tabId: tab.id, allFrames: true },
+      func: () => [...document.querySelectorAll('video')].filter(v => !v.paused).length,
+    });
+    const resumed = after.reduce((n, r) => n + (r.result || 0), 0);
+    await log(`Pause: paused ${count} video(s) on ${name}; 2 s later ${resumed ? resumed + ' PLAYING AGAIN' : 'still paused'}`);
+  } catch (e) {
+    await log(`Pause: could not pause ${name}: ${e.message}`);
+  }
+}
+
 async function goHome(source) {
   const focused = await chrome.windows.getLastFocused({ populate: true });
   const active = focused.tabs.find(t => t.active);
@@ -84,6 +110,7 @@ async function goHome(source) {
     const service = serviceOf(active.url || '');
     await chrome.storage.local.set({ lastTab: active.id });
     await log(`${source} received while on ${service ? service.name : (active.url || 'an unknown page')}`);
+    pauseVideos(active, service ? service.name : 'this page');
   } else {
     await log(`${source} received while on the launcher`);
   }

@@ -12,7 +12,8 @@ household's Chromebook, as a Chrome extension with search, arranging, and media 
 in this project; the same day they said what it is for (one place for every streaming service, in
 the quiet home screen's familiar interface), and confirmed every claim as written. Later that day
 they dropped the media controls, which ChromeOS already provides, and said it runs full screen,
-switching between the page and the services without the browser coming back into view. -->
+switching between the page and the services without the browser coming back into view. After
+the full-screen spike, they decided that going back to the page pauses the video left behind. -->
 
 ## Problem
 
@@ -70,8 +71,10 @@ returns Chrome to exactly how it was.
   household's Chromebook.
 - Controlling one device from the other: the Chromebook does not control the TV, and the TV does
   not control the Chromebook.
-- Controlling what plays in Chrome's tabs. ChromeOS's own media controls, in the shelf and Quick
-  Settings, already do that (the project lead's decision, 2026-11-16).
+- Controls for what plays in Chrome's tabs, such as play and pause buttons. ChromeOS's own media
+  controls, in the shelf and Quick Settings, already do that (the project lead's decision,
+  2026-11-16). The one exception: going back to the extension's page pauses the video left behind,
+  as Home does on the TV (the project lead's decision, 2026-11-16, after the full-screen spike).
 - Changes that need root access, or that leave the TV without a working home screen if the
   product is removed.
 - Showing advertising, or collecting usage data.
@@ -92,7 +95,9 @@ name to Google's search opened Google TV's page for that show, with the app that
 - Google's assistant decides what the text means: a vague query can get a chat reply instead of
   results.
 
-On the Chromebook, a Chrome extension can replace the new tab page; a plain web page cannot. For
+On the Chromebook, a Chrome extension can replace the new tab page; a plain web page cannot. It can
+also pause a site's video, by running a small script in that site's pages, which Chrome allows only
+for the sites the extension is granted when it is installed. For
 search, Google's web search shows which services stream a named show in many cases [to validate];
 the extension sends the text there, as the TV sends it to Google's search, rather than keeping a
 catalogue of its own.

@@ -287,5 +287,10 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
   tabs or address bar appeared. Alt+Shift+H brought the launcher's window back.
 - In either mode, a video keeps playing in its window or tab after Alt+Shift+H brings the launcher
   forward. On the TV, Home leaves the app, which usually pauses it.
+- The project lead decided that going back to the launcher should pause the video, as Home does
+  on the TV. The spike now pauses every video in the service's page (in all its frames) on
+  Alt+Shift+H and checks two seconds later that it stayed paused; it needs the streaming sites as
+  host permissions. In the agent's container, a stand-in video paused and stayed paused in both
+  modes. Not yet tried on the real services.
 - Not yet known: which of the three searches shows where a show streams, and whether Alt+Shift+H
   works while a site's own player is full screen.
