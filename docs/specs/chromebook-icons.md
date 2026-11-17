@@ -32,7 +32,7 @@ launcher uses that.
 | AC-10 | The service's name is shown once, under the tile, not also on it (the project lead's change, 2026-11-17); a tile without a kept icon shows Chrome's small icon larger, at 48 px. | test: tile-name.test.js |
 | AC-9 | A manifest icon whose `purpose` is only `monochrome` is passed over: it is a one-colour silhouette, not the service's own artwork (found trying the real sites: YouTube's 512 px manifest icon is one). | test: icons-purpose.test.js |
 | AC-2 | When a service is added and Chrome allows its site, the extension fetches its icon once and keeps it in `chrome.storage.local` (`icons`, by service id) as image data. A response that is not an image is not kept. | test: icons.test.js, icons-extension.test.js |
-| AC-3 | A tile with a kept icon shows it, 64 px with rounded corners, on the service's colour; without one, the tile is as before (Chrome's small icon). | test: icons-extension.test.js |
+| AC-3 | A tile with a kept icon shows it, 64 px (100 px since chromebook-pictures#AC-1) with rounded corners, on the service's colour; without one, the tile is as before (Chrome's small icon). | test: icons-extension.test.js |
 | AC-4 | Nothing is fetched for a site Chrome has not allowed, and nothing from any site other than the service's own (and the addresses its page or manifest names for icons). | test: icons.test.js |
 | AC-5 | A site whose icon cannot be had (no page, no icon, not an image, an error) leaves the tile as it was, with no message. | test: icons.test.js, icons-extension.test.js |
 | AC-6 | Services that have no kept icon get one when the launcher next opens, if their site is allowed (so services added before this slice, or allowed later with **Allow pausing**, get theirs). | test: icons-extension.test.js |
