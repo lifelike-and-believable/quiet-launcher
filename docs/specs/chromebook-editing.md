@@ -3,6 +3,7 @@ status: draft
 tests: [tests/chromebook]
 tests-commit: [b321a09dfc9c7a34a41e24697c8d51804d2a09df, e22277442c9a5218bcf81f932aed714340eda2aa]
 unlocks:
+  - tests/chromebook/editing-extension.test.js: a service's menu gains **Choose picture** after **Hide** or **Show** (chromebook-pictures#AC-2, the project lead's decision of 2026-11-17), so the menus the tests list include it; nothing else changes
   - tests/chromebook/editing-extension.test.js: adding a service no longer asks Chrome anything (AC-7 as amended, the project lead's decision of 2026-11-17), so the tests expect no permission request on adding from the list or by address; nothing else changes
   - tests/chromebook/permission-request.test.js: with every site granted at installation, Chrome answers a request for a granted site at once instead of showing a prompt; either answer is accepted, a refusal still fails; nothing else changes
   - tests/chromebook/editing.test.js: AC-7's test expected the permission pattern *://*.<site>/*, which Chrome refuses (AC-11, found on the project lead's Chromebook); it expects https://*.<site>/*, and nothing else changes

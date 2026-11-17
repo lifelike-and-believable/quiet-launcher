@@ -4,6 +4,7 @@ import { hintText, shortcutStatus, formatClock } from './lib/launcher-view.js';
 import { loadServices, loadSession, originPattern } from './lib/services.js';
 import { addService, moveService, setHidden, removeService, serviceFromAddress, permissionPattern, siteOf } from './lib/editing.js';
 import { CATALOGUE } from './lib/catalogue.js';
+import { readBannersFile, matchBanners, importStatus } from './lib/tv-banners.js';
 
 const $ = id => document.getElementById(id);
 const el = (tag, props = {}, ...children) => {
@@ -76,10 +77,12 @@ function tile(s, { open, allowed, hidden }) {
   const notes = [open ? 'Open' : '', allowed ? '' : 'Videos won’t pause'].filter(Boolean);
   t.setAttribute('aria-label', [s.name, ...notes].join(', '));
   const own = keptIcons[s.id];
-  // chromebook-icons#AC-3, AC-10: the icon alone on the tile; the name once, underneath.
-  const icon = el('img', { alt: '', draggable: false, className: own ? 'own' : 'small',
-    src: own || `/_favicon/?pageUrl=${encodeURIComponent(s.url)}&size=64` });
-  const banner = el('span', { className: 'banner' }, icon);
+  // chromebook-icons#AC-3, AC-10, chromebook-pictures#AC-1, AC-3: a chosen picture fills the tile;
+  // otherwise the icon alone on it; the name once, underneath.
+  const picture = keptPictures[s.id];
+  const icon = el('img', { alt: '', draggable: false, className: picture ? 'picture' : own ? 'own' : 'small',
+    src: picture || own || `/_favicon/?pageUrl=${encodeURIComponent(s.url)}&size=64` });
+  const banner = el('span', { className: picture ? 'banner has-picture' : 'banner' }, icon);
   banner.style.background = s.colour;
   t.append(banner, ' ', el('span', { className: 'name', textContent: s.name }));
   if (open) t.append(' ', el('span', { className: 'badge', textContent: 'Open' }));
@@ -96,10 +99,12 @@ function tile(s, { open, allowed, hidden }) {
 
 let drawn = []; // the list last drawn, which a drag starts from
 let keptIcons = {}; // chromebook-icons#AC-3: each service's own icon, once fetched
+let keptPictures = {}; // chromebook-pictures#AC-3: pictures the viewer chose
 async function render() {
   const list = await services();
   drawn = list;
   keptIcons = (await chrome.storage.local.get('icons')).icons || {};
+  keptPictures = (await chrome.storage.local.get('pictures')).pictures || {};
   const visible = list.filter(s => !s.hidden);
   const hiddenOnes = list.filter(s => s.hidden);
   const session = await loadSession(chrome);
@@ -119,7 +124,13 @@ async function render() {
     add.dataset.id = '__add';
     add.dataset.nav = '';
     add.addEventListener('click', openAddPanel);
-    grid.append(add);
+    // tv-banners#AC-6: the TV's banners, from the file quiet-banners saves on the PC. A tool, not a
+    // tile: it is no service, and moving one never passes it.
+    const tvPictures = el('button', { type: 'button', className: 'tool' }, el('span', { className: 'banner', textContent: 'Import TV pictures' }));
+    tvPictures.dataset.id = '__import';
+    tvPictures.dataset.nav = '';
+    tvPictures.addEventListener('click', () => { $('banners-file').value = ''; $('banners-file').click(); });
+    grid.append(add, tvPictures);
     if (hiddenOnes.length) {
       parts.push(el('p', { className: 'section', textContent: 'Hidden services: not on the launcher. Select one to show it again.' }),
         el('div', { className: 'grid' }, ...hiddenOnes.map(s => tile(s, info(s)))));
@@ -139,6 +150,8 @@ function openMenu(s, from, allowed) {
   const items = [
     ['Move', () => lift(s.id)],
     [s.hidden ? 'Show' : 'Hide', async () => { await save(setHidden(await loadServices(chrome), s.id, !s.hidden)); }],
+    ['Choose picture', () => choosePicture(s.id)],
+    ...(keptPictures[s.id] ? [['Remove picture', () => setPicture(s.id, null)]] : []),
     ...(allowed ? [] : [['Allow pausing', () => askPermission(s)]]),
     ['Remove', () => confirmRemove(s)],
     ['Cancel', () => {}],
@@ -254,14 +267,82 @@ function confirmRemove(s) {
   remove.addEventListener('click', async () => {
     closeOverlays();
     await save(removeService(await loadServices(chrome), s.id));
-    const { icons = {} } = await chrome.storage.local.get('icons'); // chromebook-icons#AC-7
+    const { icons = {}, pictures = {} } = await chrome.storage.local.get(['icons', 'pictures']); // chromebook-icons#AC-7
     delete icons[s.id];
-    await chrome.storage.local.set({ icons });
+    delete pictures[s.id]; // chromebook-pictures#AC-6
+    await chrome.storage.local.set({ icons, pictures });
     chrome.runtime.sendMessage({ type: 'close-service', id: s.id });
     $('edit').focus();
   });
   cancel.focus();
 }
+
+// A picture of the viewer's own for a service (chromebook-pictures#AC-3 to AC-5): ChromeOS's file
+// picker, then the image scaled to fit 640 by 360 and kept as a data: address.
+let pictureFor = null;
+function choosePicture(id) {
+  pictureFor = id;
+  $('picture-file').value = '';
+  $('picture-file').click(); // still inside the menu's click, so Chrome lets it open
+}
+async function setPicture(id, data) {
+  const { pictures = {} } = await chrome.storage.local.get('pictures');
+  if (data) pictures[id] = data; else delete pictures[id];
+  await chrome.storage.local.set({ pictures });
+}
+$('picture-file').addEventListener('change', async () => {
+  const file = $('picture-file').files[0];
+  const id = pictureFor;
+  if (!file || !id) return;
+  let bitmap;
+  try {
+    if (!file.type.startsWith('image/')) throw new Error('not an image');
+    bitmap = await createImageBitmap(file);
+  } catch {
+    setStatus('That file isn’t a picture.');
+    return;
+  }
+  const data = fitPicture(bitmap, file.type === 'image/png');
+  setStatus(shortcutStatus(commands));
+  await setPicture(id, data);
+  document.querySelector(`[data-id="${CSS.escape(id)}"]`)?.focus();
+});
+
+// A picture scaled to fit 640 by 360 and kept as a data: address (chromebook-pictures#AC-3).
+function fitPicture(bitmap, png) {
+  const scale = Math.min(1, 640 / bitmap.width, 360 / bitmap.height);
+  const canvas = el('canvas', { width: Math.round(bitmap.width * scale), height: Math.round(bitmap.height * scale) });
+  canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return png ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.9);
+}
+
+// The TV's banners as pictures (tv-banners#AC-7 to AC-9): every service, hidden ones too, matched to
+// the file's apps by name, or failing that by its site in the app's package.
+$('banners-file').addEventListener('change', async () => {
+  const file = $('banners-file').files[0];
+  if (!file) return;
+  const apps = readBannersFile(await file.text().catch(() => ''));
+  if (!apps) {
+    setStatus('That file isn’t a TV pictures file. Make one with quiet-banners on the PC.');
+    return;
+  }
+  const list = await services();
+  const { pictures: found, unmatched } = matchBanners(list, apps);
+  const { pictures = {} } = await chrome.storage.local.get('pictures');
+  for (const [id, picture] of Object.entries(found)) {
+    try {
+      const bitmap = await createImageBitmap(await (await fetch(picture)).blob());
+      pictures[id] = fitPicture(bitmap, true);
+    } catch {
+      delete found[id];
+      unmatched.push(list.find(s => s.id === id).name);
+    }
+  }
+  const names = list.map(s => s.name).filter(n => unmatched.includes(n)); // in the launcher's order
+  setStatus(importStatus(Object.keys(found).length, list.length, names));
+  await chrome.storage.local.set({ pictures });
+  document.querySelector('[data-id="__import"]')?.focus();
+});
 
 // Asking Chrome for a site; it must be the first thing a click or key does (chromebook-editing#AC-7, AC-8).
 function askPermission(s) {

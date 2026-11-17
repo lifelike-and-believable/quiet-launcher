@@ -10,6 +10,10 @@ arrangement sent is also kept as a dated copy. On a TV whose apps have never bee
 setting the quiet home screen up again, say), it offers to put back the newest copy. Everything it
 prints goes to a log in Documents\QuietLauncher. See docs/user/arranging.md.
 
+.PARAMETER Banners
+Save the banner of every app on the TV in tv-banners.json in Documents\QuietLauncher, for the
+Chromebook launcher's Import TV pictures (docs/user/chromebook.md). Changes nothing on the TV.
+
 .PARAMETER File
 Send this arrangement file (a dated copy, say) without opening Notepad.
 
@@ -26,12 +30,16 @@ powershell -ExecutionPolicy Bypass -File .\quiet-arrange.ps1
 powershell -ExecutionPolicy Bypass -File .\quiet-arrange.ps1 -File .\arrangement-17241HFDD2WLBM-2026-11-10-180000.txt
 
 .EXAMPLE
+powershell -ExecutionPolicy Bypass -File .\quiet-arrange.ps1 -Banners
+
+.EXAMPLE
 powershell -ExecutionPolicy Bypass -File .\quiet-arrange.ps1 -Tv 10.0.0.202:39423
 #>
 param(
     [string]$File,
     [string]$Tv,
-    [switch]$Pair
+    [switch]$Pair,
+    [switch]$Banners
 )
 
 $ErrorActionPreference = 'Stop'
@@ -43,7 +51,7 @@ $started = Get-Date
 
 $folder = if ($env:QUIET_FOLDER) { $env:QUIET_FOLDER } else { Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'QuietLauncher' }
 New-Item -ItemType Directory -Force $folder | Out-Null
-$log = Join-Path $folder ('arrange-' + $started.ToString('yyyy-MM-dd-HHmmss') + '.log')
+$log = Join-Path $folder ($(if ($Banners) { 'banners-' } else { 'arrange-' }) + $started.ToString('yyyy-MM-dd-HHmmss') + '.log')
 $answers = @(if ($env:QUIET_ANSWERS) { $env:QUIET_ANSWERS -split '\|' })
 $answerIndex = 0
 $fast = [bool]$env:QUIET_FAST
@@ -352,26 +360,57 @@ function Send-File([string]$path, $read, [long]$version) {
     Done
 }
 
+# ---- The TV's banners, for the Chromebook (docs/specs/tv-banners.md, AC-4, AC-5) ----
+
+function Save-Banners($apps) {
+    $saved = @()
+    $none = @()
+    foreach ($app in $apps) {
+        $answer = Receiver @('-a', 'quiet.launcher.action.GET_BANNER', '--es', 'package', $app.package)
+        if ($answer.code -eq 0) {
+            Say '[2/2] Banners: the quiet launcher on this TV is too old to send its banners.'
+            Say '      Update it with quiet-setup, then run this again.'
+            Stop-Setup
+        }
+        if ($answer.code -eq 1 -and $answer.json -and $answer.json.png) {
+            $saved += [ordered]@{ name = $answer.json.name; package = $answer.json.package; picture = "data:image/png;base64,$($answer.json.png)" }
+        } else {
+            $none += $app.name
+        }
+    }
+    $path = Join-Path $folder 'tv-banners.json'
+    $json = [ordered]@{ from = 'Quiet Launcher TV'; apps = @($saved) } | ConvertTo-Json -Depth 4
+    # Without a byte-order mark, which Windows PowerShell's UTF8 would add, so any reader takes it.
+    [IO.File]::WriteAllText($path, $json, (New-Object Text.UTF8Encoding $false))
+    Say "[2/2] Banners: saved $($saved.Count) of $(@($apps).Count) apps' banners in $path"
+    if ($none.Count -gt 0) { Say ('      No banner: ' + ($none -join ', ')) }
+    Say '      Copy this file to the Chromebook (with Google Drive or a USB stick). Then, on the'
+    Say '      launcher, choose Edit services, then Import TV pictures, and pick the file.'
+    Done
+}
+
 # ---- 1. ADB and the TV ----
 
-Say 'Quiet Launcher: arrange apps'
+$first = if ($Banners) { '[1/2]' } else { '[1/3]' }
+Say $(if ($Banners) { 'Quiet Launcher: TV banners for the Chromebook' } else { 'Quiet Launcher: arrange apps' })
 Say ''
 $script:adb = Find-Adb
 if (-not $script:adb) {
-    Say '[1/3] ADB: NOT FOUND'
+    Say "$first ADB: NOT FOUND"
     Say '      Install it with: winget install Google.PlatformTools'
     Say '      then open a new PowerShell window and run this again.'
     Stop-Setup
 }
-$script:serial = Connect-Tv '[1/3]'
+$script:serial = Connect-Tv $first
 $tvSerial = (Tv shell getprop ro.serialno).Trim()
 $current = Get-Arrangement
 if ($current.code -ne 1 -or -not $current.json) {
-    Say '[1/3] TV: the quiet home screen is not set up on this TV. Run quiet-setup first.'
+    Say "$first TV: the quiet home screen is not set up on this TV. Run quiet-setup first."
     Stop-Setup
 }
 $apps = @($current.json.apps)
 $version = [long]$current.json.version
+if ($Banners) { Save-Banners $apps }
 
 # ---- 2. The arrangement ----
 

@@ -18,6 +18,8 @@ class ArrangeReceiver : BroadcastReceiver() {
                 intent.getLongExtra(EXTRA_VERSION, -1),
                 intent.getBooleanExtra(EXTRA_REPLACE, false),
             )
+            // tv-banners#AC-3: the PC's quiet-banners, behind the same permission.
+            BannerRequests.ACTION_GET -> BannerRequests(context).banner(intent.getStringExtra(BannerRequests.EXTRA_PACKAGE))
             else -> return
         }
         setResult(answer.code, answer.data, null)

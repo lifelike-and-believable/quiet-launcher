@@ -48,6 +48,7 @@
             <intent-filter>
                 <action android:name="quiet.launcher.action.GET_ARRANGEMENT" />
                 <action android:name="quiet.launcher.action.SET_ARRANGEMENT" />
+                <action android:name="quiet.launcher.action.GET_BANNER" />
             </intent-filter>
         </receiver>
         <!-- docs/specs/home-takeover.md, AC-6: only Android can bind it. Its own process, so the

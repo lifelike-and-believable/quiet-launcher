@@ -67,7 +67,7 @@ site's own icon.
 | Default, first service selected | ![Default](chromebook/default.png) | **Open** marks services whose window is open |
 | Typing a search | ![Search](chromebook/search.png) | The status line says where results open |
 | Editing | ![Editing](chromebook/edit.png) | **Add a service** is the last tile; a service the extension cannot reach says so |
-| A service's menu | ![Menu](chromebook/edit-menu.png) | **Move**, **Hide**, **Remove**, **Cancel** |
+| A service's menu | ![Menu](chromebook/edit-menu.png) | **Move**, **Hide**, **Choose picture**, **Remove**, **Cancel** |
 | Moving a service | ![Moving](chromebook/moving.png) | Arrow keys or drag; Enter or release puts it down; Esc puts it back |
 | A hidden service | ![Hidden](chromebook/hidden.png) | Hidden services are listed after the others while editing |
 | Add a service | ![Add](chromebook/add.png) | A list of services in Canada, or another site's address |
@@ -86,9 +86,10 @@ site's own icon.
 - **Status line**: reserved space under the top row, empty unless there is something to say, so a
   message never moves the services.
 - **Services**: a grid, five per row at 1366 px wide and as many as fit at other widths, each a
-  rounded tile with the service's own icon on the service's colour, and the service's name
-  underneath, as on the TV; the name is not repeated on the tile (the project lead's change,
-  2026-11-17). The icon is the largest the site publishes for phones' home
+  rounded tile with the service's own icon, about 100 px, on the service's colour, and the
+  service's name underneath, as on the TV; the name is not repeated on the tile (the project lead's
+  change, 2026-11-17). A picture the viewer has chosen for the service (see Editing) fills the whole
+  tile instead, as the TV's banners do. The icon is the largest the site publishes for phones' home
   screens and installed web apps (usually 180 to 512 px), fetched from the site once and kept on
   the Chromebook; until it has one, or if the site publishes none, the tile shows the small icon
   Chrome keeps for the site (the project lead's decision, 2026-11-17). In the viewer's order, hidden ones left out. A service whose
@@ -122,10 +123,26 @@ site's own icon.
 
 ## Editing
 
-- **Edit services** turns the grid into an editing grid: the services, then **Add a service**, then
-  any hidden services under **Hidden services: not on the launcher. Select one to show it again.**
+- **Edit services** turns the grid into an editing grid: the services, then **Add a service** and
+  **Import TV pictures**, then any hidden services under **Hidden services: not on the launcher. Select one to show it again.**
 - Selecting a service opens its menu: **Move**, **Hide** (or **Show** for a hidden one),
-  **Remove**, **Cancel**. Esc closes the menu.
+  **Choose picture** (and **Remove picture** when it has one), **Remove**, **Cancel**. Esc closes
+  the menu.
+- **Choose picture** opens ChromeOS's own file picker for an image. The image is scaled to fit
+  640 by 360 px and kept on the Chromebook, and fills the service's tile, cropped to the tile's
+  shape if it is not 16:9; it stays when the service's icon is fetched again. **Remove picture**
+  goes back to the icon. A file that is not an image is not kept, and the status line says
+  **That file isn't a picture.** (the project lead's decision, 2026-11-17: the TV's banners show
+  the logo and lettering together, which a site's square icon cannot).
+- **Import TV pictures** opens ChromeOS's file picker for the file **quiet-banners** saves on the
+  PC (`tv-banners.json`, copied to the Chromebook): the TV app draws each app's banner and the
+  script keeps them all in that file. Every service, hidden ones too, whose name matches a TV app's
+  (ignoring case, spaces, punctuation, a leading "The", and a trailing "+"), or failing that whose
+  site's name is part of exactly one app's package, gets that banner as its picture, replacing any
+  it had. The status line says **Pictures set for <n> of <total> services.** and names those with
+  no TV banner, which keep what they had. A file that is not one says **That file isn't a TV
+  pictures file. Make one with quiet-banners on the PC.** (the project lead's decision,
+  2026-11-17: the tiles should look like the TV's).
 - **Move** lifts the service. The arrow keys move it one place at a time, or it can be dragged with
   the touchpad or a finger. Enter, or releasing a drag, puts it down; Esc puts it back where it was.
 - **Remove** asks **Remove <name>? Its window will close.** with **Remove** and **Cancel**, since a

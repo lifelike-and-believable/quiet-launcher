@@ -37,11 +37,11 @@ test('chromebook-editing#AC-1: Edit services starts editing', async () => {
 test('chromebook-editing#AC-2: selecting a service opens its menu, and does not open the service', async () => {
   const windowsBefore = (await ext.windows()).length;
   await tile('Alpha').click();
-  assert.deepEqual(await menu().getByRole('menuitem').allTextContents(), ['Move', 'Hide', 'Remove', 'Cancel']);
+  assert.deepEqual(await menu().getByRole('menuitem').allTextContents(), ['Move', 'Hide', 'Choose picture', 'Remove', 'Cancel']);
   await page.keyboard.press('Escape');
   assert.equal(await menu().count(), 0);
   await tile('Gamma').click();
-  assert.deepEqual(await menu().getByRole('menuitem').allTextContents(), ['Move', 'Hide', 'Allow pausing', 'Remove', 'Cancel']);
+  assert.deepEqual(await menu().getByRole('menuitem').allTextContents(), ['Move', 'Hide', 'Choose picture', 'Allow pausing', 'Remove', 'Cancel']);
   await menu().getByRole('menuitem', { name: 'Cancel' }).click();
   assert.equal(await menu().count(), 0);
   assert.equal((await ext.windows()).length, windowsBefore, 'no service opened');
@@ -87,7 +87,7 @@ test('chromebook-editing#AC-4: Hide and Show', async () => {
   assert.equal((await stored()).find(s => s.name === 'Beta').hidden, true);
   assert.equal(await page.locator('#services .tile.hidden', { hasText: 'Beta' }).count(), 1);
   await page.locator('#services .tile.hidden', { hasText: 'Beta' }).click();
-  assert.deepEqual(await menu().getByRole('menuitem').allTextContents(), ['Move', 'Show', 'Remove', 'Cancel']);
+  assert.deepEqual(await menu().getByRole('menuitem').allTextContents(), ['Move', 'Show', 'Choose picture', 'Remove', 'Cancel']);
   await menu().getByRole('menuitem', { name: 'Show' }).click();
   await settle();
   assert.equal((await stored()).find(s => s.name === 'Beta').hidden, false);

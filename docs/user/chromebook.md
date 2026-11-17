@@ -2,7 +2,7 @@
 id: docs-chromebook
 status: approved
 derived-from:
-  - design-chromebook: 7c3e3417833a
+  - design-chromebook: ba785dd6c062
   - story-chromebook-launcher: aeb2d1142c30
   - story-chromebook-open-service: 0115b9f34e7e
   - story-chromebook-go-back: 3342b71ad5f4
@@ -91,17 +91,40 @@ The launcher keeps no record of what you search for.
 ## Arrange your services
 
 1. Choose **Edit services**.
-2. Select a service. Its menu offers **Move**, **Hide**, **Remove**, and **Cancel**.
+2. Select a service. Its menu offers **Move**, **Hide**, **Choose picture**, **Remove**, and
+   **Cancel**.
    - **Move**: move it with the arrow keys, or drag it with the touchpad or your finger. Press
      **Enter** or let go to put it down; **Esc** puts it back where it was.
    - **Hide**: it leaves the launcher but stays in your list. Hidden services are shown after the
      others while you edit; select one and choose **Show** to bring it back.
+   - **Choose picture**: pick an image saved on the Chromebook, such as the service's logo with its
+     name, to fill its tile the way the TV's banners do. A wide picture (16:9) fits best. **Remove
+     picture** goes back to the service's icon.
    - **Remove**: it leaves your list altogether, and its window closes. To have it again, add it
      again.
 3. Choose **Done**.
 
 Changes are saved as you make them, and are kept when Chrome or the Chromebook restarts. Your
 Chromebook's list is its own: it does not change the TV's, or the other way round.
+
+## Use the TV's banners
+
+The TV's tiles show each app's banner, with its logo and name. To give the Chromebook's tiles the
+same pictures:
+
+1. On the PC, in the Quiet Launcher folder, double-click **quiet-banners** (`quiet-banners.cmd`).
+   It connects to the TV as quiet-arrange does (docs-arranging) and saves every app's banner in
+   `tv-banners.json`, in `Documents\QuietLauncher`. It changes nothing on the TV.
+2. Copy `tv-banners.json` to the Chromebook, for example with Google Drive or a USB stick.
+3. On the launcher, choose **Edit services**, then **Import TV pictures**, and pick the file.
+
+Each of your services whose name matches a TV app's (Apple TV+ matches Apple TV) gets that app's
+banner as its picture, replacing any it had. The status line says how many were set and names the
+services with no TV banner; they keep their icon or picture, and you can choose one for them with
+**Choose picture**. Import again whenever you like: nothing else changes.
+
+If quiet-banners says the quiet launcher on the TV is too old, update it with quiet-setup (docs-setup)
+first.
 
 ## Go back to browsing
 
