@@ -130,6 +130,9 @@ switch -Regex ($argv -join ' ') {
         # with none; a TV app from before banners (no "banners") ignores the question.
         if ($null -eq $s.installed -or $null -eq $s.PSObject.Properties['banners']) { $out = 'Broadcasting: Intent { }', 'Broadcast completed: result=0'; break }
         $pkg = $Matches[1]
+        # "no_answer": packages whose question gets no answer, as when the TV app hangs drawing one
+        # and Android kills it.
+        if ($s.PSObject.Properties['no_answer'] -and @($s.no_answer) -contains $pkg) { $out = 'Broadcasting: Intent { }', 'Broadcast completed: result=0'; break }
         $app = @($s.apps | Where-Object { $_ -and $_.package -eq $pkg }) | Select-Object -First 1
         $png = if ($s.banners.PSObject.Properties[$pkg]) { $s.banners.$pkg } else { $null }
         if (-not $app) { $out = Answer 3 ([ordered]@{ error = "$pkg is not an app on the home screen" }) }

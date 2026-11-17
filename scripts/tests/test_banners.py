@@ -71,6 +71,20 @@ class test_banners(unittest.TestCase):
         self.assertIn("      Update it with quiet-setup, then run this again.", out)
         self.assertFalse((a.pc.folder / "tv-banners.json").exists())
 
+    # tv-banners#AC-4: on the TV, the app hung drawing Disney+'s banner and the script took the
+    # missing answer for an older app, saving nothing.
+    def test_an_app_with_no_answer_is_named_and_the_others_are_saved(self):
+        a = Arranging(self, banners_tv(no_answer=[PKG["Prime Video"]]))
+        code, out = a.run("-Banners", answers=())
+        self.assertEqual(code, 0, out)
+        saved = json.loads((a.pc.folder / "tv-banners.json").read_text(encoding="utf-8-sig"))
+        self.assertEqual(["YouTube", "Google Play Store", "Netflix"], [app["name"] for app in saved["apps"]])
+        self.assertIn(f"[2/2] Banners: saved 3 of 5 apps' banners in {a.pc.folder / 'tv-banners.json'}", out)
+        self.assertIn("      No answer from the TV: Prime Video", out)
+        self.assertIn("      No banner: Tubi", out)
+        self.assertNotIn("too old", out)
+        self.assertEqual(len(APPS), len(banner_calls(a)), "it goes on to the other apps")
+
     # tv-banners#AC-5
     def test_without_the_app_it_says_to_run_setup(self):
         a = Arranging(self, tv(installed=None, apps=APPS, arrangement=None, banners=PNGS))

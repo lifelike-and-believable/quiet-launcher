@@ -65,5 +65,9 @@ class BannerRequests(
         const val EXTRA_PACKAGE = "package"
         const val MAX_WIDTH = 640
         const val MAX_HEIGHT = 360
+
+        /** At most this many characters in an answer: a broadcast's result goes through Binder as UTF-16, and
+         *  Binder carries about 1 MB at once (tv-banners#AC-1). */
+        const val MAX_ANSWER_CHARS = 200_000
     }
 }
