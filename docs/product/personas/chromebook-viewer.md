@@ -25,9 +25,9 @@ persona-chromebook-viewer#goals. -->
 
 - A software developer: comfortable loading an unpacked extension in Chrome's developer mode, and
   with keyboard shortcuts.
-- A Chromebook with ChromeOS and Chrome 150, its keyboard and touchpad.
-- Streaming services used on it include Prime Video, YouTube, MUBI, Tubi, and Plex; no Netflix
-  subscription.
+- A Chromebook with ChromeOS and Chrome 150, its keyboard, touchpad, and touchscreen.
+- Streaming services: Prime Video, YouTube, Apple TV+, Criterion Channel, MUBI, CBC Gem, Tubi, Plex,
+  and myfilmfriend; no Netflix subscription.
 
 ## Context of use
 
@@ -51,4 +51,6 @@ else uses the Chromebook, so nothing needs guarding against another person's acc
 - The full-screen spike on their Chromebook on 2026-11-16 (`docs/product/notes.md`): Chrome 150;
   the services they opened; the flash of tabs and address bar; videos playing on; Google's search
   missing the series *Carrie*.
-- Whether the Chromebook has a touchscreen, and how often they watch on it. [to validate]
+- The project lead's answer on 2026-11-17: the list of services, and that the Chromebook has a
+  touchscreen.
+- How often they watch on it. [to validate]
