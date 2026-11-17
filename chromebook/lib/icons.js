@@ -68,6 +68,9 @@ export async function fetchServiceIcon(service, fetchFn = fetch, allowed = async
         const icons = m.ok ? ((await m.json()).icons || []) : [];
         for (const icon of icons) {
           if (!icon.src) continue;
+          // AC-9: a one-colour silhouette is not the service's own artwork.
+          const purposes = (icon.purpose || 'any').toLowerCase().split(/\s+/);
+          if (purposes.every(p => p === 'monochrome')) continue;
           candidates.push({ url: new URL(icon.src, manifestUrl).href, size: sizeOf(icon.sizes), type: icon.type });
         }
       } catch { /* a manifest that cannot be read is left out */ }

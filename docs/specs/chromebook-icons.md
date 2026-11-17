@@ -1,6 +1,7 @@
 ---
 status: draft
 tests: [tests/chromebook]
+tests-commit: [f5ae040fd1a9182d7f99974d07afe1fe8c998e3f, 89a3d4f5fafeb1458c7925c76de01160bab1c705]
 ---
 
 # The Chromebook launcher: each service's own icon
