@@ -98,6 +98,8 @@ name to Google's search opened Google TV's page for that show, with the app that
 On the Chromebook, a Chrome extension can replace the new tab page; a plain web page cannot. It can
 also pause a site's video, by running a small script in that site's pages, which Chrome allows only
 for the sites the extension is granted when it is installed. For
-search, Google's web search shows which services stream a named show in many cases [to validate];
-the extension sends the text there, as the TV sends it to Google's search, rather than keeping a
-catalogue of its own.
+search, the extension sends the text to JustWatch's search for Canada, which lists every film and
+show with that name and, for each, the services that stream it, with links to them [proposed]. It
+keeps no catalogue of its own. Google's web search was tried first and did not do this: a search
+for "Carrie" gave ordinary results, and with "where to watch" added it gave only the film, not the
+show (spike, 2026-11-16, in `docs/product/notes.md`).
