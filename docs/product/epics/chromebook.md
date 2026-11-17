@@ -7,12 +7,13 @@ derived-from:
   - requirements-chromebook#REQ-chromebook-3: 9c35de05b65a
   - requirements-chromebook#REQ-chromebook-4: c9e62cf62621
   - requirements-chromebook#REQ-chromebook-5: 0803033b5a70
-  - requirements-chromebook#REQ-chromebook-6: 30317a79c71e
+  - requirements-chromebook#REQ-chromebook-6: 6de348bc8ebb
   - requirements-chromebook#REQ-chromebook-7: 692aae0e30fa
   - requirements-chromebook#REQ-chromebook-8: 077b320dba35
   - requirements-chromebook#REQ-chromebook-9: b874979dd6d0
   - requirements-chromebook#REQ-chromebook-10: 4bed4a55da39
   - requirements-chromebook#REQ-chromebook-11: f40779b811e8
+  - requirements-chromebook#REQ-chromebook-12: 0831b2aacc81
   - persona-chromebook-viewer#goals: 322e3fb02f13
   - persona-chromebook-viewer#frustrations: 574438d89687
 ---
@@ -41,8 +42,8 @@ them, find which service has a title, and go back to ordinary browsing when they
   (REQ-chromebook-1, 5, 10).
 - Open a service in its own full-screen window, or go back to it where it was left
   (REQ-chromebook-2, 5, 7).
-- Go back to the launcher, which pauses the video, or straight back to the last service
-  (REQ-chromebook-6, 7).
+- Go back to the launcher, which pauses the video, or straight back to the last service; by
+  shortcut, or by touch in tablet mode (REQ-chromebook-6, 7, 12).
 - Search JustWatch for a title and go to the service that has it (REQ-chromebook-8).
 - Add, remove, arrange, and hide services (REQ-chromebook-3, 4, 10).
 - Install the extension from the repository, change its shortcuts, and remove it cleanly

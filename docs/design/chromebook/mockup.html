@@ -124,7 +124,7 @@
     default: 'Default: the launcher, first service selected', search: 'Typing a search',
     edit: 'Editing services', 'edit-menu': 'Editing: a service’s menu', moving: 'Editing: moving a service',
     add: 'Add a service', permission: 'Chrome asks for permission on the service’s site', hidden: 'Editing: a hidden service',
-    empty: 'No services yet', 'shortcut-taken': 'A shortcut is taken by something else', open: 'Prime Video selected, already open',
+    empty: 'No services yet', 'home-button': 'A service in tablet mode, just touched: the Home button', 'shortcut-taken': 'A shortcut is taken by something else', open: 'Prime Video selected, already open',
   };
   document.getElementById('label').textContent = 'Mock-up — ' + (labels[state] || state);
   if (state === 'default') focus('s0');
@@ -167,6 +167,15 @@
     grid.remove();
     document.getElementById('extra').innerHTML = '<div class="empty">No services yet.<br>Choose <b>Edit services</b>, then <b>Add a service</b>.</div>';
     focus('edit');
+  }
+  if (state === 'home-button') {
+    document.querySelector('.safe').innerHTML = '';
+    document.getElementById('hint').remove();
+    document.body.style.background = '#000';
+    document.body.insertAdjacentHTML('beforeend',
+      '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#666;font-size:22px">A service’s video, full screen (stand-in)</div>' +
+      '<div style="position:absolute;left:24px;bottom:24px;width:64px;height:64px;border-radius:32px;border:2px solid #59646e;background:rgba(16,20,24,.85);display:flex;align-items:center;justify-content:center">' +
+      '<svg width="30" height="30" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 9.5V21h5v-6h4v6h5V9.5" fill="none" stroke="#eef2f5" stroke-width="2" stroke-linejoin="round"/></svg></div>');
   }
   if (state === 'shortcut-taken') {
     focus('s0');

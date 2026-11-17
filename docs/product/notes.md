@@ -308,6 +308,12 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
 
 The project lead asked for a touchscreen way back to the launcher, for tablet mode. The spike
 gained a Home button on service pages (shown on touch, fading after 4 seconds) and pausing
-whenever the launcher's window comes forward by any route. Results from the Chromebook still to
-come; what the container could and could not try is in the spike's README.
+whenever the launcher's window comes forward by any route. What the container could and could not
+try is in the spike's README.
+
+- On the Chromebook in tablet mode (2026-11-17): the button showed when the screen was touched and
+  did not get in the way of anything on the sites. The project lead found the bottom-left corner
+  fine for now.
+- Not reported: pausing when the launcher is brought forward from the tablet-mode overview. It is
+  written into the requirements and will be checked in the build.
 

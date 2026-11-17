@@ -16,7 +16,8 @@ order; one user; full screen; a window per service; pause when going back; JustW
 and the full-screen spike in docs/product/notes.md. What the project lead decided is written as
 decided. On 2026-11-17 the project lead accepted the agent's proposals and changed one thing: the
 launcher does not replace Chrome's new tab page, and comes up only with its shortcut
-(REQ-chromebook-1). -->
+(REQ-chromebook-1). Amended the same day for tablet mode: REQ-chromebook-12, and pausing however the
+launcher comes forward (REQ-chromebook-6). -->
 
 ## REQ-chromebook-1: The launcher is one key away
 
@@ -74,7 +75,9 @@ Release: first
 Pressing the launcher's shortcut (Alt+Shift+H unless changed) from a service brings the launcher
 forward within 1 second and pauses any video playing in that service's window, which stays paused
 until someone plays it again (concept, Non-goals: the project lead's decision of 2026-11-16).
-Nothing that is not playing is touched.
+Nothing that is not playing is touched. The same pause happens however the launcher comes forward:
+by the shortcut, by the touch control in REQ-chromebook-12, or by switching windows in ChromeOS
+(the tablet-mode overview, Alt+Tab, or a click).
 
 ## REQ-chromebook-7: Back to a service where it was left
 
@@ -115,6 +118,15 @@ Release: first
 The project lead installs the extension from the repository with Chrome's developer mode for
 extensions, following written steps; nothing is published (concept, Non-goals). Removing the
 extension returns Chrome to exactly how it was, with no leftover windows or settings.
+
+## REQ-chromebook-12: Back to the launcher by touch
+
+Release: first
+
+With no keyboard, as in tablet mode, touching a service's page shows a control for a few seconds
+that brings the launcher back, as the shortcut does (REQ-chromebook-6). It shows over the site's own
+full-screen player too, and does not get in the way of the site (the project lead's request,
+2026-11-17; tried in the tablet-mode spike).
 
 ## Constraints
 

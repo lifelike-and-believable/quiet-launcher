@@ -10,7 +10,7 @@ derived-from:
 # Go back to the launcher, and the video pauses
 
 <!-- docs/product/stories/chromebook/go-back.md. Release: first (epic-chromebook).
-REQ-chromebook-6, 7. -->
+REQ-chromebook-6, 7, 12. -->
 
 As the Chromebook viewer, I want the launcher's shortcut to work like Home on the TV, so that I can
 leave a service without its video playing on behind me, and get back to it just as quickly.
@@ -26,3 +26,8 @@ leave a service without its video playing on behind me, and get back to it just 
 - The shortcuts work while the service's own player is full screen.
 - For a service whose site I did not give the extension permission on, the launcher still comes
   back, but its video is not paused.
+- In tablet mode, touching a service's page shows a Home button in its bottom-left corner for a few
+  seconds; tapping it does what Alt+Shift+H does. It shows over the site's own full-screen player,
+  and does not cover anything I need on the site.
+- Bringing the launcher forward any other way (the tablet-mode overview, Alt+Tab, a click) also
+  pauses the video I left.
