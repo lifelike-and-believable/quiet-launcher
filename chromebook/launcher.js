@@ -139,7 +139,7 @@ function openMenu(s, from, allowed) {
   const items = [
     ['Move', () => lift(s.id)],
     [s.hidden ? 'Show' : 'Hide', async () => { await save(setHidden(await loadServices(chrome), s.id, !s.hidden)); }],
-    ...(allowed ? [] : [['Allow pausing', () => askPermission(s.site)]]),
+    ...(allowed ? [] : [['Allow pausing', () => askPermission(s)]]),
     ['Remove', () => confirmRemove(s)],
     ['Cancel', () => {}],
   ];
@@ -264,8 +264,8 @@ function confirmRemove(s) {
 }
 
 // Asking Chrome for a site; it must be the first thing a click or key does (chromebook-editing#AC-7, AC-8).
-function askPermission(site) {
-  return chrome.permissions.request({ origins: [permissionPattern(site)] }).catch(() => false)
+function askPermission(s) {
+  return chrome.permissions.request({ origins: [permissionPattern(s.site, s.url)] }).catch(() => false)
     .then(() => { chrome.runtime.sendMessage({ type: 'refresh-icons' }); return render(); });
 }
 
@@ -307,7 +307,7 @@ function openAddPanel() {
   (choices.querySelector('.choice:not(.on)') || field).focus();
 
   function add(entry) {
-    const asked = chrome.permissions.request({ origins: [permissionPattern(siteOf(entry.url))] }).catch(() => false);
+    const asked = chrome.permissions.request({ origins: [permissionPattern(siteOf(entry.url), entry.url)] }).catch(() => false);
     (async () => {
       const { list, service } = addService(await loadServices(chrome), entry);
       closeOverlays();

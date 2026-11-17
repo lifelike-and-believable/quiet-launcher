@@ -131,7 +131,7 @@ test('chromebook-editing#AC-7: choosing one asks for its site and adds it at the
   await page.locator('#services .add').click();
   await page.getByRole('dialog', { name: 'Add a service' }).locator('.choice', { hasText: 'Crave' }).click();
   await settle();
-  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['*://*.crave.ca/*'] }]);
+  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['https://*.crave.ca/*'] }]);
   const list = await stored();
   assert.equal(list[list.length - 1].name, 'Crave');
   assert.equal(list[list.length - 1].url, 'https://www.crave.ca/');
@@ -158,7 +158,7 @@ test('chromebook-editing#AC-7: an address is added by name of its site; text tha
   const added = (await stored()).at(-1);
   assert.equal(added.name, 'localhost');
   assert.equal(added.url, `https://localhost:${new URL(ext.url('localhost', 'x')).port}/delta`);
-  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['*://*.localhost/*'] }]);
+  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['https://localhost/*'] }]);
 });
 
 test('chromebook-editing#AC-8: Allow pausing asks Chrome again for the site', async () => {
@@ -166,7 +166,7 @@ test('chromebook-editing#AC-8: Allow pausing asks Chrome again for the site', as
   await tile('Gamma').click();
   await menu().getByRole('menuitem', { name: 'Allow pausing' }).click();
   await settle();
-  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['*://*.127.0.0.1/*'] }]);
+  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['http://127.0.0.1/*'] }]);
 });
 
 test('chromebook-editing#AC-1: Done ends editing; Esc does too', async () => {

@@ -6,9 +6,13 @@ export function siteOf(url) {
   return new URL(url).hostname.replace(/^www\./, '');
 }
 
-// The permission asked for on a site, covering its subdomains (chromebook-editing#AC-7).
-export function permissionPattern(site) {
-  return `*://*.${site}/*`;
+// The permission asked for on a site (chromebook-editing#AC-7, AC-11): in the service's own scheme,
+// since Chrome refuses "*://" against a manifest that lists https://*/* and http://*/*; covering
+// the site's subdomains, except for localhost or an IP address, which have none.
+export function permissionPattern(site, url = 'https://') {
+  const scheme = url.startsWith('http://') ? 'http' : 'https';
+  const bare = !site.includes('.') || /^\d+(\.\d+){3}$/.test(site) || site.includes(':');
+  return `${scheme}://${bare ? '' : '*.'}${site}/*`;
 }
 
 // A service from an address the viewer typed, or null if it is not a site address (AC-7).
