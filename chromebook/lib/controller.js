@@ -1,13 +1,15 @@
 // The launcher's window rules (docs/specs/chromebook-launcher.md, chromebook-services.md).
 // Everything goes through the chrome API object it is given, so the rules can be tested without a
 // browser.
-import { loadServices, loadSession, serviceOfWindow, pauseVideosInPage } from './services.js';
+import { loadServices, loadSession, serviceOfWindow, pauseVideosInPage, originPattern } from './services.js';
+import { fetchServiceIcon } from './icons.js';
 
 export const LAUNCHER_PAGE = 'launcher.html';
 const SEARCH = 'https://www.justwatch.com/ca/search';
 const hostOf = url => { try { return new URL(url).hostname; } catch { return ''; } };
 
 export function createController(chrome) {
+  const fetchingIcons = new Set();
   const launcherUrl = chrome.runtime.getURL(LAUNCHER_PAGE);
   const isLauncherTab = tab => (tab.url || tab.pendingUrl || '').startsWith(launcherUrl);
 
@@ -219,6 +221,26 @@ export function createController(chrome) {
         lastService: service.id,
       });
       await chrome.storage.session.set({ searchWindow: null }); // it is the service's now
+    },
+
+    // chromebook-icons#AC-2, AC-6: each allowed service without a kept icon gets its own.
+    async refreshIcons() {
+      const services = await loadServices(chrome);
+      const allowed = s => chrome.permissions.contains({ origins: [originPattern(s.url)] }).catch(() => false);
+      for (const s of services) {
+        const { icons = {} } = await chrome.storage.local.get('icons');
+        if (icons[s.id] || fetchingIcons.has(s.id)) continue;
+        fetchingIcons.add(s.id);
+        try {
+          const data = await fetchServiceIcon(s, (...a) => fetch(...a), allowed);
+          if (!data) continue;
+          const latest = (await chrome.storage.local.get('icons')).icons || {};
+          const stillThere = (await loadServices(chrome)).some(x => x.id === s.id);
+          if (stillThere) await chrome.storage.local.set({ icons: { ...latest, [s.id]: data } });
+        } finally {
+          fetchingIcons.delete(s.id);
+        }
+      }
     },
 
     noteFocus,

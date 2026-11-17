@@ -75,7 +75,9 @@ function tile(s, { open, allowed, hidden }) {
   t.dataset.nav = '';
   const notes = [open ? 'Open' : '', allowed ? '' : 'Videos won’t pause'].filter(Boolean);
   t.setAttribute('aria-label', [s.name, ...notes].join(', '));
-  const icon = el('img', { alt: '', draggable: false, src: `/_favicon/?pageUrl=${encodeURIComponent(s.url)}&size=32` });
+  const own = keptIcons[s.id];
+  const icon = el('img', { alt: '', draggable: false, className: own ? 'own' : '',
+    src: own || `/_favicon/?pageUrl=${encodeURIComponent(s.url)}&size=32` });
   const banner = el('span', { className: 'banner' }, icon, ' ', el('span', { className: 'title', textContent: s.name }));
   banner.style.background = s.colour;
   t.append(banner, ' ', el('span', { className: 'name', textContent: s.name }));
@@ -92,9 +94,11 @@ function tile(s, { open, allowed, hidden }) {
 }
 
 let drawn = []; // the list last drawn, which a drag starts from
+let keptIcons = {}; // chromebook-icons#AC-3: each service's own icon, once fetched
 async function render() {
   const list = await services();
   drawn = list;
+  keptIcons = (await chrome.storage.local.get('icons')).icons || {};
   const visible = list.filter(s => !s.hidden);
   const hiddenOnes = list.filter(s => s.hidden);
   const session = await loadSession(chrome);
@@ -248,6 +252,9 @@ function confirmRemove(s) {
   remove.addEventListener('click', async () => {
     closeOverlays();
     await save(removeService(await loadServices(chrome), s.id));
+    const { icons = {} } = await chrome.storage.local.get('icons'); // chromebook-icons#AC-7
+    delete icons[s.id];
+    await chrome.storage.local.set({ icons });
     chrome.runtime.sendMessage({ type: 'close-service', id: s.id });
     $('edit').focus();
   });
@@ -256,7 +263,8 @@ function confirmRemove(s) {
 
 // Asking Chrome for a site; it must be the first thing a click or key does (chromebook-editing#AC-7, AC-8).
 function askPermission(site) {
-  return chrome.permissions.request({ origins: [permissionPattern(site)] }).catch(() => false).then(() => render());
+  return chrome.permissions.request({ origins: [permissionPattern(site)] }).catch(() => false)
+    .then(() => { chrome.runtime.sendMessage({ type: 'refresh-icons' }); return render(); });
 }
 
 // Adding a service (chromebook-editing#AC-6, AC-7).
@@ -304,6 +312,7 @@ function openAddPanel() {
       setStatus(shortcutStatus(commands));
       await save(list);
       await asked;
+      chrome.runtime.sendMessage({ type: 'refresh-icons' }); // chromebook-icons#AC-2
       await render();
       document.querySelector(`[data-id="${CSS.escape(service.id)}"]`)?.focus();
       say(`${service.name} added`);
@@ -312,6 +321,7 @@ function openAddPanel() {
 }
 
 await render();
+chrome.runtime.sendMessage({ type: 'refresh-icons' }); // chromebook-icons#AC-6
 chrome.storage.onChanged.addListener(() => { if (!dragging) render(); });
 window.addEventListener('focus', () => { if (!dragging) render(); });
 

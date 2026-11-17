@@ -28,6 +28,7 @@ launcher uses that.
 | # | Criterion | Verified by |
 |---|---|---|
 | AC-1 | From a service's page, the icon chosen is the largest offered by its web app manifest (`<link rel="manifest">`, `icons`) or its `apple-touch-icon` and `icon` links with sizes, with addresses taken relative to the page; with none, `/apple-touch-icon.png` on the site. SVG and icons smaller than 96 px are passed over when a larger one is offered. | test: icons.test.js |
+| AC-9 | A manifest icon whose `purpose` is only `monochrome` is passed over: it is a one-colour silhouette, not the service's own artwork (found trying the real sites: YouTube's 512 px manifest icon is one). | test: icons-purpose.test.js |
 | AC-2 | When a service is added and Chrome allows its site, the extension fetches its icon once and keeps it in `chrome.storage.local` (`icons`, by service id) as image data. A response that is not an image is not kept. | test: icons.test.js, icons-extension.test.js |
 | AC-3 | A tile with a kept icon shows it, 64 px with rounded corners, above the name on the service's colour; without one, the tile is as before (Chrome's small icon). | test: icons-extension.test.js |
 | AC-4 | Nothing is fetched for a site Chrome has not allowed, and nothing from any site other than the service's own (and the addresses its page or manifest names for icons). | test: icons.test.js |

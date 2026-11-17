@@ -58,3 +58,4 @@ button:focus-visible, .search:focus-within { outline: 4px solid var(--focus); ou
 .btn.primary { background: #8ab4f8; color: #0b1a33; border-color: #8ab4f8; font-weight: 600; }
 .choice:focus-visible, .btn:focus-visible, .row input:focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 8px var(--ring); }
 body.editing .tile:not(.add):not(.hidden) { touch-action: none; user-select: none; }
+.banner img.own { width: 64px; height: 64px; border-radius: 14px; }

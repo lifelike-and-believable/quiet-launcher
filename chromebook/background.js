@@ -16,6 +16,7 @@ chrome.tabs.onUpdated.addListener((tabId, change, tab) => globalThis.quietLaunch
 chrome.windows.onRemoved.addListener(windowId => globalThis.quietLauncher.onWindowRemoved(windowId));
 
 chrome.runtime.onMessage.addListener(message => {
+  if (message?.type === 'refresh-icons') globalThis.quietLauncher.refreshIcons();
   if (message?.type === 'home-button') globalThis.quietLauncher.goHome();
   if (message?.type === 'back-to-browsing') globalThis.quietLauncher.backToBrowsing();
   if (message?.type === 'open-service') globalThis.quietLauncher.openService(message.id);
