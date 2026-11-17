@@ -95,7 +95,8 @@ name to Google's search opened Google TV's page for that show, with the app that
 - Google's assistant decides what the text means: a vague query can get a chat reply instead of
   results.
 
-On the Chromebook, a Chrome extension can replace the new tab page; a plain web page cannot. It can
+On the Chromebook, a Chrome extension can take a keyboard shortcut that works from any page, and
+open and switch between its own full-screen windows; a plain web page can do neither. It can
 also pause a site's video, by running a small script in that site's pages, which Chrome allows only
 for the sites the extension is granted when it is installed. For
 search, the extension sends the text to JustWatch's search for Canada, which lists every film and

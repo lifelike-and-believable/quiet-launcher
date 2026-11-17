@@ -4,7 +4,7 @@ status: approved
 derived-from:
   - concept#vision: 0028ebdf37ce
   - concept#non-goals: f049f9bec803
-  - concept#feasibility: 338f9a3ca734
+  - concept#feasibility: aaa8e96fc36e
 ---
 
 # Chromebook requirements
@@ -14,15 +14,22 @@ extension that is one place for every streaming service, in the TV's familiar in
 Vision). Written on 2026-11-17 from the project lead's answers of 2026-11-16 (its own list and
 order; one user; full screen; a window per service; pause when going back; JustWatch for search)
 and the full-screen spike in docs/product/notes.md. What the project lead decided is written as
-decided; the agent's proposals are marked [proposed] until the project lead accepts them. -->
+decided. On 2026-11-17 the project lead accepted the agent's proposals and changed one thing: the
+launcher does not replace Chrome's new tab page, and comes up only with its shortcut
+(REQ-chromebook-1). -->
 
-## REQ-chromebook-1: The launcher is one key or one new tab away
+## REQ-chromebook-1: The launcher is one key away
 
 Release: first
 
-Opening a new tab in Chrome shows the launcher. From any service's window, a keyboard shortcut
-brings the launcher back, the way Home does on the TV (REQ-chromebook-6). There is never more than
-one launcher: asking for it again brings the open one forward.
+A keyboard shortcut (Alt+Shift+H unless changed) brings up the launcher in its own full-screen
+window, from anywhere in Chrome: from a service's window, the way Home does on the TV
+(REQ-chromebook-6), or from ordinary browsing. There is never more than one launcher: asking for it
+again brings the open one forward.
+
+Chrome stays a browser: the launcher does not replace the new tab page, and opening a new tab or
+window works as it always has. The launcher never takes over a window the project lead is browsing
+in (the project lead's decision, 2026-11-17).
 
 ## REQ-chromebook-2: Services and nothing else
 
@@ -37,10 +44,10 @@ name, in the same look as the TV's home screen.
 Release: first
 
 The project lead adds a service by choosing it from a list of streaming services available in
-Canada, or by giving the address of any other site, and can remove one again [proposed]. Adding a
+Canada, or by giving the address of any other site, and can remove one again. Adding a
 service asks Chrome for permission on that service's site, which pausing needs
 (REQ-chromebook-6); if the permission is refused, the service is still added and opens, but is not
-paused [proposed].
+paused.
 
 ## REQ-chromebook-4: Arranging and hiding
 
@@ -85,21 +92,21 @@ The launcher has a search box. Submitting text opens JustWatch's search for Cana
 text, in its own full-screen window: it lists every film and show with that name and the services
 that stream each one, with links (concept, Feasibility). Following a link to one of the project
 lead's services makes that window the service's window, so the shortcuts and pausing work in it as
-in any other [proposed].
+in any other.
 
 ## REQ-chromebook-9: The shortcuts can be changed
 
 Release: first
 
 Both shortcuts can be changed in Chrome's own shortcut settings (`chrome://extensions/shortcuts`),
-and the launcher shows the shortcuts in use [proposed].
+and the launcher shows the shortcuts in use.
 
 ## REQ-chromebook-10: Keyboard, touchpad, or touch
 
 Release: first
 
 Everything on the launcher (opening a service, searching, arranging) works with the keyboard alone,
-and with the touchpad or the touchscreen [proposed].
+and with the touchpad or the touchscreen.
 
 ## REQ-chromebook-11: Loaded from the repository, removed cleanly
 
@@ -107,8 +114,7 @@ Release: first
 
 The project lead installs the extension from the repository with Chrome's developer mode for
 extensions, following written steps; nothing is published (concept, Non-goals). Removing the
-extension returns Chrome to exactly how it was: its own new tab page and no leftover windows or
-settings.
+extension returns Chrome to exactly how it was, with no leftover windows or settings.
 
 ## Constraints
 
@@ -123,6 +129,6 @@ settings.
 - For each of the project lead's services, going to the launcher and back with the shortcuts, in
   full screen, shows no tabs or address bar and leaves the video paused, every time.
 - Searching for ten shows or films the project lead watches lists the service that has each one
-  for at least nine of the ten [proposed].
+  for at least nine of the ten.
 - Over a two-week trial, the project lead reaches streaming services through the launcher rather
-  than Chrome's tabs and bookmarks [proposed].
+  than Chrome's tabs and bookmarks.
