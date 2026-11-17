@@ -21,7 +21,8 @@ Mock-ups: docs/design/chromebook/mockup.html (the source), rendered to PNG by re
 follows design-home-screen's look and wording where the two do the same thing. Drafted
 2026-11-17; the project lead accepted the agent's choices that go beyond the approved stories
 the same day (Back to browsing, the Open marker, the hint line, the list of services, and the
-search status line). The touch way back (REQ-chromebook-12) was added after the
+search status line). Amended the same day: tiles show each service's own icon, fetched from its
+site. The touch way back (REQ-chromebook-12) was added after the
 tablet-mode spike of 2026-11-17. -->
 
 ## Personas
@@ -84,8 +85,11 @@ appears.
 - **Status line**: reserved space under the top row, empty unless there is something to say, so a
   message never moves the services.
 - **Services**: a grid, five per row at 1366 px wide and as many as fit at other widths, each a
-  rounded tile with the service's site icon above its name on the service's colour, and the name
-  again underneath, as on the TV. In the viewer's order, hidden ones left out. A service whose
+  rounded tile with the service's own icon above its name on the service's colour, and the name
+  again underneath, as on the TV. The icon is the largest the site publishes for phones' home
+  screens and installed web apps (usually 180 to 512 px), fetched from the site once and kept on
+  the Chromebook; until it has one, or if the site publishes none, the tile shows the small icon
+  Chrome keeps for the site (the project lead's decision, 2026-11-17). In the viewer's order, hidden ones left out. A service whose
   window is open has a small **Open** marker. A service that cannot be paused (its site
   permission was refused) says **Videos won't pause** under its name.
 - **Hint line** at the bottom: the shortcuts in use, read from Chrome, for example **Alt+Shift+H
@@ -125,7 +129,8 @@ appears.
   removed service has to be added again from the list.
 - **Add a service** opens a panel with the streaming services available in Canada (the
   list in the mock-up, kept in the extension and updated with it), those already added marked, and
-  a field for any other site's address. Choosing one asks Chrome for permission on its site.
+  a field for any other site's address. Choosing one asks Chrome for permission on its site, and,
+  if allowed, fetches the service's icon.
   Allowed or refused, the service is added at the end; refused, it shows **Videos won't pause**,
   and selecting that text explains how to allow it later.
 - Every change is saved at once. **Done**, or Esc with nothing lifted or open, ends editing. No
@@ -152,8 +157,11 @@ appears.
 ## How it works
 
 - **An extension, not a page**: a Chrome extension (Manifest V3) with a background service worker.
-  It does not replace the new tab page. It has no content of its own beyond its pages, and fetches
-  nothing: the service icons come from Chrome's own icon cache (the `favicon` permission).
+  It does not replace the new tab page. The only thing it fetches is each service's own icon, from
+  that service's site, with the site permission given when the service was added: the address the
+  site names for phones and installed web apps (its web app manifest's icons, or its
+  `apple-touch-icon`), the largest offered, kept in `chrome.storage.local`. Without the permission,
+  or without such an icon, the tile uses Chrome's own icon cache (the `favicon` permission).
 - **The shortcuts**: two extension commands, `go-home` (suggested Alt+Shift+H) and `go-last`
   (suggested Alt+Shift+J), which work from any Chrome window; the spike confirmed both are free on
   the project lead's Chromebook.

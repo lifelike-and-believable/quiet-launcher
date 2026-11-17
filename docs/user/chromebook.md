@@ -2,7 +2,7 @@
 id: docs-chromebook
 status: approved
 derived-from:
-  - design-chromebook: 862483d6ccf6
+  - design-chromebook: bac26d469d32
   - story-chromebook-launcher: aeb2d1142c30
   - story-chromebook-open-service: 0115b9f34e7e
   - story-chromebook-go-back: 34b16f0ab619
