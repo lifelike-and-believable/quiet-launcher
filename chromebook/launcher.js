@@ -4,6 +4,7 @@ import { hintText, shortcutStatus, formatClock } from './lib/launcher-view.js';
 import { loadServices, loadSession, originPattern } from './lib/services.js';
 import { addService, moveService, setHidden, removeService, serviceFromAddress, permissionPattern, siteOf } from './lib/editing.js';
 import { CATALOGUE } from './lib/catalogue.js';
+import { readBannersFile, matchBanners, importStatus } from './lib/tv-banners.js';
 
 const $ = id => document.getElementById(id);
 const el = (tag, props = {}, ...children) => {
@@ -123,7 +124,13 @@ async function render() {
     add.dataset.id = '__add';
     add.dataset.nav = '';
     add.addEventListener('click', openAddPanel);
-    grid.append(add);
+    // tv-banners#AC-6: the TV's banners, from the file quiet-banners saves on the PC. A tool, not a
+    // tile: it is no service, and moving one never passes it.
+    const tvPictures = el('button', { type: 'button', className: 'tool' }, el('span', { className: 'banner', textContent: 'Import TV pictures' }));
+    tvPictures.dataset.id = '__import';
+    tvPictures.dataset.nav = '';
+    tvPictures.addEventListener('click', () => { $('banners-file').value = ''; $('banners-file').click(); });
+    grid.append(add, tvPictures);
     if (hiddenOnes.length) {
       parts.push(el('p', { className: 'section', textContent: 'Hidden services: not on the launcher. Select one to show it again.' }),
         el('div', { className: 'grid' }, ...hiddenOnes.map(s => tile(s, info(s)))));
@@ -295,13 +302,46 @@ $('picture-file').addEventListener('change', async () => {
     setStatus('That file isn’t a picture.');
     return;
   }
-  const scale = Math.min(1, 640 / bitmap.width, 360 / bitmap.height);
-  const canvas = el('canvas', { width: Math.round(bitmap.width * scale), height: Math.round(bitmap.height * scale) });
-  canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  const data = file.type === 'image/png' ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.9);
+  const data = fitPicture(bitmap, file.type === 'image/png');
   setStatus(shortcutStatus(commands));
   await setPicture(id, data);
   document.querySelector(`[data-id="${CSS.escape(id)}"]`)?.focus();
+});
+
+// A picture scaled to fit 640 by 360 and kept as a data: address (chromebook-pictures#AC-3).
+function fitPicture(bitmap, png) {
+  const scale = Math.min(1, 640 / bitmap.width, 360 / bitmap.height);
+  const canvas = el('canvas', { width: Math.round(bitmap.width * scale), height: Math.round(bitmap.height * scale) });
+  canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return png ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.9);
+}
+
+// The TV's banners as pictures (tv-banners#AC-7 to AC-9): every service, hidden ones too, matched to
+// the file's apps by name, or failing that by its site in the app's package.
+$('banners-file').addEventListener('change', async () => {
+  const file = $('banners-file').files[0];
+  if (!file) return;
+  const apps = readBannersFile(await file.text().catch(() => ''));
+  if (!apps) {
+    setStatus('That file isn’t a TV pictures file. Make one with quiet-banners on the PC.');
+    return;
+  }
+  const list = await services();
+  const { pictures: found, unmatched } = matchBanners(list, apps);
+  const { pictures = {} } = await chrome.storage.local.get('pictures');
+  for (const [id, picture] of Object.entries(found)) {
+    try {
+      const bitmap = await createImageBitmap(await (await fetch(picture)).blob());
+      pictures[id] = fitPicture(bitmap, true);
+    } catch {
+      delete found[id];
+      unmatched.push(list.find(s => s.id === id).name);
+    }
+  }
+  const names = list.map(s => s.name).filter(n => unmatched.includes(n)); // in the launcher's order
+  setStatus(importStatus(Object.keys(found).length, list.length, names));
+  await chrome.storage.local.set({ pictures });
+  document.querySelector('[data-id="__import"]')?.focus();
 });
 
 // Asking Chrome for a site; it must be the first thing a click or key does (chromebook-editing#AC-7, AC-8).

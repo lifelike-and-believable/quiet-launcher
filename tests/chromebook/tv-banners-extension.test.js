@@ -20,7 +20,7 @@ after(async () => { await ext?.close(); });
 
 const pictures = () => ext.worker.evaluate(async () => (await chrome.storage.local.get('pictures')).pictures || {});
 const settle = (ms = 500) => new Promise(r => setTimeout(r, ms));
-const importTile = () => page.locator('#services .tile', { hasText: 'Import TV pictures' });
+const importTile = () => page.locator('#services .tool', { hasText: 'Import TV pictures' });
 async function importFile(f) {
   const chooser = page.waitForEvent('filechooser');
   await importTile().click();
@@ -30,7 +30,7 @@ async function importFile(f) {
 const size = src => page.evaluate(s => new Promise(r => { const i = new Image(); i.onload = () => r([i.width, i.height]); i.src = s; }), src);
 
 test('tv-banners#AC-6: while editing, Import TV pictures follows Add a service and opens the file picker', async () => {
-  const names = await page.locator('#services .grid').first().locator('.tile').allTextContents();
+  const names = await page.locator('#services .grid').first().locator('.tile, .tool').allTextContents();
   assert.deepEqual(names.slice(-2).map(n => n.trim()), ['+ Add a service', 'Import TV pictures']);
   const chooser = page.waitForEvent('filechooser', { timeout: 3000 });
   await importTile().click();

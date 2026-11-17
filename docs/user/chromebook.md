@@ -2,7 +2,7 @@
 id: docs-chromebook
 status: approved
 derived-from:
-  - design-chromebook: 50888f6af913
+  - design-chromebook: ba785dd6c062
   - story-chromebook-launcher: aeb2d1142c30
   - story-chromebook-open-service: 0115b9f34e7e
   - story-chromebook-go-back: 3342b71ad5f4
@@ -106,6 +106,25 @@ The launcher keeps no record of what you search for.
 
 Changes are saved as you make them, and are kept when Chrome or the Chromebook restarts. Your
 Chromebook's list is its own: it does not change the TV's, or the other way round.
+
+## Use the TV's banners
+
+The TV's tiles show each app's banner, with its logo and name. To give the Chromebook's tiles the
+same pictures:
+
+1. On the PC, in the Quiet Launcher folder, double-click **quiet-banners** (`quiet-banners.cmd`).
+   It connects to the TV as quiet-arrange does (docs-arranging) and saves every app's banner in
+   `tv-banners.json`, in `Documents\QuietLauncher`. It changes nothing on the TV.
+2. Copy `tv-banners.json` to the Chromebook, for example with Google Drive or a USB stick.
+3. On the launcher, choose **Edit services**, then **Import TV pictures**, and pick the file.
+
+Each of your services whose name matches a TV app's (Apple TV+ matches Apple TV) gets that app's
+banner as its picture, replacing any it had. The status line says how many were set and names the
+services with no TV banner; they keep their icon or picture, and you can choose one for them with
+**Choose picture**. Import again whenever you like: nothing else changes.
+
+If quiet-banners says the quiet launcher on the TV is too old, update it with quiet-setup (docs-setup)
+first.
 
 ## Go back to browsing
 

@@ -1,6 +1,9 @@
 ---
 status: draft
 tests: [app/src/test, scripts/tests, tests/chromebook]
+tests-commit: a2cd42de3cff6b7965c8212fc3cb28e67493708f
+unlocks:
+  - tests/chromebook/tv-banners-extension.test.js: Import TV pictures is found as a `.tool`, not a `.tile`, because the editing tests take every tile but Add a service to be a service (chromebook-editing#AC-3); nothing else changes
 ---
 
 # The TV's banners on the Chromebook's tiles
@@ -46,8 +49,9 @@ A test cites a criterion as `tv-banners#AC-1` in its name or a comment.
 
 - In: `BannerRequests` and its action in `ArrangeReceiver` and the manifest; `quiet-arrange.ps1`'s
   `-Banners`, `quiet-banners.cmd`, and the fake ADB's answer; `chromebook/lib/tv-banners.js` and the
-  launcher's **Import TV pictures**; their tests; the amendments to design-chromebook,
-  docs-chromebook, and docs-arranging that describe them.
+  launcher's **Import TV pictures**; their tests; `build.ps1` putting quiet-banners in the Quiet
+  Launcher folder; the amendments to design-chromebook#editing and docs-chromebook that describe
+  them.
 - Out: sending pictures to the Chromebook directly (the file is copied by the project lead, with
   Google Drive or a USB stick); banners for apps the home screen leaves out.
 

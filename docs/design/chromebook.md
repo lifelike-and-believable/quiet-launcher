@@ -123,8 +123,8 @@ site's own icon.
 
 ## Editing
 
-- **Edit services** turns the grid into an editing grid: the services, then **Add a service**, then
-  any hidden services under **Hidden services: not on the launcher. Select one to show it again.**
+- **Edit services** turns the grid into an editing grid: the services, then **Add a service** and
+  **Import TV pictures**, then any hidden services under **Hidden services: not on the launcher. Select one to show it again.**
 - Selecting a service opens its menu: **Move**, **Hide** (or **Show** for a hidden one),
   **Choose picture** (and **Remove picture** when it has one), **Remove**, **Cancel**. Esc closes
   the menu.
@@ -134,6 +134,15 @@ site's own icon.
   goes back to the icon. A file that is not an image is not kept, and the status line says
   **That file isn't a picture.** (the project lead's decision, 2026-11-17: the TV's banners show
   the logo and lettering together, which a site's square icon cannot).
+- **Import TV pictures** opens ChromeOS's file picker for the file **quiet-banners** saves on the
+  PC (`tv-banners.json`, copied to the Chromebook): the TV app draws each app's banner and the
+  script keeps them all in that file. Every service, hidden ones too, whose name matches a TV app's
+  (ignoring case, spaces, punctuation, a leading "The", and a trailing "+"), or failing that whose
+  site's name is part of exactly one app's package, gets that banner as its picture, replacing any
+  it had. The status line says **Pictures set for <n> of <total> services.** and names those with
+  no TV banner, which keep what they had. A file that is not one says **That file isn't a TV
+  pictures file. Make one with quiet-banners on the PC.** (the project lead's decision,
+  2026-11-17: the tiles should look like the TV's).
 - **Move** lifts the service. The arrow keys move it one place at a time, or it can be dragged with
   the touchpad or a finger. Enter, or releasing a drag, puts it down; Esc puts it back where it was.
 - **Remove** asks **Remove <name>? Its window will close.** with **Remove** and **Cancel**, since a
