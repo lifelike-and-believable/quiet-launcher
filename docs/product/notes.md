@@ -296,6 +296,8 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
   tried.
 - JustWatch's Canadian search for "Carrie" was tried in both modes, and each time the next page
   in that tab or window was Prime Video: it looks as if JustWatch's result led there. A service
-  reached this way opens in the search's tab or window, not one the launcher opened.
+  reached this way opens in the search's tab or window, not one the launcher opened. The project
+  lead confirmed that JustWatch's page listed the services that have it, with links to Prime Video.
+- The project lead has no Netflix subscription, so pausing on Netflix does not need checking.
 - Not yet known: which of the three searches shows where a show streams, and whether Alt+Shift+H
   works while a site's own player is full screen.
