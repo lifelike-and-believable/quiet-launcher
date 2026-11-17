@@ -291,6 +291,11 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
   on the TV. The spike now pauses every video in the service's page (in all its frames) on
   Alt+Shift+H and checks two seconds later that it stayed paused; it needs the streaming sites as
   host permissions. In the agent's container, a stand-in video paused and stayed paused in both
-  modes. Not yet tried on the real services.
+  modes. On the Chromebook, Prime Video paused and stayed paused every time it was playing, in
+  both modes (six times); when nothing was playing, nothing was touched. Other services not yet
+  tried.
+- JustWatch's Canadian search for "Carrie" was tried in both modes, and each time the next page
+  in that tab or window was Prime Video: it looks as if JustWatch's result led there. A service
+  reached this way opens in the search's tab or window, not one the launcher opened.
 - Not yet known: which of the three searches shows where a show streams, and whether Alt+Shift+H
   works while a site's own player is full screen.
