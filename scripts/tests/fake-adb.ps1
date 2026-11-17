@@ -125,6 +125,17 @@ switch -Regex ($argv -join ' ') {
         $s | Add-Member -Force -NotePropertyName arrangement -NotePropertyValue ([pscustomobject]@{ version = $current + 1; order = @($sent.order); hidden = @($sent.hidden) })
         $out = Answer 1 ([ordered]@{ version = $current + 1 })
     }
+    '^shell am broadcast -n quiet\.launcher/\.ArrangeReceiver -a quiet\.launcher\.action\.GET_BANNER --es package (\S+)$' {
+        # docs/specs/tv-banners.md: "banners" maps a package to its PNG (base64), or null for an app
+        # with none; a TV app from before banners (no "banners") ignores the question.
+        if ($null -eq $s.installed -or $null -eq $s.PSObject.Properties['banners']) { $out = 'Broadcasting: Intent { }', 'Broadcast completed: result=0'; break }
+        $pkg = $Matches[1]
+        $app = @($s.apps | Where-Object { $_ -and $_.package -eq $pkg }) | Select-Object -First 1
+        $png = if ($s.banners.PSObject.Properties[$pkg]) { $s.banners.$pkg } else { $null }
+        if (-not $app) { $out = Answer 3 ([ordered]@{ error = "$pkg is not an app on the home screen" }) }
+        elseif (-not $png) { $out = Answer 3 ([ordered]@{ error = "$pkg has no banner" }) }
+        else { $out = Answer 1 ([ordered]@{ name = $app.name; package = $pkg; png = $png }) }
+    }
     '^shell input keyevent KEYCODE_WAKEUP$' { $s | Add-Member -Force -NotePropertyName awake -NotePropertyValue $true }
     '^shell dumpsys activity activities$' {
         # A sleeping TV has no resumed activity.
