@@ -246,17 +246,30 @@ export function createController(chrome) {
     noteFocus,
 
     // chromebook-launcher#AC-7: the last browsing window, else any normal window, else a new one.
+    // chromebook-back-to-browsing#AC-1 to AC-3: then the launcher is turned off: its window and
+    // every service and search window close, and nothing remembers them.
     async backToBrowsing() {
       const { lastBrowsingWindow } = await chrome.storage.session.get('lastBrowsingWindow');
       const windows = await chrome.windows.getAll();
       const normal = windows.filter(w => w.type === 'normal');
       const target = normal.find(w => w.id === lastBrowsingWindow) || normal[0];
+      let id;
       if (target) {
         await chrome.windows.update(target.id, { focused: true });
-        return target.id;
+        id = target.id;
+      } else {
+        id = (await chrome.windows.create({ focused: true })).id;
       }
-      const created = await chrome.windows.create({ focused: true });
-      return created.id;
+      const session = await loadSession(chrome);
+      const { searchWindow } = await chrome.storage.session.get('searchWindow');
+      const launcher = await findLauncherWindow();
+      await chrome.storage.session.set({ serviceWindows: {}, searchWindow: null, lastService: null });
+      const toClose = new Set([...Object.values(session.serviceWindows), searchWindow, launcher?.id]
+        .filter(w => w !== undefined && w !== null && w !== id));
+      for (const w of toClose) {
+        try { await chrome.windows.remove(w); } catch { /* already closed */ }
+      }
+      return id;
     },
   };
 }

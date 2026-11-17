@@ -76,9 +76,10 @@ function tile(s, { open, allowed, hidden }) {
   const notes = [open ? 'Open' : '', allowed ? '' : 'Videos won’t pause'].filter(Boolean);
   t.setAttribute('aria-label', [s.name, ...notes].join(', '));
   const own = keptIcons[s.id];
-  const icon = el('img', { alt: '', draggable: false, className: own ? 'own' : '',
-    src: own || `/_favicon/?pageUrl=${encodeURIComponent(s.url)}&size=32` });
-  const banner = el('span', { className: 'banner' }, icon, ' ', el('span', { className: 'title', textContent: s.name }));
+  // chromebook-icons#AC-3, AC-10: the icon alone on the tile; the name once, underneath.
+  const icon = el('img', { alt: '', draggable: false, className: own ? 'own' : 'small',
+    src: own || `/_favicon/?pageUrl=${encodeURIComponent(s.url)}&size=64` });
+  const banner = el('span', { className: 'banner' }, icon);
   banner.style.background = s.colour;
   t.append(banner, ' ', el('span', { className: 'name', textContent: s.name }));
   if (open) t.append(' ', el('span', { className: 'badge', textContent: 'Open' }));
@@ -166,7 +167,8 @@ function openMenu(s, from, allowed) {
 
 // Moving with the keyboard (chromebook-editing#AC-3).
 async function lift(id) {
-  const list = await loadServices(chrome);
+  // Lifted at once, from the list on screen, so a key pressed straight after Move moves it.
+  const list = drawn;
   lifted = { id, original: list, working: list };
   $('hint').textContent = `Moving ${list.find(s => s.id === id).name}: arrow keys or drag to move it, Enter or release to put it down, Esc to put it back.`;
   await render();

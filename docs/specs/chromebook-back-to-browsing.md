@@ -1,6 +1,7 @@
 ---
 status: draft
 tests: [tests/chromebook]
+tests-commit: 1b20e1bff7dc5a5e8efeb3ab5b8115fdf41ff5d2
 ---
 
 # The Chromebook launcher: Back to browsing turns it off
