@@ -303,3 +303,11 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
 - The project lead has no Netflix subscription, so pausing on Netflix does not need checking.
 - Not yet known: which of the three searches shows where a show streams, and whether Alt+Shift+H
   works while a site's own player is full screen.
+
+## Spike: back to the launcher in tablet mode (2026-11-17)
+
+The project lead asked for a touchscreen way back to the launcher, for tablet mode. The spike
+gained a Home button on service pages (shown on touch, fading after 4 seconds) and pausing
+whenever the launcher's window comes forward by any route. Results from the Chromebook still to
+come; what the container could and could not try is in the spike's README.
+

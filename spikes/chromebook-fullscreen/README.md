@@ -18,6 +18,17 @@ back into view):
 6. Does pausing the video when the launcher comes back work on each service, and does it stay
    paused? The log says how many videos it paused and whether any started again within 2 seconds.
    This needs the streaming sites as permissions, which Chrome lists when the extension loads.
+7. In tablet mode, with no keyboard, how does the project lead get back to the launcher?
+   - Touching a service's page shows a Home button in its bottom-left corner for 4 seconds;
+     tapping it does what Alt+Shift+H does. Does it show, including over the site's own full-screen
+     player, and does it get in the way of the site?
+   - Bringing the launcher's window forward any other way (in tablet mode, swipe up from the bottom
+     and hold, then tap the launcher; or Alt+Tab) also pauses the service left behind. The log says
+     "came forward another way".
+   In the agent's container (headless Chromium with touch emulation, 2026-11-17): the button showed
+   on a tap, tapping it brought the launcher back and paused a stand-in video, and it moved into the
+   page's own full-screen element. The other route could not be tried there, because headless
+   Chromium does not report window focus changes.
 
 Results go in `docs/product/notes.md`.
 
