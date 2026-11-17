@@ -181,7 +181,8 @@ export function createController(chrome) {
     // chromebook-search#AC-4: the search window going to one of the viewer's services becomes
     // that service's window.
     async onTabUpdated(tabId, change, tab) {
-      if (!change.url || !tab) return;
+      if (!tab) return;
+      if (!change.url) return;
       const { searchWindow } = await chrome.storage.session.get('searchWindow');
       if (searchWindow == null || tab.windowId !== searchWindow) return;
       const host = hostOf(change.url);
