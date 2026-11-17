@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "Quiet Launcher (stub)",
+  "version": "0.1.0",
+  "description": "Your streaming services in one place, full screen, in the quiet launcher's look.",
+  "background": { "service_worker": "background.js", "type": "module" },
+  "permissions": ["storage"]
+}
