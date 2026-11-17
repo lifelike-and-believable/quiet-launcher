@@ -11,7 +11,7 @@ for (const s of SERVICES) {
 document.getElementById('search').addEventListener('submit', e => {
   e.preventDefault();
   const text = document.getElementById('query').value.trim();
-  if (text) chrome.runtime.sendMessage({ type: 'search', text });
+  if (text) chrome.runtime.sendMessage({ type: 'search', text, engine: document.getElementById('engine').value });
 });
 
 async function fullScreen(why) {
@@ -27,6 +27,15 @@ chrome.storage.local.get({ auto: true }).then(({ auto: on }) => {
   if (on) fullScreen('on opening');
 });
 auto.addEventListener('change', () => chrome.storage.local.set({ auto: auto.checked }));
+chrome.storage.local.get({ mode: 'tabs' }).then(({ mode }) => {
+  for (const r of document.querySelectorAll('input[name=mode]')) {
+    r.checked = r.value === mode;
+    r.addEventListener('change', () => {
+      chrome.storage.local.set({ mode: r.value });
+      chrome.runtime.sendMessage({ type: 'log', text: `Mode: ${r.value}` });
+    });
+  }
+});
 document.getElementById('full').addEventListener('click', () => fullScreen('button'));
 
 chrome.commands.getAll().then(commands => {

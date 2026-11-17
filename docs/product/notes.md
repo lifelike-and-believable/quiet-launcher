@@ -253,3 +253,53 @@ Driven over ADB under the standing go-ahead (`docs/specs/top-row-and-search.md`,
 - The top row at 1080p fits **Search for a show** (680 px), **Voice search**, **Google TV**,
   **Settings**, and the clock inside the safe area, with 24 px gaps.
 
+
+## The Chromebook
+
+- The project lead's Chromebook runs ChromeOS with Chrome 150 (`CrOS x86_64 14541.0.0`). One
+  person uses it.
+
+## Spike: the Chromebook launcher in full screen (2026-11-16)
+
+`spikes/chromebook-fullscreen/`, run by the project lead on the Chromebook:
+
+- An extension's keyboard shortcuts were free to take: Alt+Shift+H and Alt+Shift+J were assigned
+  as suggested, with nothing else on the Chromebook using them.
+- The launcher, as Chrome's new tab page, put its window in full screen when it opened.
+- Opening a service in a new tab kept the window full screen, for Netflix, Prime Video, MUBI, Tubi,
+  and Plex. (Headless Chromium in the agent's container had dropped full screen here; the
+  Chromebook did not.)
+- Alt+Shift+H reached the extension from inside each of those five services, and switching back to
+  the launcher kept the window full screen every time.
+- Each switch, by the shortcut or by choosing a service, briefly shows Chrome's tabs and address
+  bar before the page fills the screen again. The project lead called it a nit. The spike now also
+  opens each service in its own full-screen window with no tab strip, to see whether switching
+  windows avoids it.
+- YouTube behaved the same as the other five (second run).
+- Choosing a service that was already open switched to its tab, and Alt+Shift+J went back to the
+  last service from the launcher, both keeping the window full screen (third run).
+- A search from the launcher ("Carrie") opened Google's results in a new tab, still full screen.
+  The results were ordinary web results, not a list of streaming services: the concept's
+  Feasibility claim that Google's web search shows where a show streams did not hold for this
+  query. The spike now offers three searches to compare: Google, Google with "where to watch"
+  added, and JustWatch's Canadian search.
+- With each service in its own full-screen window (no tab strip), switching showed no flash: no
+  tabs or address bar appeared. Alt+Shift+H brought the launcher's window back.
+- In either mode, a video keeps playing in its window or tab after Alt+Shift+H brings the launcher
+  forward. On the TV, Home leaves the app, which usually pauses it.
+- The project lead decided that going back to the launcher should pause the video, as Home does
+  on the TV. The spike now pauses every video in the service's page (in all its frames) on
+  Alt+Shift+H and checks two seconds later that it stayed paused; it needs the streaming sites as
+  host permissions. In the agent's container, a stand-in video paused and stayed paused in both
+  modes. On the Chromebook, Prime Video paused and stayed paused every time it was playing, in
+  both modes (six times); when nothing was playing, nothing was touched. Other services not yet
+  tried.
+- JustWatch's Canadian search for "Carrie" was tried in both modes, and each time the next page
+  in that tab or window was Prime Video: it looks as if JustWatch's result led there. A service
+  reached this way opens in the search's tab or window, not one the launcher opened. The project
+  lead confirmed that JustWatch's page listed the services that have it, with links to Prime Video.
+- Google with "where to watch" added gave links for the film *Carrie* only, not the TV series.
+  JustWatch, which lists each title with that name, let the project lead pick the one they meant.
+- The project lead has no Netflix subscription, so pausing on Netflix does not need checking.
+- Not yet known: which of the three searches shows where a show streams, and whether Alt+Shift+H
+  works while a site's own player is full screen.

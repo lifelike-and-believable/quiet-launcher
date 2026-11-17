@@ -3,18 +3,58 @@
   "name": "Quiet Launcher spike (Chromebook full screen)",
   "version": "0.1",
   "description": "Throwaway spike: switching between a launcher and streaming services in full screen.",
-  "permissions": ["tabs", "storage"],
-  "background": { "service_worker": "background.js" },
-  "chrome_url_overrides": { "newtab": "launcher.html" },
-  "action": { "default_title": "Back to the launcher" },
+  "permissions": [
+    "tabs",
+    "storage",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "chrome_url_overrides": {
+    "newtab": "launcher.html"
+  },
+  "action": {
+    "default_title": "Back to the launcher"
+  },
   "commands": {
     "go-home": {
-      "suggested_key": { "default": "Alt+Shift+H", "chromeos": "Alt+Shift+H" },
+      "suggested_key": {
+        "default": "Alt+Shift+H",
+        "chromeos": "Alt+Shift+H"
+      },
       "description": "Back to the launcher (the TV's Home button)"
     },
     "go-last": {
-      "suggested_key": { "default": "Alt+Shift+J", "chromeos": "Alt+Shift+J" },
+      "suggested_key": {
+        "default": "Alt+Shift+J",
+        "chromeos": "Alt+Shift+J"
+      },
       "description": "Back to the last service"
     }
-  }
+  },
+  "host_permissions": [
+    "*://youtube.com/*",
+    "*://netflix.com/*",
+    "*://disneyplus.com/*",
+    "*://primevideo.com/*",
+    "*://tv.apple.com/*",
+    "*://criterionchannel.com/*",
+    "*://mubi.com/*",
+    "*://gem.cbc.ca/*",
+    "*://ctv.ca/*",
+    "*://tubitv.com/*",
+    "*://plex.tv/*",
+    "*://*.youtube.com/*",
+    "*://*.netflix.com/*",
+    "*://*.disneyplus.com/*",
+    "*://*.primevideo.com/*",
+    "*://*.tv.apple.com/*",
+    "*://*.criterionchannel.com/*",
+    "*://*.mubi.com/*",
+    "*://*.gem.cbc.ca/*",
+    "*://*.ctv.ca/*",
+    "*://*.tubitv.com/*",
+    "*://*.plex.tv/*"
+  ]
 }
