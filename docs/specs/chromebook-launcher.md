@@ -2,6 +2,8 @@
 status: draft
 tests: [tests/chromebook]
 tests-commit: 52ae0d9c919d18bfb559ff13f28f16d9990ea64c
+unlocks:
+  - tests/chromebook/extension-harness.js: Chromium runs visibly when a display is set (DISPLAY, as under xvfb-run in CI) instead of always headless, because headless Chromium does not move window focus or keep service windows full screen (found in slice 2); nothing else changes
 ---
 
 # The Chromebook launcher: skeleton and launcher window
@@ -66,6 +68,9 @@ A test cites a criterion as `chromebook-launcher#AC-1` in its name.
   extension asks for `tabs`, which slice 2 needs anyway to recognise the services' windows.
 - Found while implementing: in headless Chromium a popup created full screen showed as a normal
   window a moment later, so the controller asks for full screen again once the window exists.
+- The extension tests run Chromium visibly on a virtual display (`xvfb-run`, in CI and here), as
+  headless Chromium does not move window focus (found in slice 2); without a display they run
+  headless, and only the tests that check focus fail.
 - Extension commands cannot be pressed in headless Chromium, so the extension tests call the same
   handler the command calls (`globalThis.quietLauncher.goHome()` in the service worker); AC-10
   checks the real keys.

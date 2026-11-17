@@ -22,3 +22,16 @@ button:focus-visible, .search:focus-within { outline: 4px solid var(--focus); ou
   box-shadow: 0 0 0 8px var(--ring); background: #2b343c; border-color: transparent; }
 .search:focus-within input:focus-visible { outline: none; }
 @media (prefers-reduced-motion: no-preference) { button { transition: transform .1s; } button:focus-visible { transform: scale(1.04); } }
+/* The services grid (design-chromebook#layout): five per row at 1366 px, as many as fit elsewhere. */
+.grid { display: grid; align-items: start; grid-template-columns: repeat(auto-fill, 224px); column-gap: 30px; row-gap: 22px; padding: 12px 16px 0; margin: 0 -16px; }
+.tile { position: relative; width: 224px; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border: none; background: none; color: inherit; font: inherit; cursor: pointer; text-align: center; }
+.banner { width: 224px; height: 126px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+          font-size: 24px; font-weight: 700; color: #fff; padding: 0 12px; }
+.banner img { width: 40px; height: 40px; border-radius: 10px; }
+.tile .name { display: block; margin-top: 8px; font-size: 18px; color: var(--muted); line-height: 1.25; }
+.tile .note { display: block; font-size: 16px; color: var(--note); }
+.badge { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,.7); color: var(--text); font-size: 14px; padding: 2px 8px; border-radius: 10px; }
+.tile:focus-visible { outline: none; box-shadow: none; background: none; transform: none; }
+.tile:focus-visible .banner { outline: 4px solid var(--focus); outline-offset: 3px; box-shadow: 0 0 0 9px var(--ring); }
+.tile:focus-visible .name { color: var(--text); font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) { .tile:focus-visible .banner { transform: scale(1.05); } }

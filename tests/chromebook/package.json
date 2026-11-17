@@ -4,7 +4,8 @@
   "type": "module",
   "description": "Tests for the Chromebook extension in ../../chromebook (docs/specs/chromebook-*.md).",
   "scripts": {
-    "test": "node --test --test-concurrency=1"
+    "test": "node --test --test-concurrency=1",
+    "test:display": "xvfb-run -a node --test --test-concurrency=1"
   },
   "devDependencies": {
     "playwright": "1.63.0"

@@ -1,6 +1,9 @@
 ---
 status: draft
 tests: [tests/chromebook]
+tests-commit: 372cea1404fa0dadf9e14e9faa4b368776fcde0b
+unlocks:
+  - tests/chromebook/services-harness.js: Chromium runs visibly when a display is set (DISPLAY, as under xvfb-run in CI) instead of always headless, because headless Chromium does not move window focus, which AC-5's test checks; nothing else changes
 ---
 
 # The Chromebook launcher: services, going back, and pausing
@@ -62,6 +65,12 @@ A test cites a criterion as `chromebook-services#AC-1` in its name.
   so nothing is fetched by the launcher.
 - `chrome.windows.onFocusChanged` does not fire in headless Chromium (seen in the spike), so AC-6 is
   tested against the in-memory `chrome` API and checked on the Chromebook (AC-10).
+- Found while implementing: headless Chromium does not move window focus at all, and on Linux a new
+  popup created full screen shows in a normal window until it is drawn. The extension tests run
+  Chromium visibly on a virtual display (`xvfb-run`), and the controller asks for full screen again
+  once a new window's page has loaded. Under X without a window manager only the window in front is
+  full screen, so the tests check the state of the window just brought forward; on ChromeOS every
+  window keeps its own (the spike).
 - The extension tests load a copy of the extension whose manifest also grants `http://localhost/*`,
   and serve stand-in service pages (a playing video) from a local server, because optional
   permissions cannot be granted without a person in headless Chromium.

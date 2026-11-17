@@ -12,7 +12,7 @@ export async function loadExtension() {
   const profile = mkdtempSync(join(tmpdir(), 'quiet-launcher-'));
   const context = await chromium.launchPersistentContext(profile, {
     channel: 'chromium',
-    headless: true,
+    headless: !process.env.DISPLAY,
     args: [`--disable-extensions-except=${EXTENSION}`, `--load-extension=${EXTENSION}`],
   });
   let [worker] = context.serviceWorkers();

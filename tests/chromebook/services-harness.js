@@ -40,7 +40,7 @@ export async function loadWithServices() {
 
   const profile = mkdtempSync(join(tmpdir(), 'quiet-launcher-'));
   const context = await chromium.launchPersistentContext(profile, {
-    channel: 'chromium', headless: true,
+    channel: 'chromium', headless: !process.env.DISPLAY,
     args: [`--disable-extensions-except=${dir}`, `--load-extension=${dir}`, '--autoplay-policy=no-user-gesture-required'],
   });
   let [worker] = context.serviceWorkers();
