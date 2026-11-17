@@ -1,0 +1,178 @@
+<!doctype html>
+<!-- Mock-up source for docs/design/chromebook.md. Each state is selected by the URL hash
+     (mockup.html#default, #search, ...) and rendered at 1366x768 by render.sh.
+     Tiles show each service's name on a colour with a placeholder for the site's own icon; the
+     real launcher shows the icon from Chrome's own icon cache. Placeholder colours are not part of
+     the design and were not contrast-checked. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chromebook launcher mock-up</title>
+<style>
+  :root { --bg: #101418; --surface: #1c2228; --edge: #59646e; --text: #eef2f5; --muted: #a9b4bd;
+          --focus: #ffffff; --ring: #000000; --accent: #8ab4f8; --note: #ffd28a; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1366px; height: 768px; overflow: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: Roboto, "Segoe UI", sans-serif; position: relative; }
+  .safe { position: absolute; inset: 32px 48px; }
+  .top { display: flex; align-items: center; gap: 16px; min-height: 64px; }
+  .pill { min-height: 56px; border-radius: 28px; background: var(--surface); border: 2px solid var(--edge);
+          display: flex; align-items: center; gap: 12px; padding: 0 22px; font-size: 20px; color: var(--text); }
+  .search { flex: 0 0 480px; color: var(--muted); }
+  .search.typed { color: var(--text); }
+  .caret { display: inline-block; width: 2px; height: 26px; background: var(--text); vertical-align: middle; margin-left: 2px; }
+  .spacer { flex: 1; }
+  .clock { font-size: 32px; font-weight: 300; margin-left: 8px; }
+  .focused { outline: 4px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 8px var(--ring); background: #2b343c; border-color: transparent; }
+  .status { height: 40px; display: flex; align-items: center; padding-left: 24px; font-size: 18px; color: var(--note); }
+  .grid { display: grid; grid-template-columns: repeat(5, 224px); column-gap: 30px; row-gap: 22px; padding: 12px 16px 0; margin: 0 -16px; }
+  .tile { width: 224px; position: relative; }
+  .banner { width: 224px; height: 126px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            font-size: 24px; font-weight: 700; color: #fff; text-align: center; padding: 0 12px; }
+  .ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,.22); }
+  .name { margin-top: 8px; font-size: 18px; color: var(--muted); text-align: center; line-height: 1.25; }
+  .tile.focused { outline: none; box-shadow: none; background: none; }
+  .tile.focused .banner { outline: 4px solid var(--focus); outline-offset: 3px; box-shadow: 0 0 0 9px var(--ring); transform: scale(1.05); }
+  .tile.focused .name { color: var(--text); font-weight: 600; }
+  .tile.hidden .banner { opacity: .45; }
+  .badge { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,.7); color: var(--text); font-size: 14px; padding: 2px 8px; border-radius: 10px; }
+  .add .banner { background: var(--surface); border: 2px dashed var(--edge); color: var(--muted); font-size: 22px; font-weight: 500; }
+  .lifted .banner { transform: translateY(-10px) scale(1.05); box-shadow: 0 0 0 9px var(--ring), 0 14px 24px rgba(0,0,0,.6); }
+  .arrows { position: absolute; top: 46px; font-size: 30px; color: var(--text); }
+  .section { margin: 18px 0 6px; font-size: 18px; color: var(--muted); }
+  .hint { position: absolute; left: 48px; bottom: 18px; font-size: 16px; color: var(--muted); }
+  kbd { border: 1px solid var(--edge); border-radius: 5px; padding: 0 6px; color: var(--text); background: var(--surface); font-family: inherit; }
+  .menu { position: absolute; background: #222a31; border: 2px solid var(--edge); border-radius: 14px; padding: 8px; width: 220px; box-shadow: 0 12px 30px rgba(0,0,0,.6); }
+  .menu div { padding: 10px 16px; font-size: 19px; border-radius: 8px; }
+  .menu div.focused { box-shadow: none; outline-offset: -4px; }
+  .dialog { position: absolute; inset: 0; background: rgba(16,20,24,.8); display: flex; align-items: center; justify-content: center; }
+  .panel { width: 760px; background: #1a2026; border: 2px solid var(--edge); border-radius: 18px; padding: 26px 30px; }
+  .panel h2 { margin: 0 0 6px; font-size: 26px; font-weight: 500; }
+  .panel p { margin: 0 0 16px; color: var(--muted); font-size: 17px; }
+  .choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+  .choice { padding: 12px 14px; border: 2px solid var(--edge); border-radius: 10px; font-size: 18px; display: flex; justify-content: space-between; }
+  .choice.on { color: var(--muted); }
+  .row { display: flex; gap: 12px; align-items: center; }
+  .field { flex: 1; min-height: 48px; border: 2px solid var(--edge); border-radius: 10px; display: flex; align-items: center; padding: 0 14px; color: var(--muted); font-size: 18px; }
+  .btn { min-height: 48px; padding: 0 20px; border-radius: 24px; border: 2px solid var(--edge); display: flex; align-items: center; font-size: 18px; }
+  .btn.primary { background: var(--accent); color: #0b1a33; border-color: var(--accent); font-weight: 600; }
+  .chrome { position: absolute; left: 50%; top: 120px; transform: translateX(-50%); width: 520px; background: #fff; color: #202124; border-radius: 10px;
+            padding: 18px 22px; font-size: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+  .chrome b { display: block; margin-bottom: 8px; font-size: 17px; }
+  .chrome .cb { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+  .chrome .cb span { padding: 6px 14px; border-radius: 16px; border: 1px solid #dadce0; color: #1a73e8; }
+  .chrome .cb span.p { background: #1a73e8; color: #fff; border-color: #1a73e8; }
+  .empty { margin-top: 150px; text-align: center; font-size: 24px; color: var(--muted); line-height: 1.6; }
+  .label { position: absolute; right: 16px; bottom: 6px; font-size: 13px; color: #6f7a83; }
+  svg { flex: 0 0 auto; }
+</style>
+</head>
+<body>
+<div class="safe">
+  <div class="top">
+    <div class="pill search" id="search">
+      <svg width="24" height="24" viewBox="0 0 40 40" aria-hidden="true"><circle cx="17" cy="17" r="12" fill="none" stroke="currentColor" stroke-width="5"/><line x1="26" y1="26" x2="37" y2="37" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>
+      <span id="searchText">Search for a show</span>
+    </div>
+    <div class="spacer"></div>
+    <div class="pill" id="edit">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <span id="editText">Edit services</span>
+    </div>
+    <div class="pill" id="browse">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2.2"/></svg>
+      Back to browsing
+    </div>
+    <div class="clock">8:25</div>
+  </div>
+  <div class="status" id="status"></div>
+  <div class="grid" id="grid"></div>
+  <div id="extra"></div>
+</div>
+<div class="hint" id="hint"><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> brings you back here &nbsp;·&nbsp; <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd> goes back to the last service</div>
+<div class="label" id="label"></div>
+<script>
+  // The project lead's services (2026-11-17).
+  const services = [
+    ['Prime Video', '#1a73e8'], ['YouTube', '#c4302b'], ['Apple TV+', '#3a3a3c'], ['Criterion Channel', '#333'],
+    ['MUBI', '#222'], ['CBC Gem', '#c8102e'], ['Tubi', '#6c2bd9'], ['Plex', '#282a2d'], ['myfilmfriend', '#0b6fb8'],
+  ];
+  const state = (location.hash || '#default').slice(1);
+  const grid = document.getElementById('grid');
+  const editing = ['edit', 'edit-menu', 'moving', 'add', 'permission', 'hidden'].includes(state);
+  const hidden = state === 'hidden' ? ['Plex'] : [];
+  const open = ['default', 'open'].includes(state) ? ['Prime Video', 'MUBI'] : [];
+  const noPause = state === 'permission' || state === 'edit' ? ['myfilmfriend'] : [];
+  const list = state === 'empty' ? [] : services.filter(([n]) => !(hidden.includes(n)));
+  const tile = (name, colour, i, cls = '') => {
+    const t = document.createElement('div'); t.className = 'tile ' + cls; t.id = 's' + i;
+    t.innerHTML = `<div class="banner" style="background:${colour}"><div class="ico"></div>${name}</div>` +
+      `<div class="name">${name}${noPause.includes(name) ? '<br><span style="color:var(--note)">Videos won’t pause</span>' : ''}</div>` +
+      (open.includes(name) ? '<div class="badge">Open</div>' : '');
+    grid.append(t); return t;
+  };
+  list.forEach(([n, c], i) => tile(n, c, i));
+  if (editing) {
+    const a = document.createElement('div'); a.className = 'tile add'; a.id = 'add';
+    a.innerHTML = '<div class="banner">+ Add a service</div><div class="name">&nbsp;</div>'; grid.append(a);
+    document.getElementById('editText').textContent = 'Done';
+    document.getElementById('hint').textContent = 'Select a service to move, hide, or remove it. Changes are saved as you go.';
+  }
+  const focus = id => document.getElementById(id)?.classList.add('focused');
+  const status = t => document.getElementById('status').textContent = t;
+  const labels = {
+    default: 'Default: the launcher, first service selected', search: 'Typing a search',
+    edit: 'Editing services', 'edit-menu': 'Editing: a service’s menu', moving: 'Editing: moving a service',
+    add: 'Add a service', permission: 'Chrome asks for permission on the service’s site', hidden: 'Editing: a hidden service',
+    empty: 'No services yet', 'shortcut-taken': 'A shortcut is taken by something else', open: 'Prime Video selected, already open',
+  };
+  document.getElementById('label').textContent = 'Mock-up — ' + (labels[state] || state);
+  if (state === 'default') focus('s0');
+  if (state === 'open') focus('s0');
+  if (state === 'search') {
+    document.getElementById('search').classList.add('typed');
+    document.getElementById('searchText').innerHTML = 'Carr<span class="caret"></span>';
+    focus('search'); status('Results open from JustWatch, in their own full-screen window. Enter searches.');
+  }
+  if (state === 'edit') focus('s8');
+  if (state === 'edit-menu') {
+    focus('s4');
+    const r = document.getElementById('s4').getBoundingClientRect();
+    document.body.insertAdjacentHTML('beforeend', `<div class="menu" style="left:${r.left + 10}px;top:${r.top + 160}px"><div class="focused">Move</div><div>Hide</div><div>Remove</div><div>Cancel</div></div>`);
+  }
+  if (state === 'moving') {
+    const t = document.getElementById('s4'); t.classList.add('focused', 'lifted');
+    t.insertAdjacentHTML('beforeend', '<div class="arrows" style="left:-26px">‹</div><div class="arrows" style="right:-26px">›</div>');
+    document.getElementById('hint').textContent = 'Moving MUBI: arrow keys or drag to move it, Enter or release to put it down, Esc to put it back.';
+  }
+  if (state === 'hidden') {
+    focus('hid0');
+    document.getElementById('extra').innerHTML = '<div class="section">Hidden services: not on the launcher. Select one to show it again.</div>' +
+      '<div class="grid"><div class="tile hidden" id="hid0"><div class="banner" style="background:#282a2d"><div class="ico"></div>Plex</div><div class="name">Plex</div></div></div>';
+    focus('hid0');
+  }
+  if (state === 'add' || state === 'permission') {
+    const all = ['Prime Video', 'YouTube', 'Apple TV+', 'Crave', 'Criterion Channel', 'MUBI', 'CBC Gem', 'CTV', 'Tubi', 'Plex', 'myfilmfriend', 'Netflix', 'Disney+', 'Kanopy', 'Hoopla'];
+    const have = services.map(s => s[0]);
+    document.body.insertAdjacentHTML('beforeend', '<div class="dialog"><div class="panel"><h2>Add a service</h2>' +
+      '<p>Streaming services available in Canada. Ones you already have are marked.</p><div class="choices">' +
+      all.map(n => `<div class="choice ${have.includes(n) ? 'on' : ''} ${n === 'Crave' ? 'focused' : ''}">${n}<span>${have.includes(n) ? '✓' : ''}</span></div>`).join('') +
+      '</div><div class="row"><div class="field">Or another site’s address, such as hollywoodsuite.ca</div><div class="btn primary">Add</div><div class="btn">Cancel</div></div></div></div>');
+  }
+  if (state === 'permission') {
+    document.body.insertAdjacentHTML('beforeend', '<div class="chrome"><b>“Quiet Launcher” requests additional permissions</b>' +
+      'It could: Read and change your data on www.crave.ca<div class="cb"><span>Deny</span><span class="p">Allow</span></div></div>');
+  }
+  if (state === 'empty') {
+    grid.remove();
+    document.getElementById('extra').innerHTML = '<div class="empty">No services yet.<br>Choose <b>Edit services</b>, then <b>Add a service</b>.</div>';
+    focus('edit');
+  }
+  if (state === 'shortcut-taken') {
+    focus('s0');
+    status('Alt+Shift+H is used by something else, so it is not set. Set a shortcut at chrome://extensions/shortcuts.');
+    document.getElementById('hint').innerHTML = 'No shortcut back here yet &nbsp;·&nbsp; <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>J</kbd> goes back to the last service';
+  }
+</script>
+</body>
+</html>

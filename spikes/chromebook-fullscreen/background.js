@@ -103,7 +103,26 @@ async function pauseVideos(tab, name) {
   }
 }
 
+// The window that last had focus other than the launcher's, so that bringing the launcher forward
+// by any route (overview in tablet mode, Alt+Tab, a click) can pause what was left behind.
+let lastOtherWindow = null;
+let homeBySpike = 0;
+
+chrome.windows.onFocusChanged.addListener(async windowId => {
+  if (windowId === chrome.windows.WINDOW_ID_NONE) return;
+  const tabs = await chrome.tabs.query({ windowId });
+  if (!tabs.some(isLauncher)) { lastOtherWindow = windowId; return; }
+  if (Date.now() - homeBySpike < 2000 || lastOtherWindow === null) return;
+  const left = (await chrome.tabs.query({ windowId: lastOtherWindow, active: true }))[0];
+  const service = left && serviceOf(left.url || '');
+  if (!service) return;
+  await chrome.storage.local.set({ lastTab: left.id });
+  await log(`Launcher came forward another way (overview, Alt+Tab, or a click) from ${service.name}`);
+  pauseVideos(left, service.name);
+});
+
 async function goHome(source) {
+  homeBySpike = Date.now();
   const focused = await chrome.windows.getLastFocused({ populate: true });
   const active = focused.tabs.find(t => t.active);
   if (active && !isLauncher(active)) {
@@ -163,6 +182,7 @@ chrome.runtime.onMessage.addListener(message => {
   if (message.type === 'open') openService(message.name);
   if (message.type === 'search') search(message.text, message.engine);
   if (message.type === 'log') log(message.text);
+  if (message.type === 'home-button') goHome('Home button tapped');
 });
 
 chrome.runtime.onInstalled.addListener(async () => {

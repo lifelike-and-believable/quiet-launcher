@@ -56,5 +56,37 @@
     "*://*.ctv.ca/*",
     "*://*.tubitv.com/*",
     "*://*.plex.tv/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://youtube.com/*",
+        "*://netflix.com/*",
+        "*://disneyplus.com/*",
+        "*://primevideo.com/*",
+        "*://tv.apple.com/*",
+        "*://criterionchannel.com/*",
+        "*://mubi.com/*",
+        "*://gem.cbc.ca/*",
+        "*://ctv.ca/*",
+        "*://tubitv.com/*",
+        "*://plex.tv/*",
+        "*://*.youtube.com/*",
+        "*://*.netflix.com/*",
+        "*://*.disneyplus.com/*",
+        "*://*.primevideo.com/*",
+        "*://*.tv.apple.com/*",
+        "*://*.criterionchannel.com/*",
+        "*://*.mubi.com/*",
+        "*://*.gem.cbc.ca/*",
+        "*://*.ctv.ca/*",
+        "*://*.tubitv.com/*",
+        "*://*.plex.tv/*"
+      ],
+      "js": [
+        "homebutton.js"
+      ],
+      "run_at": "document_idle"
+    }
   ]
 }
