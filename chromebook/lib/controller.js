@@ -41,6 +41,12 @@ export function createController(chrome) {
       } catch { /* the window closed before we looked */ }
     },
 
+    // Stubs for chromebook-services (tests first).
+    async openService() { return -1; },
+    async goLast() { return -1; },
+    async onFocus() {},
+    async onWindowRemoved() {},
+
     // AC-7: the last browsing window, else any normal window, else a new one. The launcher stays.
     async backToBrowsing() {
       const { lastBrowsingWindow } = await chrome.storage.session.get('lastBrowsingWindow');
