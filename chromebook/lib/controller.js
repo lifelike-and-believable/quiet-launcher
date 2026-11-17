@@ -159,6 +159,10 @@ export function createController(chrome) {
       await chrome.storage.session.set({ serviceWindows });
     },
 
+    // Stubs for chromebook-search (tests first).
+    async search() { return -1; },
+    async onTabUpdated() {},
+
     noteFocus,
 
     // chromebook-launcher#AC-7: the last browsing window, else any normal window, else a new one.
