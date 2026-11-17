@@ -24,8 +24,8 @@ leave a service without its video playing on behind me, and get back to it just 
 - If nothing was playing, nothing is touched.
 - Pressing Alt+Shift+J on the launcher goes straight back to the last service I used, as I left it.
 - The shortcuts work while the service's own player is full screen.
-- For a service whose site I did not give the extension permission on, the launcher still comes
-  back, but its video is not paused.
+- For a service the extension cannot reach (because I narrowed its site access in Chrome), the
+  launcher still comes back, but its video is not paused.
 - In tablet mode, touching a service's page shows a Home button in its bottom-left corner for a few
   seconds; tapping it does what Alt+Shift+H does. It shows over the site's own full-screen player,
   and does not cover anything I need on the site.

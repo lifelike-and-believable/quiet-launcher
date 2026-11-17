@@ -5,9 +5,9 @@ derived-from:
   - story-chromebook-launcher: aeb2d1142c30
   - story-chromebook-open-service: 0115b9f34e7e
   - requirements-chromebook#REQ-chromebook-12: 0831b2aacc81
-  - story-chromebook-go-back: 34b16f0ab619
+  - story-chromebook-go-back: 3342b71ad5f4
   - story-chromebook-search: e76b0c88e535
-  - story-chromebook-services: 368e4fdb201a
+  - story-chromebook-services: 0ed11c4ae63d
   - story-chromebook-install: 7dd879387fea
   - persona-chromebook-viewer#goals: 322e3fb02f13
   - persona-chromebook-viewer#frustrations: 574438d89687
@@ -23,7 +23,8 @@ follows design-home-screen's look and wording where the two do the same thing. D
 the same day (Back to browsing, the Open marker, the hint line, the list of services, and the
 search status line). Amended the same day: tiles show each service's own icon, fetched from its
 site, with the name only underneath; Back to browsing turns the launcher and its services off; a
-refused site only shows that its videos won't pause. The touch way back (REQ-chromebook-12) was added after the
+refused site only shows that its videos won't pause; and the extension may run on every site from
+installation, so nothing is asked when a service is added. The touch way back (REQ-chromebook-12) was added after the
 tablet-mode spike of 2026-11-17. -->
 
 ## Personas
@@ -59,19 +60,17 @@ tablet-mode spike of 2026-11-17. -->
 
 Drawn at 1366 by 768, a common Chromebook screen size. The services are the project lead's (2026-11-17).
 The tiles are placeholders: the real launcher shows each service's name on its colour with the
-site's own icon. Chrome's permission prompt is Chrome's own; the mock-up only marks where it
-appears.
+site's own icon.
 
 | Screen or state | Mock-up | Notes |
 |---|---|---|
 | Default, first service selected | ![Default](chromebook/default.png) | **Open** marks services whose window is open |
 | Typing a search | ![Search](chromebook/search.png) | The status line says where results open |
-| Editing | ![Editing](chromebook/edit.png) | **Add a service** is the last tile; a service without permission says so |
+| Editing | ![Editing](chromebook/edit.png) | **Add a service** is the last tile; a service the extension cannot reach says so |
 | A service's menu | ![Menu](chromebook/edit-menu.png) | **Move**, **Hide**, **Remove**, **Cancel** |
 | Moving a service | ![Moving](chromebook/moving.png) | Arrow keys or drag; Enter or release puts it down; Esc puts it back |
 | A hidden service | ![Hidden](chromebook/hidden.png) | Hidden services are listed after the others while editing |
 | Add a service | ![Add](chromebook/add.png) | A list of services in Canada, or another site's address |
-| Chrome asks for permission | ![Permission](chromebook/permission.png) | Chrome's own prompt, on adding a service |
 | No services | ![Empty](chromebook/empty.png) | **Edit services** is selected |
 | A shortcut is taken | ![Shortcut taken](chromebook/shortcut-taken.png) | The status line says what to do |
 | Selected service already open | ![Already open](chromebook/open.png) | Choosing it brings its window back |
@@ -93,8 +92,9 @@ appears.
   screens and installed web apps (usually 180 to 512 px), fetched from the site once and kept on
   the Chromebook; until it has one, or if the site publishes none, the tile shows the small icon
   Chrome keeps for the site (the project lead's decision, 2026-11-17). In the viewer's order, hidden ones left out. A service whose
-  window is open has a small **Open** marker. A service that cannot be paused (its site
-  permission was refused) says **Videos won't pause** under its name.
+  window is open has a small **Open** marker. A service that cannot be paused (the
+  viewer narrowed the extension's site access in Chrome) says **Videos won't pause** under its
+  name.
 - **Hint line** at the bottom: the shortcuts in use, read from Chrome, for example **Alt+Shift+H
   brings you back here · Alt+Shift+J goes back to the last service**. While editing, it
   says how editing works instead.
@@ -132,13 +132,11 @@ appears.
   removed service has to be added again from the list.
 - **Add a service** opens a panel with the streaming services available in Canada (the
   list in the mock-up, kept in the extension and updated with it), those already added marked, and
-  a field for any other site's address. Choosing one asks Chrome for permission on its site, and,
-  if allowed, fetches the service's icon.
-  Allowed or refused, the service is added at the end. The launcher always pauses a service's
-  video when it comes forward, if it can; the viewer only needs to know when it cannot, so a
-  refused service shows **Videos won't pause**, and nothing else is asked of them (the project
-  lead's decision, 2026-11-17). **Allow pausing** in the service's menu asks Chrome again, for a
-  viewer who changes their mind.
+  a field for any other site's address. Choosing one adds it at the end, asking nothing, and fetches
+  its icon. The launcher always pauses a service's video when it comes forward; the viewer only
+  needs to know when it cannot, so a service the extension cannot reach shows **Videos won't
+  pause**, and nothing else is asked of them (the project lead's decision, 2026-11-17). For a viewer who has narrowed the
+  extension's site access, **Allow pausing** in that service's menu asks Chrome for its site.
 - Every change is saved at once. **Done**, or Esc with nothing lifted or open, ends editing. No
   step guards editing: one person uses the Chromebook.
 
@@ -164,10 +162,10 @@ appears.
 
 - **An extension, not a page**: a Chrome extension (Manifest V3) with a background service worker.
   It does not replace the new tab page. The only thing it fetches is each service's own icon, from
-  that service's site, with the site permission given when the service was added: the address the
+  that service's site: the address the
   site names for phones and installed web apps (its web app manifest's icons, or its
-  `apple-touch-icon`), the largest offered, kept in `chrome.storage.local`. Without the permission,
-  or without such an icon, the tile uses Chrome's own icon cache (the `favicon` permission).
+  `apple-touch-icon`), the largest offered, kept in `chrome.storage.local`. Without such an icon,
+  or without access to the site, the tile uses Chrome's own icon cache (the `favicon` permission).
 - **The shortcuts**: two extension commands, `go-home` (suggested Alt+Shift+H) and `go-last`
   (suggested Alt+Shift+J), which work from any Chrome window; the spike confirmed both are free on
   the project lead's Chromebook.
@@ -179,8 +177,9 @@ appears.
   and empties the map, so nothing of the launcher is left open.
 - **Going back pauses**: on `go-home`, before bringing the launcher forward, the worker runs a
   script in every frame of the service's window that pauses each playing `<video>`, as the spike
-  did on Prime Video. It needs host permission on the service's site, requested as an optional
-  permission when the service is added.
+  did on Prime Video. It needs host permission on the service's site: the manifest asks for every
+  `http` and `https` site, which Chrome grants at installation, so no service has to ask (the project lead's decision, 2026-11-17).
+  The script runs only in the launcher's own service windows, never in ordinary browsing.
 - **Pausing however the launcher comes forward**: the worker also listens for window focus
   changes; when the launcher's window gains focus from a service's window, it pauses that window
   as above, unless the shortcut or the Home button has just done so.
@@ -199,7 +198,7 @@ appears.
   written steps in the user documentation: the folder is copied into **My files** in the Files app,
   then loaded with Chrome's **Developer mode** and **Load unpacked** at `chrome://extensions`. The
   extension's name there, and in Chrome's prompts and shortcut settings, is **Quiet Launcher**.
-  Adding a service shows Chrome's own permission prompt, with **Allow** and **Deny**. Removing the extension closes its windows and deletes
+  Removing the extension closes its windows and deletes
   its storage, which Chrome does for any removed extension.
 
 ## Accessibility

@@ -3,6 +3,7 @@ status: draft
 tests: [tests/chromebook]
 tests-commit: 372cea1404fa0dadf9e14e9faa4b368776fcde0b
 unlocks:
+  - tests/chromebook/services-harness.js: the extension's manifest now grants every site, so the test copy sets its host permissions to http://localhost/* alone (rather than adding it), keeping 127.0.0.1 out of reach to test a service that cannot be paused (AC-8); nothing else changes
   - tests/chromebook/services-controller.test.js: AC-5's first test took the first script run in the service's tab to be the pause; slice 5 (chromebook-home-button) also runs a script there, to add the Home button, before it, so the test looks for the run of the pausing function instead; nothing else changes
   - tests/chromebook/services-harness.js: Chromium runs visibly when a display is set (DISPLAY, as under xvfb-run in CI) instead of always headless, because headless Chromium does not move window focus, which AC-5's test checks; nothing else changes
 ---
@@ -59,9 +60,11 @@ A test cites a criterion as `chromebook-services#AC-1` in its name.
   window is dropped from it (`chrome.windows.onRemoved`).
 - Pausing runs `video.pause()` on each playing `<video>` in every frame with
   `chrome.scripting.executeScript`, as the spike did on Prime Video. It needs the `scripting`
-  permission and host permission on the site, which slice 3 asks for as an optional permission when
-  a service is added; the manifest declares `optional_host_permissions` for any `http` or `https`
-  site. Pausing twice is harmless, so `go-home` and the focus change may both pause.
+  permission and host permission on the site. The manifest asks for every `http` and `https` site,
+  which Chrome grants at installation (the project lead's decision of 2026-11-17; at first it was an
+  optional permission asked for when a service was added, and declared `optional_host_permissions`
+  for any `http` or `https`
+  site). Pausing twice is harmless, so `go-home` and the focus change may both pause.
 - Site icons come from Chrome's own icon cache (`favicon` permission, `/_favicon/?pageUrl=`),
   so nothing is fetched by the launcher.
 - `chrome.windows.onFocusChanged` does not fire in headless Chromium (seen in the spike), so AC-6 is

@@ -17,7 +17,8 @@ and the full-screen spike in docs/product/notes.md. What the project lead decide
 decided. On 2026-11-17 the project lead accepted the agent's proposals and changed one thing: the
 launcher does not replace Chrome's new tab page, and comes up only with its shortcut
 (REQ-chromebook-1). Amended the same day for tablet mode: REQ-chromebook-12, and pausing however the
-launcher comes forward (REQ-chromebook-6). -->
+launcher comes forward (REQ-chromebook-6). Amended again on 2026-11-17: adding a service asks
+nothing, as the extension may run on every site from installation (REQ-chromebook-3). -->
 
 ## REQ-chromebook-1: The launcher is one key away
 
@@ -45,9 +46,10 @@ name, in the same look as the TV's home screen.
 Release: first
 
 The project lead adds a service by choosing it from a list of streaming services available in
-Canada, or by giving the address of any other site, and can remove one again. Adding a
-service asks Chrome for permission on that service's site, which pausing needs
-(REQ-chromebook-6); if the permission is refused, the service is still added and opens, but is not
+Canada, or by giving the address of any other site, and can remove one again. Adding a service
+asks nothing: the extension may run on every site from installation, so each service's video pauses
+from the start (REQ-chromebook-6) (the project lead's decision, 2026-11-17). If the project lead narrows the extension's site
+access in Chrome's settings, a service it can no longer reach is still added and opens, but is not
 paused.
 
 ## REQ-chromebook-4: Arranging and hiding

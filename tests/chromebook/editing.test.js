@@ -44,7 +44,7 @@ test('chromebook-editing#AC-7: text that is not a site address gives no service'
 test('chromebook-editing#AC-7: the site and the permission asked for', () => {
   assert.equal(siteOf('https://www.primevideo.com/'), 'primevideo.com');
   assert.equal(siteOf('https://gem.cbc.ca/live'), 'gem.cbc.ca');
-  assert.equal(permissionPattern('primevideo.com'), '*://*.primevideo.com/*');
+  assert.equal(permissionPattern('primevideo.com'), 'https://*.primevideo.com/*');
 });
 
 test('chromebook-editing#AC-7: an added service goes at the end, visible, with an id of its own', () => {
