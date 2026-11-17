@@ -1,10 +1,11 @@
 ---
 id: design-chromebook
-status: draft
+status: approved
 derived-from:
   - story-chromebook-launcher: aeb2d1142c30
   - story-chromebook-open-service: 0115b9f34e7e
-  - story-chromebook-go-back: ee264250efc5
+  - requirements-chromebook#REQ-chromebook-12: 0831b2aacc81
+  - story-chromebook-go-back: 34b16f0ab619
   - story-chromebook-search: e76b0c88e535
   - story-chromebook-services: 368e4fdb201a
   - story-chromebook-install: 7dd879387fea
@@ -18,9 +19,10 @@ derived-from:
 <!-- docs/design/chromebook.md. The launcher on the project lead's Chromebook, a Chrome extension.
 Mock-ups: docs/design/chromebook/mockup.html (the source), rendered to PNG by render.js. It
 follows design-home-screen's look and wording where the two do the same thing. Drafted
-2026-11-17; the agent's choices that go beyond the approved stories are marked [proposed] until
-the project lead accepts them. Still to add: a touchscreen way back to the launcher in tablet mode
-(the project lead's request, 2026-11-17), after a spike. -->
+2026-11-17; the project lead accepted the agent's choices that go beyond the approved stories
+the same day (Back to browsing, the Open marker, the hint line, the list of services, and the
+search status line). The touch way back (REQ-chromebook-12) was added after the
+tablet-mode spike of 2026-11-17. -->
 
 ## Personas
 
@@ -36,15 +38,18 @@ the project lead accepts them. Still to add: a touchscreen way back to the launc
    as it was.
 2. To watch: choose a service (click, tap, or move to it with the arrow keys and press Enter). It
    opens in its own full-screen window, or, if already open, comes back as it was left.
-3. To go back: Alt+Shift+H from the service. The launcher comes forward and the service's video
-   pauses. Alt+Shift+J from the launcher goes straight back to the last service.
+3. To go back: Alt+Shift+H from the service, or, without a keyboard, touch the service's page and
+   tap the Home button that appears in its bottom-left corner. The launcher comes forward and the
+   service's video pauses. Bringing the launcher forward from ChromeOS's own window switcher (the
+   tablet-mode overview, or Alt+Tab) pauses it too. Alt+Shift+J from the launcher goes straight back
+   to the last service.
 4. To search: type in **Search for a show** and press Enter. JustWatch's results for Canada open
    in their own full-screen window. Following a link to one of the viewer's services turns that
    window into the service's window.
 5. To change the services: **Edit services**. Select a service to move, hide, or remove it; **Add a
    service** to add one. **Done** returns to the launcher.
 6. To stop watching: **Back to browsing** brings forward the Chrome window the viewer was last
-   browsing in [proposed]. The launcher and the services stay open behind it, ready for
+   browsing in. The launcher and the services stay open behind it, ready for
    Alt+Shift+H.
 
 ## Mock-ups
@@ -56,7 +61,7 @@ appears.
 
 | Screen or state | Mock-up | Notes |
 |---|---|---|
-| Default, first service selected | ![Default](chromebook/default.png) | **Open** marks services whose window is open [proposed] |
+| Default, first service selected | ![Default](chromebook/default.png) | **Open** marks services whose window is open |
 | Typing a search | ![Search](chromebook/search.png) | The status line says where results open |
 | Editing | ![Editing](chromebook/edit.png) | **Add a service** is the last tile; a service without permission says so |
 | A service's menu | ![Menu](chromebook/edit-menu.png) | **Move**, **Hide**, **Remove**, **Cancel** |
@@ -81,10 +86,10 @@ appears.
 - **Services**: a grid, five per row at 1366 px wide and as many as fit at other widths, each a
   rounded tile with the service's site icon above its name on the service's colour, and the name
   again underneath, as on the TV. In the viewer's order, hidden ones left out. A service whose
-  window is open has a small **Open** marker [proposed]. A service that cannot be paused (its site
+  window is open has a small **Open** marker. A service that cannot be paused (its site
   permission was refused) says **Videos won't pause** under its name.
 - **Hint line** at the bottom: the shortcuts in use, read from Chrome, for example **Alt+Shift+H
-  brings you back here · Alt+Shift+J goes back to the last service** [proposed]. While editing, it
+  brings you back here · Alt+Shift+J goes back to the last service**. While editing, it
   says how editing works instead.
 - **Selection**, as on the TV: a white outline with a thin black edge, slightly enlarged, the name
   white and bold. One item is selected at all times while the keyboard is in use; a click or tap
@@ -92,6 +97,21 @@ appears.
 - **Movement**: the arrow keys move between neighbours, as on the TV, with no wrapping; Tab and
   Shift+Tab move through everything in reading order; Enter or Space activates. Up from the first
   row goes to the top row.
+
+## The Home button on service pages
+
+- On any service's page, a touch anywhere shows a round **Home** button, 64 px, in the bottom-left
+  corner, 24 px in from the edges, in the launcher's colours (a dark fill with the `#59646e` edge
+  and a white house). It fades out 4 seconds after the last touch. A mouse or touchpad does not
+  show it; the keyboard has Alt+Shift+H.
+- Tapping it does exactly what Alt+Shift+H does: the video pauses and the launcher comes forward.
+- When the site's own player is full screen, the button shows over it.
+- Checked on the project lead's Chromebook in tablet mode (2026-11-17): it showed, and did not get
+  in the way of anything on the sites; the bottom-left corner suits for now.
+
+| State | Mock-up | Notes |
+|---|---|---|
+| A service, just touched | ![Home button](chromebook/home-button.png) | The service's page is a stand-in |
 
 ## Editing
 
@@ -103,8 +123,8 @@ appears.
   the touchpad or a finger. Enter, or releasing a drag, puts it down; Esc puts it back where it was.
 - **Remove** asks **Remove <name>? Its window will close.** with **Remove** and **Cancel**, since a
   removed service has to be added again from the list.
-- **Add a service** opens a panel with the streaming services available in Canada [proposed: the
-  list in the mock-up, kept in the extension and updated with it], those already added marked, and
+- **Add a service** opens a panel with the streaming services available in Canada (the
+  list in the mock-up, kept in the extension and updated with it), those already added marked, and
   a field for any other site's address. Choosing one asks Chrome for permission on its site.
   Allowed or refused, the service is added at the end; refused, it shows **Videos won't pause**,
   and selecting that text explains how to allow it later.
@@ -116,7 +136,7 @@ appears.
 - **Searching**: Enter with text opens JustWatch's results in their own full-screen window, and
   the box is cleared. Enter with nothing typed does nothing. The status line, while the box is
   selected, says **Results open from JustWatch, in their own full-screen window. Enter searches.**
-  [proposed]
+
 - **No services**: **No services yet. Choose Edit services, then Add a service.** with **Edit
   services** selected.
 - **A shortcut is taken**: if Chrome could not give the extension Alt+Shift+H or Alt+Shift+J
@@ -145,6 +165,14 @@ appears.
   script in every frame of the service's window that pauses each playing `<video>`, as the spike
   did on Prime Video. It needs host permission on the service's site, requested as an optional
   permission when the service is added.
+- **Pausing however the launcher comes forward**: the worker also listens for window focus
+  changes; when the launcher's window gains focus from a service's window, it pauses that window
+  as above, unless the shortcut or the Home button has just done so.
+- **The Home button**: a content script on each service's site (the same host permission) adds the
+  button in a closed shadow root, so the site's styles cannot reach it and it cannot reach the
+  site's page. It listens for touch pointer events only, and moves itself into the site's own
+  full-screen element when there is one (the spike did this on a stand-in page; on the Chromebook
+  it showed over the services' players).
 - **Search**: JustWatch's search for Canada (`https://www.justwatch.com/ca/search?q=<text>`), in a
   new full-screen popup window. When that window navigates to one of the viewer's services, the
   worker records it as that service's window (replacing any earlier one in the map, which stays
@@ -166,5 +194,7 @@ appears.
 - With ChromeVox: each tile reads the service's name, "button", and **Open** or **Videos won't
   pause** when shown; the controls read their names; the status line is announced when it changes;
   editing announces "Editing services" and each move ("MUBI, moved to 4 of 9").
-- With ChromeOS's reduce-motion setting on, nothing animates: no enlarging, and lifted services move
-  without sliding.
+- With ChromeOS's reduce-motion setting on, nothing animates: no enlarging, lifted services move
+  without sliding, and the Home button appears and goes without fading.
+- The Home button reads "Back to the launcher, button" with ChromeVox, and is 64 px, larger than
+  the 48 px minimum touch target.
