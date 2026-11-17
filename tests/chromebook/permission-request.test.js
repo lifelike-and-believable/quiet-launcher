@@ -21,11 +21,11 @@ const ask = (site, url) => page.evaluate(async ([s, u]) => {
 }, [site, url]);
 
 test('chromebook-editing#AC-11: Chrome accepts the permission asked for a service in the list', async () => {
-  assert.equal(await ask('primevideo.com', 'https://www.primevideo.com/'), 'prompt');
+  assert.match(await ask('primevideo.com', 'https://www.primevideo.com/'), /^(prompt|answered true)$/);
 });
 
 test('chromebook-editing#AC-11: and for an http address, a bare host, and an IP address', async () => {
-  assert.equal(await ask('example.org', 'http://www.example.org/'), 'prompt');
-  assert.equal(await ask('localhost', 'https://localhost:8080/tv'), 'prompt');
-  assert.equal(await ask('127.0.0.1', 'http://127.0.0.1:8080/'), 'prompt');
+  assert.match(await ask('example.org', 'http://www.example.org/'), /^(prompt|answered true)$/);
+  assert.match(await ask('localhost', 'https://localhost:8080/tv'), /^(prompt|answered true)$/);
+  assert.match(await ask('127.0.0.1', 'http://127.0.0.1:8080/'), /^(prompt|answered true)$/);
 });

@@ -29,8 +29,8 @@
       "description": "Back to the last service"
     }
   },
-  "optional_host_permissions": [
-    "http://*/*",
-    "https://*/*"
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
   ]
 }

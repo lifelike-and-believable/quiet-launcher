@@ -2,12 +2,12 @@
 id: docs-chromebook
 status: approved
 derived-from:
-  - design-chromebook: 1bf61f23d651
+  - design-chromebook: 7c3e3417833a
   - story-chromebook-launcher: aeb2d1142c30
   - story-chromebook-open-service: 0115b9f34e7e
-  - story-chromebook-go-back: 34b16f0ab619
+  - story-chromebook-go-back: 3342b71ad5f4
   - story-chromebook-search: e76b0c88e535
-  - story-chromebook-services: 368e4fdb201a
+  - story-chromebook-services: 0ed11c4ae63d
   - story-chromebook-install: 7dd879387fea
 ---
 
@@ -44,15 +44,16 @@ If Chrome says a shortcut could not be set, see [If something goes wrong](#if-so
 2. Choose a service from the list (Prime Video, YouTube, Apple TV+, Criterion Channel, MUBI, CBC Gem,
    Tubi, Plex, myfilmfriend, and others available in Canada), or type another site's address and
    choose **Add**.
-3. Chrome asks whether the extension may "read and change your data" on that service's site.
-   Choose **Allow**: the launcher needs this to pause the service's video when you go back to the
-   launcher, and to show its Home button. It does nothing else on the site.
-4. Add the rest the same way, then choose **Done**.
+3. Add the rest the same way, then choose **Done**.
 
-If you choose **Deny**, the service is still added and opens, but its videos will not pause when
-you leave them, and the launcher says **Videos won't pause** under it. That is all you need to do
-about it. If you change your mind, choose **Edit services**, select the service, and choose
-**Allow pausing**.
+Nothing more is asked: each service's video pauses when you go back to the launcher, and its own
+icon appears on its tile.
+
+The extension may read and change pages on every site, which is what lets it pause any service and
+show its Home button; Chrome's extension page says so. It only acts in the launcher's own service
+windows, never in your ordinary browsing. If you narrow its site access in Chrome's settings, a
+service it can no longer reach says **Videos won't pause** under it; to let that one pause again,
+choose **Edit services**, select it, and choose **Allow pausing**.
 
 ## Watch something
 
@@ -143,11 +144,11 @@ stored is left behind.
   extension or ChromeOS already uses those keys. Set different ones (see [Change the
   shortcuts](#change-the-shortcuts)). Until then, the launcher's window can be reached with
   Alt+Tab or the tablet-mode overview, and services' Home buttons still work.
-- A video keeps playing when I go back: check that the service does not say **Videos won't
-  pause** while you edit; if it does, allow its site. A few players start again by themselves; the
-  launcher does not fight them.
+- A video keeps playing when I go back: if the service says **Videos won't pause**, the extension's
+  site access has been narrowed (see [Add your services](#add-your-services)). A few players start
+  again by themselves; the launcher does not fight them.
 - The Home button does not appear: it appears only on a touch, not with the touchpad or a mouse.
-  If it never appears on one service, that service's site permission is probably missing (as
+  If it never appears on one service, that service probably says **Videos won't pause** too (as
   above).
 - Tabs or the address bar show: the window has left full screen, for example after the
   Chromebook's full-screen key. Press Alt+Shift+H, or choose the service again, to go back to full

@@ -306,14 +306,13 @@ function openAddPanel() {
   field.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); fromField(); } });
   (choices.querySelector('.choice:not(.on)') || field).focus();
 
+  // chromebook-editing#AC-7: added at the end, asking nothing; every site is allowed at installation.
   function add(entry) {
-    const asked = chrome.permissions.request({ origins: [permissionPattern(siteOf(entry.url), entry.url)] }).catch(() => false);
     (async () => {
       const { list, service } = addService(await loadServices(chrome), entry);
       closeOverlays();
       setStatus(shortcutStatus(commands));
       await save(list);
-      await asked;
       chrome.runtime.sendMessage({ type: 'refresh-icons' }); // chromebook-icons#AC-2
       await render();
       document.querySelector(`[data-id="${CSS.escape(service.id)}"]`)?.focus();

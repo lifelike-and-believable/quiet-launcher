@@ -25,7 +25,7 @@ export async function loadWithServices() {
   const dir = mkdtempSync(join(tmpdir(), 'quiet-launcher-ext-'));
   cpSync(SOURCE, dir, { recursive: true });
   const manifest = JSON.parse(readFileSync(join(dir, 'manifest.json')));
-  manifest.host_permissions = [...(manifest.host_permissions || []), 'http://localhost/*'];
+  manifest.host_permissions = ['http://localhost/*'];
   writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2));
 
   const hits = {};

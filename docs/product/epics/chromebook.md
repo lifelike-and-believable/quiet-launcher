@@ -4,7 +4,7 @@ status: approved
 derived-from:
   - requirements-chromebook#REQ-chromebook-1: 28894598d5df
   - requirements-chromebook#REQ-chromebook-2: b95df4d33199
-  - requirements-chromebook#REQ-chromebook-3: 9c35de05b65a
+  - requirements-chromebook#REQ-chromebook-3: ccc620e173b8
   - requirements-chromebook#REQ-chromebook-4: c9e62cf62621
   - requirements-chromebook#REQ-chromebook-5: 0803033b5a70
   - requirements-chromebook#REQ-chromebook-6: 6de348bc8ebb

@@ -20,8 +20,8 @@ that what I reach for most is first.
 - I can add a service by choosing it from a list of streaming services available in Canada, which
   includes Prime Video, YouTube, Apple TV+, Criterion Channel, MUBI, CBC Gem, Tubi, Plex, and
   myfilmfriend, or by giving the address of any other site.
-- Adding a service asks Chrome for permission on its site. If I refuse, the service is still added
-  and opens, and the launcher says its videos will not be paused.
+- Adding a service asks me nothing: its videos pause from the start. Only if I narrow the
+  extension's site access in Chrome does a service say its videos won't pause.
 - I can remove a service, move it to any place in the list, and hide it and show it again, with
   the keyboard, the touchpad, or the touchscreen. No extra step guards against doing this by
   accident.

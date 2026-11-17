@@ -126,12 +126,12 @@ test('chromebook-editing#AC-6: Add a service lists services in Canada and an add
   assert.equal(await panel.count(), 0);
 });
 
-test('chromebook-editing#AC-7: choosing one asks for its site and adds it at the end; refused, it will not pause', async () => {
+test('chromebook-editing#AC-7: choosing one adds it at the end, asking nothing; one out of reach says it will not pause', async () => {
   await answerPermission(false);
   await page.locator('#services .add').click();
   await page.getByRole('dialog', { name: 'Add a service' }).locator('.choice', { hasText: 'Crave' }).click();
   await settle();
-  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['https://*.crave.ca/*'] }]);
+  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [], 'nothing was asked');
   const list = await stored();
   assert.equal(list[list.length - 1].name, 'Crave');
   assert.equal(list[list.length - 1].url, 'https://www.crave.ca/');
@@ -158,7 +158,7 @@ test('chromebook-editing#AC-7: an address is added by name of its site; text tha
   const added = (await stored()).at(-1);
   assert.equal(added.name, 'localhost');
   assert.equal(added.url, `https://localhost:${new URL(ext.url('localhost', 'x')).port}/delta`);
-  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [{ origins: ['https://localhost/*'] }]);
+  assert.deepEqual(await page.evaluate(() => window.permissionAsks), [], 'nothing was asked');
 });
 
 test('chromebook-editing#AC-8: Allow pausing asks Chrome again for the site', async () => {
