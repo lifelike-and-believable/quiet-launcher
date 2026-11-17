@@ -19,8 +19,9 @@ derived-from:
 <!-- docs/design/chromebook.md. The launcher on the project lead's Chromebook, a Chrome extension.
 Mock-ups: docs/design/chromebook/mockup.html (the source), rendered to PNG by render.js. It
 follows design-home-screen's look and wording where the two do the same thing. Drafted
-2026-11-17; the agent's choices that go beyond the approved stories are marked [proposed] until
-the project lead accepts them. The touch way back (REQ-chromebook-12) was added after the
+2026-11-17; the project lead accepted the agent's choices that go beyond the approved stories
+the same day (Back to browsing, the Open marker, the hint line, the list of services, and the
+search status line). The touch way back (REQ-chromebook-12) was added after the
 tablet-mode spike of 2026-11-17. -->
 
 ## Personas
@@ -48,7 +49,7 @@ tablet-mode spike of 2026-11-17. -->
 5. To change the services: **Edit services**. Select a service to move, hide, or remove it; **Add a
    service** to add one. **Done** returns to the launcher.
 6. To stop watching: **Back to browsing** brings forward the Chrome window the viewer was last
-   browsing in [proposed]. The launcher and the services stay open behind it, ready for
+   browsing in. The launcher and the services stay open behind it, ready for
    Alt+Shift+H.
 
 ## Mock-ups
@@ -60,7 +61,7 @@ appears.
 
 | Screen or state | Mock-up | Notes |
 |---|---|---|
-| Default, first service selected | ![Default](chromebook/default.png) | **Open** marks services whose window is open [proposed] |
+| Default, first service selected | ![Default](chromebook/default.png) | **Open** marks services whose window is open |
 | Typing a search | ![Search](chromebook/search.png) | The status line says where results open |
 | Editing | ![Editing](chromebook/edit.png) | **Add a service** is the last tile; a service without permission says so |
 | A service's menu | ![Menu](chromebook/edit-menu.png) | **Move**, **Hide**, **Remove**, **Cancel** |
@@ -85,10 +86,10 @@ appears.
 - **Services**: a grid, five per row at 1366 px wide and as many as fit at other widths, each a
   rounded tile with the service's site icon above its name on the service's colour, and the name
   again underneath, as on the TV. In the viewer's order, hidden ones left out. A service whose
-  window is open has a small **Open** marker [proposed]. A service that cannot be paused (its site
+  window is open has a small **Open** marker. A service that cannot be paused (its site
   permission was refused) says **Videos won't pause** under its name.
 - **Hint line** at the bottom: the shortcuts in use, read from Chrome, for example **Alt+Shift+H
-  brings you back here · Alt+Shift+J goes back to the last service** [proposed]. While editing, it
+  brings you back here · Alt+Shift+J goes back to the last service**. While editing, it
   says how editing works instead.
 - **Selection**, as on the TV: a white outline with a thin black edge, slightly enlarged, the name
   white and bold. One item is selected at all times while the keyboard is in use; a click or tap
@@ -122,8 +123,8 @@ appears.
   the touchpad or a finger. Enter, or releasing a drag, puts it down; Esc puts it back where it was.
 - **Remove** asks **Remove <name>? Its window will close.** with **Remove** and **Cancel**, since a
   removed service has to be added again from the list.
-- **Add a service** opens a panel with the streaming services available in Canada [proposed: the
-  list in the mock-up, kept in the extension and updated with it], those already added marked, and
+- **Add a service** opens a panel with the streaming services available in Canada (the
+  list in the mock-up, kept in the extension and updated with it), those already added marked, and
   a field for any other site's address. Choosing one asks Chrome for permission on its site.
   Allowed or refused, the service is added at the end; refused, it shows **Videos won't pause**,
   and selecting that text explains how to allow it later.
@@ -135,7 +136,7 @@ appears.
 - **Searching**: Enter with text opens JustWatch's results in their own full-screen window, and
   the box is cleared. Enter with nothing typed does nothing. The status line, while the box is
   selected, says **Results open from JustWatch, in their own full-screen window. Enter searches.**
-  [proposed]
+
 - **No services**: **No services yet. Choose Edit services, then Add a service.** with **Edit
   services** selected.
 - **A shortcut is taken**: if Chrome could not give the extension Alt+Shift+H or Alt+Shift+J
