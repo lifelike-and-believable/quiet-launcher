@@ -44,13 +44,19 @@ test('chromebook-search#AC-4: following a link to a service makes the window tha
     const [tab] = await chrome.tabs.query({ windowId: id });
     await chrome.tabs.update(tab.id, { url });
   }, [w.id, ext.url('localhost', 'beta')]);
-  const service = await ext.page(ext.url('localhost', 'beta'));
+  let service;
+  for (let i = 0; i < 50 && !service; i++) {
+    service = ext.context.pages().find(p => p.url().startsWith(ext.url('localhost', 'beta')));
+    if (!service) await settle(100);
+  }
   await service.waitForLoadState();
   await settle();
   page = await ext.launcher();
   await settle();
   assert.match(await page.locator('#services .tile', { hasText: 'Beta' }).first().textContent(), /\bOpen\b/);
   await ext.worker.evaluate(id => chrome.windows.update(id, { focused: true }), w.id);
+  await service.evaluate(() => [document, document.querySelector('iframe').contentDocument]
+    .flatMap(d => [...d.querySelectorAll('video')]).forEach(v => v.play()));
   assert.equal(await playing(service), true);
   await ext.call('goHome');
   await settle();

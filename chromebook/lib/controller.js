@@ -4,6 +4,8 @@
 import { loadServices, loadSession, serviceOfWindow, pauseVideosInPage } from './services.js';
 
 export const LAUNCHER_PAGE = 'launcher.html';
+const SEARCH = 'https://www.justwatch.com/ca/search';
+const hostOf = url => { try { return new URL(url).hostname; } catch { return ''; } };
 
 export function createController(chrome) {
   const launcherUrl = chrome.runtime.getURL(LAUNCHER_PAGE);
@@ -20,22 +22,18 @@ export function createController(chrome) {
   }
 
   // A new full-screen popup window. On some systems Chrome shows a new popup in a normal window
-  // until it is drawn (seen in Chromium on Linux), so full screen is asked for again once the page
-  // has loaded, or after 5 seconds at most. On ChromeOS it is already full screen, and asking again
-  // changes nothing.
+  // until it is drawn (seen in Chromium on Linux), so full screen is asked for again while the
+  // window settles: until its page has loaded and it is full screen, or for 5 seconds at most. On
+  // ChromeOS it is full screen from the start, and nothing more is asked.
   async function openFullscreen(url) {
     const created = await chrome.windows.create({ url, type: 'popup', state: 'fullscreen', focused: true });
-    await chrome.windows.update(created.id, { state: 'fullscreen' });
-    for (let waited = 0; waited < 5000; waited += 100) {
+    for (let waited = 0; waited <= 5000; waited += 100) {
       let w;
-      try { w = await chrome.windows.get(created.id, { populate: true }); } catch { return created.id; }
-      if (!(w.tabs || []).some(t => t.status === 'loading')) {
-        if (w.state !== 'fullscreen') await chrome.windows.update(created.id, { state: 'fullscreen' });
-        return created.id;
-      }
+      try { w = await chrome.windows.get(created.id, { populate: true }); } catch { break; }
+      if (w.state !== 'fullscreen') await chrome.windows.update(created.id, { state: 'fullscreen' });
+      else if (!(w.tabs || []).some(t => t.status === 'loading')) break;
       await new Promise(r => setTimeout(r, 100));
     }
-    await chrome.windows.update(created.id, { state: 'fullscreen' });
     return created.id;
   }
 
@@ -159,9 +157,45 @@ export function createController(chrome) {
       await chrome.storage.session.set({ serviceWindows });
     },
 
-    // Stubs for chromebook-search (tests first).
-    async search() { return -1; },
-    async onTabUpdated() {},
+    // chromebook-search#AC-1, AC-2: JustWatch's results for Canada in their own full-screen
+    // window, reusing it while it still shows JustWatch. The text is never stored (AC-5).
+    async search(text) {
+      if (!text || !text.trim()) return undefined;
+      const url = `${SEARCH}?q=${encodeURIComponent(text)}`;
+      const { searchWindow } = await chrome.storage.session.get('searchWindow');
+      if (searchWindow != null) {
+        try {
+          const w = await chrome.windows.get(searchWindow, { populate: true });
+          const tab = (w.tabs || [])[0];
+          if (tab && hostOf(tab.url || tab.pendingUrl) === 'www.justwatch.com') {
+            await chrome.tabs.update(tab.id, { url });
+            return await bringForward(searchWindow);
+          }
+        } catch { /* it closed */ }
+      }
+      const id = await openFullscreen(url);
+      await chrome.storage.session.set({ searchWindow: id });
+      return id;
+    },
+
+    // chromebook-search#AC-4: the search window going to one of the viewer's services becomes
+    // that service's window.
+    async onTabUpdated(tabId, change, tab) {
+      if (!change.url || !tab) return;
+      const { searchWindow } = await chrome.storage.session.get('searchWindow');
+      if (searchWindow == null || tab.windowId !== searchWindow) return;
+      const host = hostOf(change.url);
+      // On the service's site; if several services share it, the one whose own address it is under.
+      const candidates = (await loadServices(chrome)).filter(s => host === s.site || host.endsWith(`.${s.site}`));
+      const service = candidates.find(s => change.url.startsWith(s.url)) || candidates[0];
+      if (!service) return;
+      const session = await loadSession(chrome);
+      await chrome.storage.session.set({
+        serviceWindows: { ...session.serviceWindows, [service.id]: searchWindow },
+        lastService: service.id,
+      });
+      await chrome.storage.session.set({ searchWindow: null }); // it is the service's now
+    },
 
     noteFocus,
 

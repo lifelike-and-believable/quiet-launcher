@@ -12,10 +12,12 @@ chrome.commands.onCommand.addListener(command => {
 });
 
 chrome.windows.onFocusChanged.addListener(windowId => globalThis.quietLauncher.onFocus(windowId));
+chrome.tabs.onUpdated.addListener((tabId, change, tab) => globalThis.quietLauncher.onTabUpdated(tabId, change, tab));
 chrome.windows.onRemoved.addListener(windowId => globalThis.quietLauncher.onWindowRemoved(windowId));
 
 chrome.runtime.onMessage.addListener(message => {
   if (message?.type === 'back-to-browsing') globalThis.quietLauncher.backToBrowsing();
   if (message?.type === 'open-service') globalThis.quietLauncher.openService(message.id);
+  if (message?.type === 'search') globalThis.quietLauncher.search(message.text);
   if (message?.type === 'close-service') globalThis.quietLauncher.closeService(message.id);
 });

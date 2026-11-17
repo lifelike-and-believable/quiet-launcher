@@ -33,6 +33,19 @@ let closing = null; // what to do on Esc when a menu or dialog is open
 async function services() { return lifted ? lifted.working : loadServices(chrome); }
 async function save(list) { await chrome.storage.local.set({ services: list }); }
 
+// chromebook-search#AC-1, AC-3: the search box.
+const SEARCH_STATUS = 'Results open from JustWatch, in their own full-screen window. Enter searches.';
+$('search').addEventListener('focus', () => setStatus(SEARCH_STATUS));
+$('search').addEventListener('blur', () => { if ($('status').textContent === SEARCH_STATUS) setStatus(shortcutStatus(commands)); });
+$('search').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  const text = $('search').value;
+  if (!text.trim()) return;
+  chrome.runtime.sendMessage({ type: 'search', text });
+  $('search').value = '';
+});
+
 $('browse').addEventListener('click', () => chrome.runtime.sendMessage({ type: 'back-to-browsing' }));
 $('edit').addEventListener('click', () => (editing ? stopEditing() : startEditing()));
 
