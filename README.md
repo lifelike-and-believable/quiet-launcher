@@ -24,3 +24,20 @@ powershell -ExecutionPolicy Bypass -File .\build.ps1
 
 The first build downloads Gradle and the Android libraries (about 1 GB). The tests run with
 `.\gradlew.bat :app:testDebugUnitTest`.
+
+## The Chromebook launcher
+
+`chromebook/` is a Chrome extension that brings the same quiet launcher to the household's
+Chromebook: the streaming services in one place, full screen, with Alt+Shift+H to come back to it.
+Installing and using it is in `docs/user/chromebook.md`; nothing needs building.
+
+Its tests are in `tests/chromebook` (Node 22 and Playwright's Chromium):
+
+```
+cd tests/chromebook
+npm ci
+npm run test:display   # on Linux, runs Chromium on a virtual display (xvfb-run); `npm test` runs it headless
+```
+
+Headless Chromium does not move window focus, so a few tests fail with `npm test`; CI uses
+`npm run test:display`.

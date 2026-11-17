@@ -21,7 +21,9 @@ Mock-ups: docs/design/chromebook/mockup.html (the source), rendered to PNG by re
 follows design-home-screen's look and wording where the two do the same thing. Drafted
 2026-11-17; the project lead accepted the agent's choices that go beyond the approved stories
 the same day (Back to browsing, the Open marker, the hint line, the list of services, and the
-search status line). The touch way back (REQ-chromebook-12) was added after the
+search status line). Amended the same day: tiles show each service's own icon, fetched from its
+site, with the name only underneath; Back to browsing turns the launcher and its services off; a
+refused site only shows that its videos won't pause. The touch way back (REQ-chromebook-12) was added after the
 tablet-mode spike of 2026-11-17. -->
 
 ## Personas
@@ -48,9 +50,10 @@ tablet-mode spike of 2026-11-17. -->
    window into the service's window.
 5. To change the services: **Edit services**. Select a service to move, hide, or remove it; **Add a
    service** to add one. **Done** returns to the launcher.
-6. To stop watching: **Back to browsing** brings forward the Chrome window the viewer was last
-   browsing in. The launcher and the services stay open behind it, ready for
-   Alt+Shift+H.
+6. To stop watching: **Back to browsing** turns the launcher off. It closes the launcher's window
+   and every service and search window it opened, and brings forward the Chrome window the viewer
+   was last browsing in. The next Alt+Shift+H starts afresh (the project lead's decision,
+   2026-11-17: going back to browsing turns off the launcher and its services).
 
 ## Mock-ups
 
@@ -84,8 +87,12 @@ appears.
 - **Status line**: reserved space under the top row, empty unless there is something to say, so a
   message never moves the services.
 - **Services**: a grid, five per row at 1366 px wide and as many as fit at other widths, each a
-  rounded tile with the service's site icon above its name on the service's colour, and the name
-  again underneath, as on the TV. In the viewer's order, hidden ones left out. A service whose
+  rounded tile with the service's own icon on the service's colour, and the service's name
+  underneath, as on the TV; the name is not repeated on the tile (the project lead's change,
+  2026-11-17). The icon is the largest the site publishes for phones' home
+  screens and installed web apps (usually 180 to 512 px), fetched from the site once and kept on
+  the Chromebook; until it has one, or if the site publishes none, the tile shows the small icon
+  Chrome keeps for the site (the project lead's decision, 2026-11-17). In the viewer's order, hidden ones left out. A service whose
   window is open has a small **Open** marker. A service that cannot be paused (its site
   permission was refused) says **Videos won't pause** under its name.
 - **Hint line** at the bottom: the shortcuts in use, read from Chrome, for example **Alt+Shift+H
@@ -125,9 +132,13 @@ appears.
   removed service has to be added again from the list.
 - **Add a service** opens a panel with the streaming services available in Canada (the
   list in the mock-up, kept in the extension and updated with it), those already added marked, and
-  a field for any other site's address. Choosing one asks Chrome for permission on its site.
-  Allowed or refused, the service is added at the end; refused, it shows **Videos won't pause**,
-  and selecting that text explains how to allow it later.
+  a field for any other site's address. Choosing one asks Chrome for permission on its site, and,
+  if allowed, fetches the service's icon.
+  Allowed or refused, the service is added at the end. The launcher always pauses a service's
+  video when it comes forward, if it can; the viewer only needs to know when it cannot, so a
+  refused service shows **Videos won't pause**, and nothing else is asked of them (the project
+  lead's decision, 2026-11-17). **Allow pausing** in the service's menu asks Chrome again, for a
+  viewer who changes their mind.
 - Every change is saved at once. **Done**, or Esc with nothing lifted or open, ends editing. No
   step guards editing: one person uses the Chromebook.
 
@@ -152,15 +163,20 @@ appears.
 ## How it works
 
 - **An extension, not a page**: a Chrome extension (Manifest V3) with a background service worker.
-  It does not replace the new tab page. It has no content of its own beyond its pages, and fetches
-  nothing: the service icons come from Chrome's own icon cache (the `favicon` permission).
+  It does not replace the new tab page. The only thing it fetches is each service's own icon, from
+  that service's site, with the site permission given when the service was added: the address the
+  site names for phones and installed web apps (its web app manifest's icons, or its
+  `apple-touch-icon`), the largest offered, kept in `chrome.storage.local`. Without the permission,
+  or without such an icon, the tile uses Chrome's own icon cache (the `favicon` permission).
 - **The shortcuts**: two extension commands, `go-home` (suggested Alt+Shift+H) and `go-last`
   (suggested Alt+Shift+J), which work from any Chrome window; the spike confirmed both are free on
   the project lead's Chromebook.
 - **Windows**: the launcher and each service are `popup` windows created full screen, so none has
   a tab strip; the spike showed switching windows never flashes Chrome's tabs or address bar. The
   service worker keeps a map from service to window in session storage, so it survives the worker
-  sleeping; a window that closes is dropped from the map.
+  sleeping; a window that closes is dropped from the map. **Back to browsing** brings the browsing
+  window forward, then closes every window in the map, the search window, and the launcher's own,
+  and empties the map, so nothing of the launcher is left open.
 - **Going back pauses**: on `go-home`, before bringing the launcher forward, the worker runs a
   script in every frame of the service's window that pauses each playing `<video>`, as the spike
   did on Prime Video. It needs host permission on the service's site, requested as an optional

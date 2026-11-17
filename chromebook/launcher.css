@@ -1,0 +1,61 @@
+/* The launcher page, in the TV's colours and selection (design-chromebook#layout). */
+:root { --bg: #101418; --surface: #1c2228; --edge: #59646e; --text: #eef2f5; --muted: #a9b4bd;
+        --focus: #ffffff; --ring: #000000; --note: #ffd28a; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--text); font-family: Roboto, "Segoe UI", sans-serif; font-size: 18px; overflow: hidden; }
+.safe { position: absolute; inset: 32px 48px 64px; display: flex; flex-direction: column; }
+.top { display: flex; align-items: center; gap: 16px; min-height: 64px; }
+.pill { min-height: 56px; border-radius: 28px; background: var(--surface); border: 2px solid var(--edge);
+        display: flex; align-items: center; gap: 12px; padding: 0 22px; font: inherit; font-size: 20px; color: var(--text); cursor: pointer; }
+.search { flex: 0 1 480px; color: var(--muted); cursor: text; }
+.search input { flex: 1; min-width: 0; background: none; border: none; color: var(--text); font: inherit; font-size: 20px; outline: none; }
+.search input::placeholder { color: var(--muted); }
+.spacer { flex: 1; }
+.clock { font-size: 32px; font-weight: 300; margin-left: 8px; min-width: 4ch; text-align: right; }
+.status { min-height: 40px; display: flex; align-items: center; padding-left: 24px; color: var(--note); }
+#services { flex: 1; }
+.empty { margin-top: 15vh; text-align: center; font-size: 24px; color: var(--muted); line-height: 1.6; }
+.hint { position: absolute; left: 48px; right: 48px; bottom: 18px; font-size: 16px; color: var(--muted); }
+/* The TV's selection: a white outline with a thin black edge, slightly enlarged. */
+button:focus-visible, .search:focus-within { outline: 4px solid var(--focus); outline-offset: 2px;
+  box-shadow: 0 0 0 8px var(--ring); background: #2b343c; border-color: transparent; }
+.search:focus-within input:focus-visible { outline: none; }
+@media (prefers-reduced-motion: no-preference) { button { transition: transform .1s; } button:focus-visible { transform: scale(1.04); } }
+/* The services grid (design-chromebook#layout): five per row at 1366 px, as many as fit elsewhere. */
+.grid { display: grid; align-items: start; grid-template-columns: repeat(auto-fill, 224px); column-gap: 30px; row-gap: 22px; padding: 12px 16px 0; margin: 0 -16px; }
+.tile { position: relative; width: 224px; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border: none; background: none; color: inherit; font: inherit; cursor: pointer; text-align: center; }
+.banner { width: 224px; height: 126px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+          font-size: 24px; font-weight: 700; color: #fff; padding: 0 12px; }
+.banner img { width: 48px; height: 48px; border-radius: 10px; }
+.tile .name { display: block; margin-top: 8px; font-size: 18px; color: var(--muted); line-height: 1.25; }
+.tile .note { display: block; font-size: 16px; color: var(--note); }
+.badge { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,.7); color: var(--text); font-size: 14px; padding: 2px 8px; border-radius: 10px; }
+.tile:focus-visible { outline: none; box-shadow: none; background: none; transform: none; }
+.tile:focus-visible .banner { outline: 4px solid var(--focus); outline-offset: 3px; box-shadow: 0 0 0 9px var(--ring); }
+.tile:focus-visible .name { color: var(--text); font-weight: 600; }
+@media (prefers-reduced-motion: no-preference) { .tile:focus-visible .banner { transform: scale(1.05); } }
+/* Editing (design-chromebook#editing). */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.tile.add .banner { background: var(--surface); border: 2px dashed var(--edge); color: var(--muted); font-size: 22px; font-weight: 500; }
+.tile.hidden .banner { opacity: .45; }
+.tile.lifted .banner { box-shadow: 0 0 0 9px var(--ring), 0 14px 24px rgba(0,0,0,.6); }
+@media (prefers-reduced-motion: no-preference) { .tile.lifted .banner { transform: translateY(-10px) scale(1.05); } }
+.section { margin: 18px 0 6px; color: var(--muted); }
+.menu { position: fixed; z-index: 5; background: #222a31; border: 2px solid var(--edge); border-radius: 14px; padding: 8px; width: 220px; box-shadow: 0 12px 30px rgba(0,0,0,.6); display: flex; flex-direction: column; }
+.menu button { text-align: left; padding: 10px 16px; font: inherit; font-size: 19px; color: var(--text); background: none; border: none; border-radius: 8px; cursor: pointer; }
+.menu button:focus-visible { outline: 4px solid var(--focus); outline-offset: -4px; box-shadow: none; transform: none; }
+.dialog { position: fixed; inset: 0; z-index: 10; background: rgba(16,20,24,.8); display: flex; align-items: center; justify-content: center; }
+.panel { width: min(760px, calc(100vw - 32px)); background: #1a2026; border: 2px solid var(--edge); border-radius: 18px; padding: 26px 30px; }
+.panel h2 { margin: 0 0 6px; font-size: 26px; font-weight: 500; }
+.panel p { margin: 0 0 16px; color: var(--muted); font-size: 17px; }
+.choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+.choice { padding: 12px 14px; border: 2px solid var(--edge); border-radius: 10px; font: inherit; font-size: 18px; display: flex; justify-content: space-between; background: none; color: var(--text); cursor: pointer; }
+.choice.on { color: var(--muted); cursor: default; }
+.row { display: flex; gap: 12px; align-items: center; }
+.row input { flex: 1; min-width: 0; min-height: 48px; border: 2px solid var(--edge); border-radius: 10px; padding: 0 14px; font: inherit; font-size: 18px; background: none; color: var(--text); }
+.btn { min-height: 48px; padding: 0 20px; border-radius: 24px; border: 2px solid var(--edge); font: inherit; font-size: 18px; background: none; color: var(--text); cursor: pointer; }
+.btn.primary { background: #8ab4f8; color: #0b1a33; border-color: #8ab4f8; font-weight: 600; }
+.choice:focus-visible, .btn:focus-visible, .row input:focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 8px var(--ring); }
+body.editing .tile:not(.add):not(.hidden) { touch-action: none; user-select: none; }
+.banner img.own { width: 64px; height: 64px; border-radius: 14px; }
