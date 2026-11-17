@@ -115,3 +115,4 @@ file tracks where the project is; it is not a process artifact.
 | 2026-11-17 | A separate persona for the Chromebook, the project lead as its only viewer, instead of amending the TV's set-up person (whose sections eleven TV artifacts link to) | `docs/product/personas/chromebook-viewer.md` |
 | 2026-11-17 | One Chromebook epic with six stories, all first release; search may follow the other five | `docs/product/epics/chromebook.md`, `docs/product/stories/chromebook/` |
 | 2026-11-17 | Tablet mode: a Home button on service pages, shown on touch; pausing however the launcher comes forward (REQ-chromebook-12, REQ-chromebook-6 amended); the Chromebook design opened for approval | `docs/product/requirements/chromebook.md`, `docs/design/chromebook.md` |
+| 2026-11-17 | Chromebook user documentation: install from the repository's `chromebook` folder, use, edit, search, tablet mode, shortcuts, update, remove | `docs/user/chromebook.md` |

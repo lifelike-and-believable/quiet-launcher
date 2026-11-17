@@ -179,8 +179,11 @@ appears.
   open).
 - **Storage**: the services, their order, hidden services, and colours in `chrome.storage.local`,
   which stays on the Chromebook; nothing per window is stored beyond the session.
-- **Install and removal**: loaded unpacked from the repository's extension folder, following
-  written steps in the user documentation. Removing the extension closes its windows and deletes
+- **Install and removal**: loaded unpacked from the repository's `chromebook` folder, following
+  written steps in the user documentation: the folder is copied into **My files** in the Files app,
+  then loaded with Chrome's **Developer mode** and **Load unpacked** at `chrome://extensions`. The
+  extension's name there, and in Chrome's prompts and shortcut settings, is **Quiet Launcher**.
+  Adding a service shows Chrome's own permission prompt, with **Allow** and **Deny**. Removing the extension closes its windows and deletes
   its storage, which Chrome does for any removed extension.
 
 ## Accessibility
