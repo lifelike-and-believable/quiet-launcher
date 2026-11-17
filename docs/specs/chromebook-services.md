@@ -3,6 +3,7 @@ status: draft
 tests: [tests/chromebook]
 tests-commit: 372cea1404fa0dadf9e14e9faa4b368776fcde0b
 unlocks:
+  - tests/chromebook/services-controller.test.js: AC-5's first test took the first script run in the service's tab to be the pause; slice 5 (chromebook-home-button) also runs a script there, to add the Home button, before it, so the test looks for the run of the pausing function instead; nothing else changes
   - tests/chromebook/services-harness.js: Chromium runs visibly when a display is set (DISPLAY, as under xvfb-run in CI) instead of always headless, because headless Chromium does not move window focus, which AC-5's test checks; nothing else changes
 ---
 

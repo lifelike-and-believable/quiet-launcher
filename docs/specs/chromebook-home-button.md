@@ -1,6 +1,10 @@
 ---
 status: draft
 tests: [tests/chromebook]
+tests-commit: 70961942adab5357e6349a352cb1e99995e21256
+unlocks:
+  - tests/chromebook/home-button-controller.test.js: AC-1's first test expected exactly one injection, but the button is injected both when a service's window is recorded and when its page loads, which the spec allows (injecting twice is harmless); it expects at least one, and nothing else changes
+  - tests/chromebook/home-button-extension.test.js: AC-5's test hid every element with `*`, including `<html>`, which no site does and which hides anything on the page; it hides every `div`, every `button`, and everything in `<body>` instead, and removes that style even when it fails, so later tests are not affected; nothing else changes
 ---
 
 # The Chromebook launcher: the Home button on service pages

@@ -41,6 +41,11 @@ test('chromebook-search#AC-1: Enter opens JustWatch for the text in a full-scree
 test('chromebook-search#AC-4: following a link to a service makes the window that service\'s, Open and paused', async () => {
   const [w] = await searchWindows();
   await ext.worker.evaluate(async ([id, url]) => {
+    for (let i = 0; i < 150; i++) { // JustWatch's page finishes loading first (up to 15 s)
+      const [t] = await chrome.tabs.query({ windowId: id });
+      if (t.status === 'complete') break;
+      await new Promise(r => setTimeout(r, 100));
+    }
     const [tab] = await chrome.tabs.query({ windowId: id });
     await chrome.tabs.update(tab.id, { url });
   }, [w.id, ext.url('localhost', 'beta')]);

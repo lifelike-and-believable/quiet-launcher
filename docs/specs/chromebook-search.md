@@ -3,7 +3,7 @@ status: draft
 tests: [tests/chromebook]
 tests-commit: 4882149a16e19656b332376c7081574899721002
 unlocks:
-  - tests/chromebook/search-extension.test.js: AC-4's test waited for a new page, but following a link reuses the search window's page, so the wait could miss it; the test waits for a page at the service's address instead; and opening the launcher to check for **Open** rightly paused the service, so the test starts its video again before checking that go-home pauses it; nothing else changes
+  - tests/chromebook/search-extension.test.js: AC-4's test waited for a new page, but following a link reuses the search window's page, so the wait could miss it; the test waits for a page at the service's address instead; and opening the launcher to check for **Open** rightly paused the service, so the test starts its video again before checking that go-home pauses it; and it waits for JustWatch's page to finish loading before following the link, since JustWatch's own loading could otherwise win the race (it failed one full run in three); nothing else changes
 ---
 
 # The Chromebook launcher: search through JustWatch

@@ -25,8 +25,10 @@ export function createController(chrome) {
   // until it is drawn (seen in Chromium on Linux), so full screen is asked for again while the
   // window settles: until its page has loaded and it is full screen, or for 5 seconds at most. On
   // ChromeOS it is full screen from the start, and nothing more is asked.
-  async function openFullscreen(url) {
+  async function openFullscreen(url, recordAs = async () => {}) {
     const created = await chrome.windows.create({ url, type: 'popup', state: 'fullscreen', focused: true });
+    // Recorded at once, before it settles, so a page that loads or a link followed meanwhile counts.
+    await recordAs(created.id);
     for (let waited = 0; waited <= 5000; waited += 100) {
       let w;
       try { w = await chrome.windows.get(created.id, { populate: true }); } catch { break; }
@@ -54,6 +56,20 @@ export function createController(chrome) {
         await chrome.scripting.executeScript({ target: { tabId: tab.id, allFrames: true }, func: pauseVideosInPage });
       } catch { /* no permission on this site, or the page is gone */ }
     }
+  }
+
+  // chromebook-home-button#AC-1: the Home button, into a page of a service's window. Injecting
+  // twice is harmless; a site the extension may not run on gets none.
+  async function injectButton(tabId) {
+    try {
+      await chrome.scripting.executeScript({ target: { tabId }, files: ['homebutton.js'] });
+    } catch { /* no permission on this site, or the page went */ }
+  }
+  async function injectButtonInWindow(windowId) {
+    try {
+      const w = await chrome.windows.get(windowId, { populate: true });
+      for (const tab of w.tabs || []) if (tab.status !== 'loading') await injectButton(tab.id);
+    } catch { /* it closed */ }
   }
 
   async function bringLauncherForward() {
@@ -99,11 +115,15 @@ export function createController(chrome) {
           return known;
         } catch { /* it closed without our hearing */ }
       }
-      const id = await openFullscreen(service.url);
-      await chrome.storage.session.set({
-        serviceWindows: { ...session.serviceWindows, [serviceId]: id },
-        lastService: serviceId,
+      const id = await openFullscreen(service.url, async created => {
+        const latest = await loadSession(chrome);
+        await chrome.storage.session.set({
+          serviceWindows: { ...latest.serviceWindows, [serviceId]: created },
+          lastService: serviceId,
+        });
       });
+      // In case the page loaded before the window was recorded as the service's.
+      await injectButtonInWindow(id);
       return id;
     },
 
@@ -173,15 +193,18 @@ export function createController(chrome) {
           }
         } catch { /* it closed */ }
       }
-      const id = await openFullscreen(url);
-      await chrome.storage.session.set({ searchWindow: id });
-      return id;
+      return openFullscreen(url, created => chrome.storage.session.set({ searchWindow: created }));
     },
 
     // chromebook-search#AC-4: the search window going to one of the viewer's services becomes
     // that service's window.
     async onTabUpdated(tabId, change, tab) {
       if (!tab) return;
+      // chromebook-home-button#AC-1: a page that has loaded in a service's window gets the button.
+      if (change.status === 'complete') {
+        const session = await loadSession(chrome);
+        if (serviceOfWindow(session, tab.windowId)) await injectButton(tabId);
+      }
       if (!change.url) return;
       const { searchWindow } = await chrome.storage.session.get('searchWindow');
       if (searchWindow == null || tab.windowId !== searchWindow) return;

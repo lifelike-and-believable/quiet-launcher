@@ -50,7 +50,7 @@ test('chromebook-services#AC-5: go-home from a service pauses its video, in ever
   const tab = tabOf(chrome, 'https://www.primevideo.com/');
   chrome.state.playing.add(tab.id);
   await c.goHome();
-  const pause = chrome.calls.findIndex(([k, target]) => k === 'executeScript' && target.tabId === tab.id);
+  const pause = chrome.calls.findIndex(([k, target, func]) => k === 'executeScript' && target.tabId === tab.id && typeof func === 'function');
   assert.ok(pause >= 0, 'the service was paused');
   assert.equal(chrome.calls[pause][1].allFrames, true);
   const focusLauncher = chrome.calls.findIndex(([k, id, o]) => k === 'update' && id === launcherWindow(chrome)?.id && o.focused);

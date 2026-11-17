@@ -59,13 +59,15 @@ test('chromebook-home-button#AC-6: it reads Back to the launcher, button', async
 });
 
 test('chromebook-home-button#AC-5: the site\'s styles and scripts cannot reach it', async () => {
-  await service.addStyleTag({ content: 'button, div, * { display: none !important; visibility: hidden !important; }' });
-  await service.evaluate(() => document.body.style.setProperty('display', 'block', 'important'));
-  await pointer(service, 'touch');
-  await settle();
-  assert.equal(await shownAt(service), true, 'still shown');
-  assert.equal(await service.evaluate(() => document.getElementById('quiet-launcher-home').shadowRoot), null);
-  await service.evaluate(() => document.querySelectorAll('style').forEach(s => { if (s.textContent.includes('display: none')) s.remove(); }));
+  await service.addStyleTag({ content: 'button, div, body * { display: none !important; visibility: hidden !important; }' });
+  try {
+    await pointer(service, 'touch');
+    await settle();
+    assert.equal(await shownAt(service), true, 'still shown');
+    assert.equal(await service.evaluate(() => document.getElementById('quiet-launcher-home').shadowRoot), null);
+  } finally {
+    await service.evaluate(() => document.querySelectorAll('style').forEach(s => { if (s.textContent.includes('display: none')) s.remove(); }));
+  }
 });
 
 test('chromebook-home-button#AC-7: with reduce motion, no fading', async () => {
