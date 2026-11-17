@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { loadWithServices } from './services-harness.js';
 
 // A 32x18 red PNG and a not-an-image file.
-const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAACAAAAASCAIAAACWyxqdAAAAG0lEQVR42mP8z8Dwn4EIwDiqcFThqMJRhQAA2KgXAZ9WoYoAAAAASUVORK5CYII=', 'base64');
+const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAACAAAAASCAIAAAC1qksFAAAAI0lEQVR4nGM8wUBbwERj80ctGLVg1IJRC0YtGLWAgYGBgQEA1SkA7IRfy9wAAAAASUVORK5CYII=', 'base64');
 const ICON = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 
 let ext;
@@ -30,7 +30,7 @@ async function choosePicture(name, file) {
 
 test('chromebook-pictures#AC-1: a kept icon is shown at 100 px', async () => {
   await page.waitForFunction(() => document.querySelector('#services .tile img')?.src.startsWith('data:'));
-  const size = await tile('Alpha').locator('img').evaluate(i => [i.getBoundingClientRect().width, i.getBoundingClientRect().height]);
+  const size = await tile('Alpha').locator('img').evaluate(i => [i.offsetWidth, i.offsetHeight]);
   assert.deepEqual(size, [100, 100]);
 });
 
@@ -49,7 +49,7 @@ test('chromebook-pictures#AC-3: a chosen picture is kept, scaled, and fills the 
   const img = tile('Alpha').locator('.banner img');
   assert.equal(await img.getAttribute('src'), kept);
   const [tw, th] = await tile('Alpha').locator('.banner').evaluate(b => [b.clientWidth, b.clientHeight]);
-  const box = await img.evaluate(i => [i.getBoundingClientRect().width, i.getBoundingClientRect().height, getComputedStyle(i).objectFit]);
+  const box = await img.evaluate(i => [i.offsetWidth, i.offsetHeight, getComputedStyle(i).objectFit]);
   assert.deepEqual(box, [tw, th, 'cover']);
   await tile('Alpha').click();
   assert.deepEqual(await menu().getByRole('menuitem').allTextContents(), ['Move', 'Hide', 'Choose picture', 'Remove picture', 'Remove', 'Cancel']);

@@ -1,6 +1,9 @@
 ---
 status: draft
 tests: [tests/chromebook]
+tests-commit: ac036b5904d607564ed553a83fcd868a79844b42
+unlocks:
+  - tests/chromebook/pictures-extension.test.js: the sample PNG written into the test was not a valid image (so the launcher rightly refused it) and is replaced with one that is; and the sizes are measured as laid out (offsetWidth), since the selected tile is drawn 5% larger by design; nothing else changes
 ---
 
 # The Chromebook launcher: bigger icons and a picture of your own
