@@ -1,0 +1,31 @@
+# Runs the Chromebook extension's tests (tests/chromebook: Node's test runner, and Playwright's
+# Chromium with the extension loaded) on every pull request and on main.
+name: chromebook
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: tests/chromebook
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/chromebook/package-lock.json
+      - run: npm ci
+      - name: Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Tests
+        run: npm test

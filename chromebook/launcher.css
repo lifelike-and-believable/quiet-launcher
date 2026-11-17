@@ -1,0 +1,24 @@
+/* The launcher page, in the TV's colours and selection (design-chromebook#layout). */
+:root { --bg: #101418; --surface: #1c2228; --edge: #59646e; --text: #eef2f5; --muted: #a9b4bd;
+        --focus: #ffffff; --ring: #000000; --note: #ffd28a; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--text); font-family: Roboto, "Segoe UI", sans-serif; font-size: 18px; overflow: hidden; }
+.safe { position: absolute; inset: 32px 48px 64px; display: flex; flex-direction: column; }
+.top { display: flex; align-items: center; gap: 16px; min-height: 64px; }
+.pill { min-height: 56px; border-radius: 28px; background: var(--surface); border: 2px solid var(--edge);
+        display: flex; align-items: center; gap: 12px; padding: 0 22px; font: inherit; font-size: 20px; color: var(--text); cursor: pointer; }
+.search { flex: 0 1 480px; color: var(--muted); cursor: text; }
+.search input { flex: 1; min-width: 0; background: none; border: none; color: var(--text); font: inherit; font-size: 20px; outline: none; }
+.search input::placeholder { color: var(--muted); }
+.spacer { flex: 1; }
+.clock { font-size: 32px; font-weight: 300; margin-left: 8px; min-width: 4ch; text-align: right; }
+.status { min-height: 40px; display: flex; align-items: center; padding-left: 24px; color: var(--note); }
+#services { flex: 1; }
+.empty { margin-top: 15vh; text-align: center; font-size: 24px; color: var(--muted); line-height: 1.6; }
+.hint { position: absolute; left: 48px; right: 48px; bottom: 18px; font-size: 16px; color: var(--muted); }
+/* The TV's selection: a white outline with a thin black edge, slightly enlarged. */
+button:focus-visible, .search:focus-within { outline: 4px solid var(--focus); outline-offset: 2px;
+  box-shadow: 0 0 0 8px var(--ring); background: #2b343c; border-color: transparent; }
+.search:focus-within input:focus-visible { outline: none; }
+@media (prefers-reduced-motion: no-preference) { button { transition: transform .1s; } button:focus-visible { transform: scale(1.04); } }

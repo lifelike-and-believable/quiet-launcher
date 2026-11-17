@@ -1,6 +1,7 @@
 ---
 status: draft
 tests: [tests/chromebook]
+tests-commit: 52ae0d9c919d18bfb559ff13f28f16d9990ea64c
 ---
 
 # The Chromebook launcher: skeleton and launcher window
@@ -60,6 +61,11 @@ A test cites a criterion as `chromebook-launcher#AC-1` in its name.
 - The launcher window is found by its tab's address (the extension's `launcher.html`), so nothing
   needs storing to know whether it is open. The last browsing window is kept in
   `chrome.storage.session`, which outlives the service worker sleeping.
+- Found while implementing: without the `tabs` permission Chrome does not give an extension the
+  address of any tab, not even its own pages, so the launcher window could not be found. The
+  extension asks for `tabs`, which slice 2 needs anyway to recognise the services' windows.
+- Found while implementing: in headless Chromium a popup created full screen showed as a normal
+  window a moment later, so the controller asks for full screen again once the window exists.
 - Extension commands cannot be pressed in headless Chromium, so the extension tests call the same
   handler the command calls (`globalThis.quietLauncher.goHome()` in the service worker); AC-10
   checks the real keys.
