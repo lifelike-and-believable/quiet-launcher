@@ -2,7 +2,7 @@
 id: docs-chromebook
 status: approved
 derived-from:
-  - design-chromebook: bac26d469d32
+  - design-chromebook: 1bf61f23d651
   - story-chromebook-launcher: aeb2d1142c30
   - story-chromebook-open-service: 0115b9f34e7e
   - story-chromebook-go-back: 34b16f0ab619
@@ -50,8 +50,9 @@ If Chrome says a shortcut could not be set, see [If something goes wrong](#if-so
 4. Add the rest the same way, then choose **Done**.
 
 If you choose **Deny**, the service is still added and opens, but its videos will not pause when
-you leave them, and the launcher says **Videos won't pause** under it. To allow it later, select
-that text and follow what it says.
+you leave them, and the launcher says **Videos won't pause** under it. That is all you need to do
+about it. If you change your mind, choose **Edit services**, select the service, and choose
+**Allow pausing**.
 
 ## Watch something
 
@@ -103,8 +104,9 @@ Chromebook's list is its own: it does not change the TV's, or the other way roun
 
 ## Go back to browsing
 
-Choose **Back to browsing** on the launcher. The Chrome window you were last browsing in comes
-forward. The launcher and your services stay open behind it, ready for the next Alt+Shift+H.
+Choose **Back to browsing** on the launcher. This turns the launcher off: its window and your
+services' windows close, and the Chrome window you were last browsing in comes forward. The next
+Alt+Shift+H starts it afresh, and your services open from the beginning.
 
 New tabs and new windows are Chrome's own, as always: the launcher only comes up when you ask for
 it.
@@ -127,11 +129,12 @@ Your services, their order, and what is hidden are kept.
 
 ## Remove it
 
-1. In `chrome://extensions`, choose **Remove** on **Quiet Launcher**, and confirm.
-2. If you turned on **Developer mode** only for this, turn it off.
-3. You can delete the `chromebook` folder from **My files**.
+1. If the launcher is on, choose **Back to browsing** first, so its windows close.
+2. In `chrome://extensions`, choose **Remove** on **Quiet Launcher**, and confirm.
+3. If you turned on **Developer mode** only for this, turn it off.
+4. You can delete the `chromebook` folder from **My files**.
 
-Chrome is exactly as it was before: the launcher's and services' windows close, and nothing it
+Chrome is exactly as it was before: no launcher or service windows are left open, and nothing it
 stored is left behind.
 
 ## If something goes wrong

@@ -58,7 +58,6 @@ test('chromebook-launcher#AC-7: Back to browsing brings forward the last normal 
   await c.noteFocus(launcherId); // a popup: not a browsing window
   assert.equal(await c.backToBrowsing(), 1);
   assert.equal(chrome.state.windows.find(w => w.id === 1).focused, true);
-  assert.ok(chrome.state.windows.some(w => w.id === launcherId), 'the launcher stays open');
 });
 
 test('chromebook-launcher#AC-7: if that window has closed, any normal window', async () => {

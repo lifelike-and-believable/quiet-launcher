@@ -3,6 +3,7 @@ status: draft
 tests: [tests/chromebook]
 tests-commit: 52ae0d9c919d18bfb559ff13f28f16d9990ea64c
 unlocks:
+  - tests/chromebook/controller.test.js: AC-7's first test checked that the launcher stays open after Back to browsing; the project lead decided on 2026-11-17 that Back to browsing turns the launcher off (chromebook-back-to-browsing), so that check is taken out; nothing else changes
   - tests/chromebook/extension-harness.js: Chromium runs visibly when a display is set (DISPLAY, as under xvfb-run in CI) instead of always headless, because headless Chromium does not move window focus or keep service windows full screen (found in slice 2); nothing else changes
 ---
 
@@ -38,7 +39,7 @@ fill: the launcher shows no services until slice 3 (editing) lets them be added.
 | AC-4 | `go-home` opens no tab in, and changes nothing about, any other window. | test: extension.test.js |
 | AC-5 | The launcher page has the top row of design-chromebook#layout: **Search for a show**, **Edit services**, **Back to browsing**, and the clock, which cannot be selected; then the status line, empty. With no services it says **No services yet. Choose Edit services, then Add a service.** with **Edit services** selected. | test: extension.test.js |
 | AC-6 | The hint line at the bottom shows the shortcuts Chrome has given the commands, as **<keys> brings you back here · <keys> goes back to the last service**. If `go-home` has no shortcut, the status line says **Alt+Shift+H is used by something else, so it is not set. Set a shortcut at chrome://extensions/shortcuts.** and the hint line says **No shortcut back here yet** in its place; a `go-last` with no shortcut is left out of the hint line. | test: launcher-view.test.js, extension.test.js |
-| AC-7 | **Back to browsing** brings forward the last ordinary (`normal`) Chrome window that had focus; if it has closed, any ordinary window; if there is none, a new one. The launcher window stays open. | test: controller.test.js |
+| AC-7 | **Back to browsing** brings forward the last ordinary (`normal`) Chrome window that had focus; if it has closed, any ordinary window; if there is none, a new one. (It then turns the launcher off: chromebook-back-to-browsing.) | test: controller.test.js |
 | AC-8 | With the keyboard, Left and Right move along the top row's three controls without wrapping, Tab and Shift+Tab move through them in reading order, and Enter or Space activates the selected one. The selected control has the TV's selection outline. | test: extension.test.js |
 | AC-9 | The clock shows hours and minutes in the Chromebook's own 12- or 24-hour form, without AM or PM, and keeps time. | test: launcher-view.test.js |
 | AC-10 | On the project lead's Chromebook: installed by docs-chromebook#install-it, Alt+Shift+H from an ordinary web page opens the launcher full screen with no tabs or address bar, and again brings the same one forward; a new tab is still Chrome's own; **Back to browsing** returns to the page. | command: the project lead on the Chromebook |
