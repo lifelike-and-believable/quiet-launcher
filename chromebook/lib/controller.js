@@ -138,6 +138,17 @@ export function createController(chrome) {
       }
     },
 
+    // chromebook-editing#AC-5: a removed service's window closes.
+    async closeService(serviceId) {
+      const session = await loadSession(chrome);
+      const id = session.serviceWindows[serviceId];
+      if (id === undefined) return;
+      const serviceWindows = { ...session.serviceWindows };
+      delete serviceWindows[serviceId];
+      await chrome.storage.session.set({ serviceWindows });
+      try { await chrome.windows.remove(id); } catch { /* already closed */ }
+    },
+
     // A closed service window is forgotten, so choosing the service opens it again.
     async onWindowRemoved(windowId) {
       const session = await loadSession(chrome);

@@ -17,4 +17,5 @@ chrome.windows.onRemoved.addListener(windowId => globalThis.quietLauncher.onWind
 chrome.runtime.onMessage.addListener(message => {
   if (message?.type === 'back-to-browsing') globalThis.quietLauncher.backToBrowsing();
   if (message?.type === 'open-service') globalThis.quietLauncher.openService(message.id);
+  if (message?.type === 'close-service') globalThis.quietLauncher.closeService(message.id);
 });

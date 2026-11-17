@@ -1,6 +1,9 @@
 ---
 status: draft
 tests: [tests/chromebook]
+tests-commit: b321a09dfc9c7a34a41e24697c8d51804d2a09df
+unlocks:
+  - tests/chromebook/editing-extension.test.js: the menu item **Move** was looked up by name, which Playwright matches as a substring, so it also found **Remove**; the lookups of **Move** are made exact, and nothing else changes
 ---
 
 # The Chromebook launcher: editing services

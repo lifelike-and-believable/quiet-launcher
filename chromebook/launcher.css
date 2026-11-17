@@ -35,3 +35,26 @@ button:focus-visible, .search:focus-within { outline: 4px solid var(--focus); ou
 .tile:focus-visible .banner { outline: 4px solid var(--focus); outline-offset: 3px; box-shadow: 0 0 0 9px var(--ring); }
 .tile:focus-visible .name { color: var(--text); font-weight: 600; }
 @media (prefers-reduced-motion: no-preference) { .tile:focus-visible .banner { transform: scale(1.05); } }
+/* Editing (design-chromebook#editing). */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.tile.add .banner { background: var(--surface); border: 2px dashed var(--edge); color: var(--muted); font-size: 22px; font-weight: 500; }
+.tile.hidden .banner { opacity: .45; }
+.tile.lifted .banner { box-shadow: 0 0 0 9px var(--ring), 0 14px 24px rgba(0,0,0,.6); }
+@media (prefers-reduced-motion: no-preference) { .tile.lifted .banner { transform: translateY(-10px) scale(1.05); } }
+.section { margin: 18px 0 6px; color: var(--muted); }
+.menu { position: fixed; z-index: 5; background: #222a31; border: 2px solid var(--edge); border-radius: 14px; padding: 8px; width: 220px; box-shadow: 0 12px 30px rgba(0,0,0,.6); display: flex; flex-direction: column; }
+.menu button { text-align: left; padding: 10px 16px; font: inherit; font-size: 19px; color: var(--text); background: none; border: none; border-radius: 8px; cursor: pointer; }
+.menu button:focus-visible { outline: 4px solid var(--focus); outline-offset: -4px; box-shadow: none; transform: none; }
+.dialog { position: fixed; inset: 0; z-index: 10; background: rgba(16,20,24,.8); display: flex; align-items: center; justify-content: center; }
+.panel { width: min(760px, calc(100vw - 32px)); background: #1a2026; border: 2px solid var(--edge); border-radius: 18px; padding: 26px 30px; }
+.panel h2 { margin: 0 0 6px; font-size: 26px; font-weight: 500; }
+.panel p { margin: 0 0 16px; color: var(--muted); font-size: 17px; }
+.choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+.choice { padding: 12px 14px; border: 2px solid var(--edge); border-radius: 10px; font: inherit; font-size: 18px; display: flex; justify-content: space-between; background: none; color: var(--text); cursor: pointer; }
+.choice.on { color: var(--muted); cursor: default; }
+.row { display: flex; gap: 12px; align-items: center; }
+.row input { flex: 1; min-width: 0; min-height: 48px; border: 2px solid var(--edge); border-radius: 10px; padding: 0 14px; font: inherit; font-size: 18px; background: none; color: var(--text); }
+.btn { min-height: 48px; padding: 0 20px; border-radius: 24px; border: 2px solid var(--edge); font: inherit; font-size: 18px; background: none; color: var(--text); cursor: pointer; }
+.btn.primary { background: #8ab4f8; color: #0b1a33; border-color: #8ab4f8; font-weight: 600; }
+.choice:focus-visible, .btn:focus-visible, .row input:focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 8px var(--ring); }
+body.editing .tile:not(.add):not(.hidden) { touch-action: none; user-select: none; }

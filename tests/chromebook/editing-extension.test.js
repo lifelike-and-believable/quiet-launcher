@@ -49,7 +49,7 @@ test('chromebook-editing#AC-2: selecting a service opens its menu, and does not 
 
 test('chromebook-editing#AC-3: Move, Right, Enter moves a service one place and saves it', async () => {
   await tile('Alpha').click();
-  await menu().getByRole('menuitem', { name: 'Move' }).click();
+  await menu().getByRole('menuitem', { name: 'Move', exact: true }).click();
   await page.keyboard.press('ArrowRight');
   assert.match(await announced(), /Alpha, moved to 2 of 3/);
   await page.keyboard.press('Enter');
@@ -59,7 +59,7 @@ test('chromebook-editing#AC-3: Move, Right, Enter moves a service one place and 
 
 test('chromebook-editing#AC-3: Esc puts a lifted service back where it was', async () => {
   await tile('Gamma').click();
-  await menu().getByRole('menuitem', { name: 'Move' }).click();
+  await menu().getByRole('menuitem', { name: 'Move', exact: true }).click();
   await page.keyboard.press('ArrowLeft');
   await page.keyboard.press('Escape');
   await settle();
