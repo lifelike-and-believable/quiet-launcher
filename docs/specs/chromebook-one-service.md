@@ -14,6 +14,7 @@ unlocks:
   - tests/chromebook/search-controller.test.js: chromebook-search#AC-4's second test followed a link to Gem in the results after opening Prime Video, but opening Prime Video now closes the results (AC-4); it follows both links first and opens Prime Video last, checking the same things; nothing else changes
   - tests/chromebook/search-controller.test.js: chromebook-search#AC-4's third test checked that the service's old window stays open, but searching now closes it (AC-3); it checks that the results window, not the old one, is the service's; nothing else changes
   - tests/chromebook/back-to-browsing.test.js: chromebook-back-to-browsing#AC-1's test opens two services and a search and expected all six windows open before Back to browsing, but now only the results are (AC-1, AC-3); it expects four, and looks only at the calls Back to browsing makes when checking that the browsing window comes forward before anything closes; nothing else changes
+  - tests/chromebook/back-to-browsing-extension.test.js: chromebook-back-to-browsing#AC-1's test opens two services and expected at least three windows besides the browsing ones before Back to browsing, but opening the second closes the first (AC-1); it expects at least two (the second service and the launcher); nothing else changes
 ---
 
 # The Chromebook launcher: one service open at a time

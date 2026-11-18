@@ -11,7 +11,8 @@ test('chromebook-back-to-browsing#AC-1: Back to browsing leaves only the browsin
   await ext.call('openService', 'alpha');
   await ext.call('openService', 'beta');
   const page = await ext.launcher();
-  assert.ok((await ext.windows()).length >= browsing.length + 3);
+  // Beta and the launcher: opening Beta closed Alpha (chromebook-one-service#AC-1).
+  assert.ok((await ext.windows()).length >= browsing.length + 2);
   await page.getByRole('button', { name: 'Back to browsing' }).click();
   let left;
   for (let i = 0; i < 30; i++) {
