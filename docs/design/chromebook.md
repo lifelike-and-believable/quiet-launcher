@@ -3,7 +3,7 @@ id: design-chromebook
 status: approved
 derived-from:
   - story-chromebook-launcher: aeb2d1142c30
-  - story-chromebook-open-service: 0115b9f34e7e
+  - story-chromebook-open-service: 29eca37df80b
   - requirements-chromebook#REQ-chromebook-12: 0831b2aacc81
   - story-chromebook-go-back: 3342b71ad5f4
   - story-chromebook-search: e76b0c88e535
@@ -40,15 +40,19 @@ tablet-mode spike of 2026-11-17. -->
    full-screen window, with the first service selected; if it was already open, it comes forward
    as it was.
 2. To watch: choose a service (click, tap, or move to it with the arrow keys and press Enter). It
-   opens in its own full-screen window, or, if already open, comes back as it was left.
+   opens in its own full-screen window, or, if already open, comes back as it was left. Only one
+   service is open at a time: opening a different one closes the window of the one that was open
+   (the project lead's change, 2026-11-17: trying several services should not leave several video
+   players running, and an **Open** marker on every service is confusing).
 3. To go back: Alt+Shift+H from the service, or, without a keyboard, touch the service's page and
    tap the Home button that appears in its bottom-left corner. The launcher comes forward and the
    service's video pauses. Bringing the launcher forward from ChromeOS's own window switcher (the
    tablet-mode overview, or Alt+Tab) pauses it too. Alt+Shift+J from the launcher goes straight back
    to the last service.
 4. To search: type in **Search for a show** and press Enter. JustWatch's results for Canada open
-   in their own full-screen window. Following a link to one of the viewer's services turns that
-   window into the service's window.
+   in their own full-screen window, and the service that was open closes. Following a link to one
+   of the viewer's services turns that window into the service's window. The results count as the
+   one open service: choosing a service on the launcher closes them.
 5. To change the services: **Edit services**. Select a service to move, hide, or remove it; **Add a
    service** to add one. **Done** returns to the launcher.
 6. To stop watching: **Back to browsing** turns the launcher off. It closes the launcher's window
@@ -64,7 +68,7 @@ site's own icon.
 
 | Screen or state | Mock-up | Notes |
 |---|---|---|
-| Default, first service selected | ![Default](chromebook/default.png) | **Open** marks services whose window is open |
+| Default, first service selected | ![Default](chromebook/default.png) | **Open** marks the one service whose window is open |
 | Typing a search | ![Search](chromebook/search.png) | The status line says where results open |
 | Editing | ![Editing](chromebook/edit.png) | **Add a service** is the last tile; a service the extension cannot reach says so |
 | A service's menu | ![Menu](chromebook/edit-menu.png) | **Move**, **Hide**, **Choose picture**, **Remove**, **Cancel** |
@@ -92,8 +96,8 @@ site's own icon.
   tile instead, as the TV's banners do. The icon is the largest the site publishes for phones' home
   screens and installed web apps (usually 180 to 512 px), fetched from the site once and kept on
   the Chromebook; until it has one, or if the site publishes none, the tile shows the small icon
-  Chrome keeps for the site (the project lead's decision, 2026-11-17). In the viewer's order, hidden ones left out. A service whose
-  window is open has a small **Open** marker. A service that cannot be paused (the
+  Chrome keeps for the site (the project lead's decision, 2026-11-17). In the viewer's order, hidden ones left out. The service whose
+  window is open, at most one, has a small **Open** marker. A service that cannot be paused (the
   viewer narrowed the extension's site access in Chrome) says **Videos won't pause** under its
   name.
 - **Hint line** at the bottom: the shortcuts in use, read from Chrome, for example **Alt+Shift+H
@@ -189,7 +193,10 @@ site's own icon.
 - **Windows**: the launcher and each service are `popup` windows created full screen, so none has
   a tab strip; the spike showed switching windows never flashes Chrome's tabs or address bar. The
   service worker keeps a map from service to window in session storage, so it survives the worker
-  sleeping; a window that closes is dropped from the map. **Back to browsing** brings the browsing
+  sleeping; a window that closes is dropped from the map. The map holds at most one service: before
+  opening a service's window, or the search window, the worker closes the other windows in the map
+  and the search window (REQ-chromebook-7); a search window that becomes a service's window does
+  the same. **Back to browsing** brings the browsing
   window forward, then closes every window in the map, the search window, and the launcher's own,
   and empties the map, so nothing of the launcher is left open.
 - **Going back pauses**: on `go-home`, before bringing the launcher forward, the worker runs a

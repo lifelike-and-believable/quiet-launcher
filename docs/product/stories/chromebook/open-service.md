@@ -23,5 +23,7 @@ screen, so that the Chromebook feels like the TV rather than a browser full of t
   Chrome's tabs or address bar show, even briefly.
 - Choosing a service that is already open brings its window back as I left it: same page, same
   place in the video, still signed in.
+- Only one service is open at a time: choosing a different one closes the one I had open, so
+  trying several services does not leave several video players running.
 - Pressing the Chromebook's full-screen key in a service's window leaves full screen as it does
   anywhere else in Chrome.

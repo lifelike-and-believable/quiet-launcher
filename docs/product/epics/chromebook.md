@@ -8,8 +8,8 @@ derived-from:
   - requirements-chromebook#REQ-chromebook-4: c9e62cf62621
   - requirements-chromebook#REQ-chromebook-5: 0803033b5a70
   - requirements-chromebook#REQ-chromebook-6: 6de348bc8ebb
-  - requirements-chromebook#REQ-chromebook-7: 692aae0e30fa
-  - requirements-chromebook#REQ-chromebook-8: 077b320dba35
+  - requirements-chromebook#REQ-chromebook-7: d5005789842f
+  - requirements-chromebook#REQ-chromebook-8: b4a3f0a73969
   - requirements-chromebook#REQ-chromebook-9: b874979dd6d0
   - requirements-chromebook#REQ-chromebook-10: 4bed4a55da39
   - requirements-chromebook#REQ-chromebook-11: f40779b811e8
