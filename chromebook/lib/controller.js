@@ -74,6 +74,24 @@ export function createController(chrome) {
     } catch { /* it closed */ }
   }
 
+  // chromebook-one-service#AC-1, AC-3 to AC-5: only one service, or the results, is open. Closes
+  // every service window and the results window but `keep`, and forgets them. Run after the window
+  // that stays has come forward, so closing the others never shows the browsing window.
+  async function closeAllBut(keep) {
+    const session = await loadSession(chrome);
+    const { searchWindow } = await chrome.storage.session.get('searchWindow');
+    const serviceWindows = Object.fromEntries(Object.entries(session.serviceWindows).filter(([, w]) => w === keep));
+    const lastService = Object.keys(serviceWindows).includes(session.lastService) ? session.lastService : null;
+    await chrome.storage.session.set({
+      serviceWindows, lastService, searchWindow: searchWindow === keep ? searchWindow : null,
+    });
+    const toClose = new Set([...Object.values(session.serviceWindows), searchWindow]
+      .filter(w => w !== undefined && w !== null && w !== keep));
+    for (const w of toClose) {
+      try { await chrome.windows.remove(w); } catch { /* already closed */ }
+    }
+  }
+
   async function bringLauncherForward() {
     const open = await findLauncherWindow();
     if (open) return bringForward(open.id);
@@ -114,6 +132,7 @@ export function createController(chrome) {
         try {
           await bringForward(known);
           await chrome.storage.session.set({ lastService: serviceId });
+          await closeAllBut(known);
           return known;
         } catch { /* it closed without our hearing */ }
       }
@@ -126,6 +145,7 @@ export function createController(chrome) {
       });
       // In case the page loaded before the window was recorded as the service's.
       await injectButtonInWindow(id);
+      await closeAllBut(id);
       return id;
     },
 
@@ -191,11 +211,15 @@ export function createController(chrome) {
           const tab = (w.tabs || [])[0];
           if (tab && hostOf(tab.url || tab.pendingUrl) === 'www.justwatch.com') {
             await chrome.tabs.update(tab.id, { url });
-            return await bringForward(searchWindow);
+            await bringForward(searchWindow);
+            await closeAllBut(searchWindow);
+            return searchWindow;
           }
         } catch { /* it closed */ }
       }
-      return openFullscreen(url, created => chrome.storage.session.set({ searchWindow: created }));
+      const id = await openFullscreen(url, created => chrome.storage.session.set({ searchWindow: created }));
+      await closeAllBut(id);
+      return id;
     },
 
     // chromebook-search#AC-4: the search window going to one of the viewer's services becomes
@@ -221,6 +245,7 @@ export function createController(chrome) {
         lastService: service.id,
       });
       await chrome.storage.session.set({ searchWindow: null }); // it is the service's now
+      await closeAllBut(searchWindow);
     },
 
     // chromebook-icons#AC-2, AC-6: each allowed service without a kept icon gets its own.
