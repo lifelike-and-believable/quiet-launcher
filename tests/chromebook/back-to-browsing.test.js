@@ -32,7 +32,10 @@ test('chromebook-back-to-browsing#AC-1: it brings the browsing window forward an
   await c.openService('prime');
   await c.openService('mubi');
   await c.search('Carrie');
-  assert.equal(chrome.state.windows.length, 6);
+  // Two browsing windows, the launcher, and the results: opening MUBI closed Prime Video, and the
+  // search closed MUBI (chromebook-one-service#AC-1, AC-3).
+  assert.equal(chrome.state.windows.length, 4);
+  chrome.calls.length = 0;
   await c.backToBrowsing();
   assert.deepEqual(ids(chrome), [1, 2], 'only the browsing windows are left');
   assert.equal(chrome.state.windows.find(w => w.id === 1).focused, true);
