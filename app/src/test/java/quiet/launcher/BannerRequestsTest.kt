@@ -88,6 +88,29 @@ class BannerRequestsTest {
         assertEquals(listOf(360, 360), listOf(square.width, square.height))
     }
 
+    /** A banner that compresses badly, as a photograph does: every pixel different. */
+    private fun noise(width: Int, height: Int): Drawable {
+        val random = java.util.Random(1)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        bitmap.setPixels(IntArray(width * height) { random.nextInt() or (0xff shl 24) }, 0, width, 0, 0, width, height)
+        return BitmapDrawable(context.resources, bitmap).apply { setTargetDensity(bitmap.density) }
+    }
+
+    // tv-banners#AC-1: on the TV, Disney+'s banner (a 512 by 288 photograph) drawn at full size made
+    // an answer too big for the broadcast's result to carry; the app hung until Android killed it.
+    @Test
+    fun `AC-1 a banner whose answer would be too big is drawn smaller until it fits, keeping its shape`() {
+        banners["com.netflix.ninja"] = noise(512, 288)
+
+        val answer = requests.banner("com.netflix.ninja")
+
+        assertEquals(ArrangeRequests.DONE, answer.code)
+        assertTrue("${answer.data.length} chars", answer.data.length <= BannerRequests.MAX_ANSWER_CHARS)
+        val bitmap = png(decode(answer.data))
+        assertTrue("${bitmap.width} wide", bitmap.width < 512)
+        assertEquals(512f / 288, bitmap.width.toFloat() / bitmap.height, 0.02f)
+    }
+
     // tv-banners#AC-2
     @Test
     fun `AC-2 an app with no banner is refused with the reason`() {
