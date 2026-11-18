@@ -1,9 +1,9 @@
 ---
 id: tutorial-chromebook-watch-something
-status: draft
+status: approved
 runner: manual
 derived-from:
-  - docs-chromebook#watch-something: a729d27f3661
+  - docs-chromebook#watch-something: dad567bc8618
   - docs-chromebook#find-which-service-has-a-show: 01b59f5064c5
 ---
 
