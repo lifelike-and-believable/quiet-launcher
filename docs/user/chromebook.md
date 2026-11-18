@@ -69,6 +69,8 @@ a few services while you look for something to watch doesn't leave them all runn
 open that service again, it starts from its own home page; the service itself remembers where you
 were in a show, as it does anywhere else.
 
+Try it: [Watch something on the Chromebook, trying a few services first](../tutorials/chromebook-watch-something.md).
+
 ## Go back to the launcher
 
 - With a keyboard: press **Alt+Shift+H**.

@@ -3,7 +3,7 @@ id: spec-chromebook-one-service
 status: approved
 derived-from:
   - story-chromebook-open-service#acceptance-criteria: 314afdd4d079
-  - docs-chromebook#watch-something: a729d27f3661
+  - docs-chromebook#watch-something: dad567bc8618
   - docs-chromebook#find-which-service-has-a-show: 01b59f5064c5
   - design-chromebook#flow: e7083082e76d
   - design-chromebook#how-it-works: ff584664a6b9
