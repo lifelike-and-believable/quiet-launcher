@@ -2,9 +2,9 @@
 id: docs-chromebook
 status: approved
 derived-from:
-  - design-chromebook: ba785dd6c062
+  - design-chromebook: 96763e48b537
   - story-chromebook-launcher: aeb2d1142c30
-  - story-chromebook-open-service: 0115b9f34e7e
+  - story-chromebook-open-service: 29eca37df80b
   - story-chromebook-go-back: 3342b71ad5f4
   - story-chromebook-search: e76b0c88e535
   - story-chromebook-services: 0ed11c4ae63d
@@ -64,6 +64,11 @@ choose **Edit services**, select it, and choose **Allow pausing**.
 The service opens full screen in its own window, with no tabs or address bar. If it was already
 open (the launcher marks it **Open**), you are back exactly where you left it.
 
+Only one service is open at a time. Choosing a different one closes the one you had open, so trying
+a few services while you look for something to watch doesn't leave them all running. When you
+open that service again, it starts from its own home page; the service itself remembers where you
+were in a show, as it does anywhere else.
+
 ## Go back to the launcher
 
 - With a keyboard: press **Alt+Shift+H**.
@@ -81,8 +86,9 @@ launcher.
 ## Find which service has a show
 
 1. On the launcher, type the name of a show or film in **Search for a show** and press **Enter**.
-2. JustWatch's results for Canada open, full screen, in their own window. They list every film and
-   show with that name, and the services that stream each one.
+2. JustWatch's results for Canada open, full screen, in their own window, and the service you had
+   open closes. They list every film and show with that name, and the services that stream each
+   one.
 3. Choose one of your services from the results. It opens in that same window, and from then on it
    is that service's window: Alt+Shift+H, the Home button, and pausing all work in it.
 

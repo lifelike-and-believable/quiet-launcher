@@ -101,7 +101,7 @@
   const grid = document.getElementById('grid');
   const editing = ['edit', 'edit-menu', 'moving', 'add', 'permission', 'hidden'].includes(state);
   const hidden = state === 'hidden' ? ['Plex'] : [];
-  const open = ['default', 'open'].includes(state) ? ['Prime Video', 'MUBI'] : [];
+  const open = ['default', 'open'].includes(state) ? ['Prime Video'] : [];
   const noPause = state === 'permission' || state === 'edit' ? ['myfilmfriend'] : [];
   const list = state === 'empty' ? [] : services.filter(([n]) => !(hidden.includes(n)));
   const tile = (name, colour, i, cls = '') => {

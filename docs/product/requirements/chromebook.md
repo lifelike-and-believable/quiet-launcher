@@ -85,9 +85,12 @@ by the shortcut, by the touch control in REQ-chromebook-12, or by switching wind
 
 Release: first
 
-Choosing a service whose window is already open brings that window back as it was left, rather than
-opening the service again. A second shortcut (Alt+Shift+J unless changed) goes from the launcher
-straight back to the last service used.
+Only one service is open at a time: choosing a different service closes the window of the one that
+was open, so browsing around for something to watch does not leave a video player running for each
+service tried (the project lead's change, 2026-11-17: open players waste battery and memory, and an
+**Open** marker on every service is confusing). Choosing the service that is open brings its window
+back as it was left, rather than opening it again. A second shortcut (Alt+Shift+J unless changed)
+goes from the launcher straight back to it.
 
 ## REQ-chromebook-8: Search shows which service has it
 
@@ -97,7 +100,8 @@ The launcher has a search box. Submitting text opens JustWatch's search for Cana
 text, in its own full-screen window: it lists every film and show with that name and the services
 that stream each one, with links (concept, Feasibility). Following a link to one of the project
 lead's services makes that window the service's window, so the shortcuts and pausing work in it as
-in any other.
+in any other. The results window counts as the one open service (REQ-chromebook-7): searching
+closes the service that was open, and choosing a service from the launcher closes the results.
 
 ## REQ-chromebook-9: The shortcuts can be changed
 
