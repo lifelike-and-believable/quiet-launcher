@@ -31,19 +31,25 @@ class BannerRequests(
             return refused("${app.packageName} could not be read: ${e.message ?: e.javaClass.simpleName}")
         }
         val banner = loadBanner(activity) ?: return refused("${app.label} has no banner")
-        val png = draw(banner)
-        return answer(
-            ArrangeRequests.DONE,
-            JSONObject().put("name", app.label).put("package", app.packageName)
-                .put("png", Base64.getEncoder().encodeToString(png)),
-        )
+        // AC-1: a banner that compresses badly is drawn smaller until its answer fits.
+        var fit = 1f
+        while (true) {
+            val done = answer(
+                ArrangeRequests.DONE,
+                JSONObject().put("name", app.label).put("package", app.packageName)
+                    .put("png", Base64.getEncoder().encodeToString(draw(banner, fit))),
+            )
+            if (done.data.length <= MAX_ANSWER_CHARS) return done
+            fit *= SHRINK
+            if (fit < MIN_FIT) return refused("${app.label}'s banner is too big to send")
+        }
     }
 
-    /** AC-1: drawn at its own size, scaled down (never up) to fit 640 by 360, as a PNG. */
-    private fun draw(banner: Drawable): ByteArray {
+    /** AC-1: drawn at its own size, scaled down (never up) to fit 640 by 360 and then by [fit], as a PNG. */
+    private fun draw(banner: Drawable, fit: Float): ByteArray {
         val width = banner.intrinsicWidth.takeIf { it > 0 } ?: MAX_WIDTH
         val height = banner.intrinsicHeight.takeIf { it > 0 } ?: MAX_HEIGHT
-        val scale = min(1f, min(MAX_WIDTH.toFloat() / width, MAX_HEIGHT.toFloat() / height))
+        val scale = fit * min(1f, min(MAX_WIDTH.toFloat() / width, MAX_HEIGHT.toFloat() / height))
         val w = (width * scale).roundToInt().coerceAtLeast(1)
         val h = (height * scale).roundToInt().coerceAtLeast(1)
         val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
@@ -69,5 +75,7 @@ class BannerRequests(
         /** At most this many characters in an answer: a broadcast's result goes through Binder as UTF-16, and
          *  Binder carries about 1 MB at once (tv-banners#AC-1). */
         const val MAX_ANSWER_CHARS = 200_000
+        private const val SHRINK = 0.75f
+        private const val MIN_FIT = 0.1f
     }
 }

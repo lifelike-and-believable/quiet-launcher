@@ -365,24 +365,29 @@ function Send-File([string]$path, $read, [long]$version) {
 function Save-Banners($apps) {
     $saved = @()
     $none = @()
+    $silent = @()
     foreach ($app in $apps) {
         $answer = Receiver @('-a', 'quiet.launcher.action.GET_BANNER', '--es', 'package', $app.package)
-        if ($answer.code -eq 0) {
-            Say '[2/2] Banners: the quiet launcher on this TV is too old to send its banners.'
-            Say '      Update it with quiet-setup, then run this again.'
-            Stop-Setup
-        }
+        # No answer: an older TV app ignores the question, but so does one that hangs drawing a
+        # banner and is killed. Only when no app answers is the TV app too old.
+        if ($answer.code -eq 0) { $silent += $app.name; continue }
         if ($answer.code -eq 1 -and $answer.json -and $answer.json.png) {
             $saved += [ordered]@{ name = $answer.json.name; package = $answer.json.package; picture = "data:image/png;base64,$($answer.json.png)" }
         } else {
             $none += $app.name
         }
     }
+    if (@($apps).Count -gt 0 -and $silent.Count -eq @($apps).Count) {
+        Say '[2/2] Banners: the quiet launcher on this TV is too old to send its banners.'
+        Say '      Update it with quiet-setup, then run this again.'
+        Stop-Setup
+    }
     $path = Join-Path $folder 'tv-banners.json'
     $json = [ordered]@{ from = 'Quiet Launcher TV'; apps = @($saved) } | ConvertTo-Json -Depth 4
     # Without a byte-order mark, which Windows PowerShell's UTF8 would add, so any reader takes it.
     [IO.File]::WriteAllText($path, $json, (New-Object Text.UTF8Encoding $false))
     Say "[2/2] Banners: saved $($saved.Count) of $(@($apps).Count) apps' banners in $path"
+    if ($silent.Count -gt 0) { Say ('      No answer from the TV: ' + ($silent -join ', ')) }
     if ($none.Count -gt 0) { Say ('      No banner: ' + ($none -join ', ')) }
     Say '      Copy this file to the Chromebook (with Google Drive or a USB stick). Then, on the'
     Say '      launcher, choose Edit services, then Import TV pictures, and pick the file.'
