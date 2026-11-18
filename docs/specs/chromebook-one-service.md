@@ -8,6 +8,9 @@ derived-from:
   - design-chromebook#how-it-works: ff584664a6b9
   - design-chromebook#layout: 62e7bd978b1c
 tests: [tests/chromebook]
+unlocks:
+  - tests/chromebook/search-controller.test.js: chromebook-search#AC-4's second test followed a link to Gem in the results after opening Prime Video, but opening Prime Video now closes the results (AC-4); it follows both links first and opens Prime Video last, checking the same things; nothing else changes
+  - tests/chromebook/search-controller.test.js: chromebook-search#AC-4's third test checked that the service's old window stays open, but searching now closes it (AC-3); it checks that the results window, not the old one, is the service's; nothing else changes
 ---
 
 # The Chromebook launcher: one service open at a time

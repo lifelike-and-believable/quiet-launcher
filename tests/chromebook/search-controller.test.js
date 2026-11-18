@@ -63,15 +63,17 @@ test('chromebook-search#AC-4: a site under the service\'s counts; another site d
   const tab = chrome.state.windows.find(w => w.id === win).tabs[0];
   tab.url = 'https://www.netflix.com/title/1';
   await c.onTabUpdated(tab.id, { url: tab.url }, { ...tab, windowId: win });
-  const created = chrome.calls.filter(([k]) => k === 'create').length;
-  await c.openService('prime');
-  assert.equal(chrome.calls.filter(([k]) => k === 'create').length, created + 1, 'Prime Video opened its own window');
+  assert.deepEqual((await chrome.storage.session.get('serviceWindows')).serviceWindows || {}, {}, 'Netflix is no service of the viewer');
   tab.url = 'https://gem.cbc.ca/schitts-creek';
   await c.onTabUpdated(tab.id, { url: tab.url }, { ...tab, windowId: win });
   assert.equal(await c.openService('gem'), win);
+  const created = chrome.calls.filter(([k]) => k === 'create').length;
+  await c.openService('prime');
+  assert.equal(chrome.calls.filter(([k]) => k === 'create').length, created + 1, 'Prime Video opened its own window');
 });
 
-test('chromebook-search#AC-4: a window the service already had stays open but is no longer its own', async () => {
+// The service's old window is closed by the search itself (chromebook-one-service#AC-3).
+test('chromebook-search#AC-4: a window the service already had is no longer its own', async () => {
   const { chrome, c } = setup();
   const old = await c.openService('prime');
   const win = await c.search('Carrie');
@@ -79,7 +81,7 @@ test('chromebook-search#AC-4: a window the service already had stays open but is
   tab.url = 'https://www.primevideo.com/detail/carrie';
   await c.onTabUpdated(tab.id, { url: tab.url }, { ...tab, windowId: win });
   assert.equal(await c.openService('prime'), win);
-  assert.ok(chrome.state.windows.some(w => w.id === old), 'the old window is still open');
+  assert.notEqual(win, old);
 });
 
 test('chromebook-search#AC-4: a service window reached from search is paused by go-home', async () => {
