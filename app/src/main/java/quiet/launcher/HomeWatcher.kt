@@ -77,7 +77,7 @@ class HomeWatcher : AccessibilityService() {
             pkg == LAUNCHERX && window in GOOGLE_TV_HOME_SCREENS -> {
                 Log.i(TAG, "covering $window at ${event.eventTime}")
                 showCover()
-                showQuietHome()
+                showQuietHome(covered = true)
             }
             pkg == packageName && window == HomeActivity::class.java.name && cover != null -> {
                 // The quiet home screen is up: lower the cover once it has had time to draw.
@@ -126,11 +126,16 @@ class HomeWatcher : AccessibilityService() {
         super.onDestroy()
     }
 
-    private fun showQuietHome() {
+    /**
+     * [covered]: Google TV's home screen came up by itself and was covered, so the home screen may
+     * search again instead (top-row-and-search#AC-14); otherwise it acts as a Home press.
+     */
+    private fun showQuietHome(covered: Boolean = false) {
         startActivity(
             Intent(this, HomeActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(HomeActivity.EXTRA_HOME, true),
+                .putExtra(HomeActivity.EXTRA_HOME, true)
+                .apply { if (covered) putExtra(HomeActivity.EXTRA_COVERED, true) },
         )
     }
 

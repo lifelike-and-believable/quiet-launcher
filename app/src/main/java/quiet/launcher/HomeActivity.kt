@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
@@ -75,6 +76,26 @@ class HomeActivity : Activity() {
     private var searchFailed = false
 
     private val searchTimeout = Runnable { searchDidNotOpen() }
+
+    /** The text of the search in progress, and whether it is already the one retry (AC-14). */
+    private var searchText = ""
+    private var searchIsRetry = false
+
+    /**
+     * top-row-and-search#AC-14: the text to search again if Google TV's own home screen is covered
+     * soon after Google's search screen opened; null when no retry is allowed.
+     */
+    private var retryText: String? = null
+
+    /**
+     * top-row-and-search#AC-14: true for a while after the retry, when Google TV's home screen may be
+     * reported again; a cover then only brings this screen forward, without a Home press's reset.
+     */
+    private var afterRetry = false
+    private val retryExpiry = Runnable {
+        retryText = null
+        afterRetry = false
+    }
 
     // ---- Holding select (arrange-mode#AC-1 to AC-3) ----
 
@@ -146,7 +167,22 @@ class HomeActivity : Activity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        // top-row-and-search#AC-14: Google TV put its home screen over the results, so search again.
+        if (intent.getBooleanExtra(EXTRA_COVERED, false)) {
+            val retry = retryText
+            if (retry != null) {
+                cancelRetry()
+                afterRetry = true
+                handler.postDelayed(retryExpiry, RETRY_WINDOW_MS)
+                searchBox.setText(retry)
+                searchBox.requestFocus()
+                startSearch(retry, isRetry = true)
+                return
+            }
+            if (afterRetry) return
+        }
         if (intent.getBooleanExtra(EXTRA_HOME, false)) {
+            cancelRetry()
             homePressed = true
             endSearch()
             searchFailed = false
@@ -194,6 +230,12 @@ class HomeActivity : Activity() {
         if (searching) {
             endSearch()
             searchBox.setText("")
+            // top-row-and-search#AC-14: one retry, for a short while, and never for a retry.
+            if (!searchIsRetry) {
+                retryText = searchText
+                handler.removeCallbacks(retryExpiry)
+                handler.postDelayed(retryExpiry, RETRY_WINDOW_MS)
+            }
         }
     }
 
@@ -207,6 +249,8 @@ class HomeActivity : Activity() {
 
     /** top-row-and-search#AC-3: while searching, only Back (to cancel) and Home act. */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // top-row-and-search#AC-14: a key on this screen means the viewer has moved on.
+        if (event.action == KeyEvent.ACTION_DOWN) cancelRetry()
         if (question.visibility == View.VISIBLE && event.keyCode == KeyEvent.KEYCODE_BACK) {
             if (event.action == KeyEvent.ACTION_UP) closeQuestion()
             return true
@@ -294,6 +338,14 @@ class HomeActivity : Activity() {
             searchBox.announceForAccessibility(getString(R.string.type_something))
             return true // keeps the keyboard open
         }
+        cancelRetry()
+        startSearch(text, isRetry = false)
+        return true
+    }
+
+    private fun startSearch(text: String, isRetry: Boolean) {
+        searchText = text
+        searchIsRetry = isRetry
         searchFailed = false
         updateStatus()
         overlayTitle.text = getString(R.string.searching_for, text)
@@ -304,12 +356,18 @@ class HomeActivity : Activity() {
         hideKeyboard()
         handler.postDelayed(searchTimeout, SEARCH_TIMEOUT_MS)
         try {
-            startActivity(googleSearch().putExtra("query", text))
+            startActivity(googleSearch(text) ?: throw ActivityNotFoundException("no search entry point"))
         } catch (e: ActivityNotFoundException) {
             Log.w(HomeWatcher.TAG, "Google's search is not installed", e)
             searchDidNotOpen()
         }
-        return true
+        if (isRetry) Log.i(HomeWatcher.TAG, "Google TV's home screen covered the results: searching again")
+    }
+
+    private fun cancelRetry() {
+        handler.removeCallbacks(retryExpiry)
+        retryText = null
+        afterRetry = false
     }
 
     private fun cancelSearch() {
@@ -333,7 +391,7 @@ class HomeActivity : Activity() {
     private fun voiceSearch() {
         returnTo = R.id.voice_button
         try {
-            startActivity(googleSearch())
+            startActivity(googleSearch(null) ?: throw ActivityNotFoundException("no voice search entry point"))
         } catch (e: ActivityNotFoundException) {
             Log.w(HomeWatcher.TAG, "Google's voice search is not installed", e)
         }
@@ -353,9 +411,12 @@ class HomeActivity : Activity() {
         startActivity(Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
     }
 
-    private fun googleSearch() = Intent("android.search.action.GLOBAL_SEARCH")
-        .setComponent(ComponentName(KATNISS, "com.google.android.apps.tvsearch.app.launch.trampoline.SearchActivityTrampoline"))
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    /**
+     * top-row-and-search#AC-2 and AC-6: the first of Google's search entry points this TV has, with
+     * [query] (or none, for voice search); null if there is none.
+     */
+    private fun googleSearch(query: String?): Intent? =
+        searchIntents(query).firstOrNull { packageManager.resolveActivity(it, PackageManager.MATCH_DEFAULT_ONLY) != null }
 
     private fun animationsOn(): Boolean =
         ValueAnimator.areAnimatorsEnabled() &&
@@ -707,5 +768,24 @@ class HomeActivity : Activity() {
 
         /** Set by HomeWatcher on an intent that stands for a Home press (home-takeover#AC-4). */
         const val EXTRA_HOME = "quiet.launcher.HOME"
+
+        /** Also set when that intent comes from covering Google TV's home screen (home-takeover#AC-3). */
+        const val EXTRA_COVERED = "quiet.launcher.COVERED"
+
+        /** top-row-and-search#AC-14: how long after Google's search screen opens a cover is retried. */
+        const val RETRY_WINDOW_MS = 20_000L
+
+        /**
+         * top-row-and-search#AC-2 and AC-6: Google's search entry points, newest first. Google's search
+         * app (katniss) 8.2 takes `ASSIST` with a `query` (results open in Google TV) or without one
+         * (voice); before that it had the `GLOBAL_SEARCH` trampoline, kept for TVs not yet updated.
+         */
+        fun searchIntents(query: String?): List<Intent> = listOf(
+            Intent(Intent.ACTION_ASSIST).setPackage(KATNISS),
+            Intent("android.search.action.GLOBAL_SEARCH")
+                .setComponent(ComponentName(KATNISS, "com.google.android.apps.tvsearch.app.launch.trampoline.SearchActivityTrampoline")),
+        ).map { intent ->
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).apply { if (query != null) putExtra("query", query) }
+        }
     }
 }

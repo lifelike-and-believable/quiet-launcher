@@ -2,6 +2,7 @@ package quiet.launcher
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Looper
 import android.view.KeyEvent
 import android.view.View
@@ -16,13 +17,20 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.android.controller.ActivityController
 import java.time.Duration
 
-/** Test helper: opens the quiet home screen with a few apps and drives it like the remote would. */
-class HomeScreenRobot(appCount: Int = 7) {
+/**
+ * Test helper: opens the quiet home screen with a few apps and drives it like the remote would.
+ * [setUpSearch] puts Google's search app on the TV; by default with its current entry point.
+ */
+class HomeScreenRobot(
+    appCount: Int = 7,
+    setUpSearch: (PackageManager) -> Unit = { TvPackages.installGoogleSearch(it) },
+) {
     val context: Context = ApplicationProvider.getApplicationContext()
 
     init {
         val pm = context.packageManager
         for (i in 1..appCount) TvPackages.install(pm, "app.n%02d".format(i), "App %02d".format(i), installed = i.toLong())
+        setUpSearch(pm)
     }
 
     val controller: ActivityController<HomeActivity> = Robolectric.buildActivity(HomeActivity::class.java).setup()
@@ -79,6 +87,16 @@ class HomeScreenRobot(appCount: Int = 7) {
 
     fun homePress() {
         controller.newIntent(Intent(context, HomeActivity::class.java).putExtra(HomeActivity.EXTRA_HOME, true))
+        idle()
+    }
+
+    /** The service covered Google TV's home screen and brought this screen forward (home-takeover#AC-3). */
+    fun covered() {
+        controller.newIntent(
+            Intent(context, HomeActivity::class.java)
+                .putExtra(HomeActivity.EXTRA_HOME, true)
+                .putExtra(HomeActivity.EXTRA_COVERED, true),
+        )
         idle()
     }
 }
