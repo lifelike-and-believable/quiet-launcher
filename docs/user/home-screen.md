@@ -2,7 +2,7 @@
 id: docs-home-screen
 status: approved
 derived-from:
-  - design-home-screen: 4ea20c86ce77
+  - design-home-screen: f06b962edf2c
   - story-quiet-home-home-key: 7adbfcde7ee1
   - story-quiet-home-apps: cef8c5e03e43
   - story-quiet-home-new-and-removed-apps: bbd39a3046ae

@@ -178,8 +178,9 @@ Play Store last.
   nothing on the quiet home screen. Checked by the screen-recording test in
   story-quiet-home-home-key, and by tests of the service's rule: the Home key is consumed, Google
   TV's home screen window brings the quiet one forward, and no other window or key does anything.
-- **Search**: the text is sent unchanged to Google's search (`GLOBAL_SEARCH` with a `query`, as in
-  the spike), with the keyboard asking for a Search action key. The box is cleared when Google's
+- **Search**: the text is sent unchanged to Google's search with a `query` (`ASSIST` to Google's
+  search app since its version 8.2; `GLOBAL_SEARCH`, as in the spike, on TVs with an older one),
+  with the keyboard asking for a Search action key. The box is cleared when Google's
   search screen opens (when the quiet home screen stops being in front), or restored on Back or
   timeout. **Voice search** sends the same request with no text, which opened Google's voice search
   in the spike.

@@ -44,6 +44,46 @@ From `cmd package query-activities` and `dumpsys package`:
 - Other apps' search suggestion providers need `android.permission.GLOBAL_SEARCH`, which only
   system apps can hold.
 
+## Search entry points after katniss 8.2 (2026-11-22)
+
+katniss updated itself to 8.2.17 (launcherx 1.0.1018641540). The `SearchActivityTrampoline` is gone,
+and nothing on the TV handles `GLOBAL_SEARCH`, `android.speech.action.WEB_SEARCH`, `VOICE_ASSIST`, or
+`VOICE_SEARCH_HANDS_FREE`. katniss's only exported activity is
+`com.google.android.apps.tv.katniss.voiceassisttrampoline.VoiceAssistTrampoline` (`ASSIST` and
+`SEARCH_LONG_PRESS`); launcherx has no search activity or search deep link of its own.
+
+- `am start -a android.intent.action.ASSIST --es query 'Severance'`: katniss logs
+  `ROBIN_TV_TEXT_QUERY_RECEIVED` and opens Google TV's page for the show
+  (`launcherx/.entity.EntityActivity`) about 6 s later. A broader query (`'Star Trek'`) opens Gemini's
+  answer with matching shows (`launcherx/.gemini.chat.ChatActivity`). The same from the quiet home
+  screen's search box works.
+- Gemini reads its answer aloud even for a typed query: katniss logs `ROBIN_TV_TTS_PLAY_STARTED`
+  about 5 s after `ROBIN_TV_TEXT_QUERY_RECEIVED` and `ROBIN_TV_TTS_PLAY_COMPLETE` about 9 s later,
+  and launcherx logs `isTtsPlaying: true`. The crossed-out speaker in Gemini's answer is its
+  **Stop audio** button, not a sign that it is silent. Adding
+  `android.intent.extra.ASSIST_INPUT_HINT_KEYBOARD=true` did not change that, and the TV's settings
+  (Settings > Accounts & Profiles > the account > Voice assistant) offer only **Gemini's voice** and
+  **Connected Apps**: no switch for spoken answers.
+- Why, from katniss 8.2.17's code (decompiled with jadx 1.5.1, 2026-11-22): the spoken answer is
+  audio streamed by Google's server, and katniss drops it only when the server answers with certain
+  tools (show pages, YouTube search) for the app said to be in front; nothing the launching intent
+  can carry asks for a silent answer. A show's own page ("Severance") is not spoken; Gemini's answer
+  screen ("Star Trek") is. Saying YouTube is in front (`android.intent.extra.ASSIST_PACKAGE`) does
+  silence it, but Google then sends the search to YouTube, sponsored results included: not usable.
+- `am start -a android.intent.action.ASSIST` with no extras: katniss shows its voice prompt, treats
+  it as the remote's microphone button, asks the remote service for the remote's audio, gets
+  `No active audio device available`, and closes the prompt at once. Seen over ADB, where no remote
+  key had been pressed; whether a press of **Voice search** with the real remote opens the
+  microphone is still to be checked.
+- Three times in nine searches, launcherx started its own `HomeActivity` over the show's page, and
+  the home-button service then covered it, so the results vanished. The cause is launcherx's own
+  rule, logged as `BootModeAppToForeground: Background timeout reached, starting home intent and
+  reset focus position`: when a launcherx screen comes up after launcherx has been in the background
+  for a while (under 9 minutes; the first search after a break), it moves its home task in front of
+  that screen (`wm_set_resumed_activity … launcherx/.home.HomeActivity`, the page paused), before
+  the service covers anything. Searches a few minutes apart never did it. Fixed by searching again
+  once (top-row-and-search#AC-14): straight after, launcherx has just been in front.
+
 ## Becoming the home screen
 
 Google TV has no setting for choosing a home screen. Known routes: an accessibility service that

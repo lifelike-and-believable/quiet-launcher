@@ -7,8 +7,10 @@
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
-    <!-- Package visibility (Android 11+): the TV apps to list, and the home-screen apps to leave out. -->
+    <!-- Package visibility (Android 11+): the TV apps to list, the home-screen apps to leave out, and
+         Google's search app, whose entry points are looked up before searching (top-row-and-search#AC-2). -->
     <queries>
+        <package android:name="com.google.android.katniss" />
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LEANBACK_LAUNCHER" />

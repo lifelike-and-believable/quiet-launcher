@@ -75,6 +75,17 @@ class HomeWatcherTest {
         assertQuietHomeStarted(nextStarted())
     }
 
+    // home-takeover#AC-3 and top-row-and-search#AC-14: a cover says so, so a search can be retried;
+    // a Home press does not.
+    @Test
+    fun `AC-3 a cover is marked as one and a Home press is not`() {
+        service.onAccessibilityEvent(window(LAUNCHERX, "$LAUNCHERX.home.HomeActivity"))
+        assertTrue(nextStarted()!!.getBooleanExtra(HomeActivity.EXTRA_COVERED, false))
+
+        service.handleKey(key(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HOME))
+        assertFalse(nextStarted()!!.getBooleanExtra(HomeActivity.EXTRA_COVERED, false))
+    }
+
     // home-takeover#AC-3
     @Test
     fun `AC-3 leaves Google TV's other pages and other apps alone`() {
